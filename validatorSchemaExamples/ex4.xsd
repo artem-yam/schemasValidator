@@ -1,0 +1,563 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2020 rel. 2 sp1 (x64) (http://www.altova.com) by Ivchenko-ed (JSC SBERBANK - TECHNOLOGIES) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:element name="DebitCardStatementRq" type="DebitCardStatementRqType">
+		<xs:annotation>
+			<xs:documentation>Запрос на формирование выписки по дебетовой карте</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="DebitCardStatementRs" type="DebitCardStatementRsType">
+		<xs:annotation>
+			<xs:documentation>Ответ на запрос на формирование выписки по дебетовой карте</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="DebitCardStatementRqType">
+		<xs:sequence>
+			<xs:element name="RqUID" type="RqUID_Type">
+				<xs:annotation>
+					<xs:documentation>Уникальный идентификатор запроса</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="RqTm" type="DateTime">
+				<xs:annotation>
+					<xs:documentation>Дата и время передачи сообщения</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="SPName" type="SPName_Type">
+				<xs:annotation>
+					<xs:documentation>Идентификатор вызывающей системы </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="SystemId" type="SystemId_Type">
+				<xs:annotation>
+					<xs:documentation>Идентификатор вызываемой системы </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Cards" type="CardsType">
+				<xs:annotation>
+					<xs:documentation>Параметры карт</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Period" type="PeriodType">
+				<xs:annotation>
+					<xs:documentation>Период</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="AiV" type="xs:boolean" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Флаг, говорящий о необходимости обращения в АС АиВ</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ClientsAcc" type="ClientsAccType" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Счета клиента по другим продуктам</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CardParamsType">
+		<xs:sequence>
+			<xs:element name="ContractNumber" type="CardParamsType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Номер контракта карты</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CardNum" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Номер карты</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="AccNumber" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Номер счета</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ClientsAccType">
+		<xs:sequence>
+			<xs:element name="RegionID" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>номер ТБ </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ClientAcc" type="xs:string" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Номер счета клиента по другому продукту</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="DebitCardStatementRsType">
+		<xs:sequence>
+			<xs:element name="RqUID" type="RqUID_Type">
+				<xs:annotation>
+					<xs:documentation>Уникальный идентификатор запроса</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="RqTm" type="DateTime">
+				<xs:annotation>
+					<xs:documentation>Дата и время передачи сообщения</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="SPName" type="SPName_Type">
+				<xs:annotation>
+					<xs:documentation>Идентификатор вызывающей системы </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="SystemId" type="SystemId_Type">
+				<xs:annotation>
+					<xs:documentation>Идентификатор вызываемой системы </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Status" type="StatusType">
+				<xs:annotation>
+					<xs:documentation>Статус выполнения операции</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Period" type="PeriodType">
+				<xs:annotation>
+					<xs:documentation>Период</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Card" type="CardType" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Выписка по карте</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="AllOperationDetailsSorted" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="OperationDetails" type="AllOperationDetailsType" minOccurs="0" maxOccurs="unbounded"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="TotalArrest" minOccurs="0">
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="TotalArrestType"/>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="StatusType">
+		<xs:sequence>
+			<xs:element name="Status" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Статус</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ErrorCode" type="xs:int" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Код ошибки</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ErrorDesc" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Описание ошибки</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="OperationType">
+		<xs:sequence>
+			<xs:element name="SummInc" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Сумма пополнений</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="SummCashInc" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Сумма наличных пополнений </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="SummTransferInc" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Сумма поступивших переводов </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="SummOtherCashInc" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Сумма прочих пополнений</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="SummPercentsInc" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Причисленные проценты</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="SummWriteOffs" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Суммы списаний
+</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="SummPaymWriteOffs" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Сумма покупок/платежей</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="SummCashWriteOffs" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Сумма снятых наличных</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="SummTransferWriteOffs" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Сумма совершенных переводов</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="SummOtherWriteOffs" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Сумма прочих списаний</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="SummFeeWriteOffs" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Сумма уплаченных комиссий</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="SummPercentsWriteOffs" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Сумма взысканий</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="StartRemainder" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Остаток на начало периода</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="EndRemainder" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Остаток на конец периода</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CurrentLoanDebtAmount" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Сумма задолженности на дату формирования выписки</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CurrentAmount" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Сумма доступных средств на дату формирования выписки</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="SummRefund" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Сумма возвратов</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="OperationDetailsType">
+		<xs:sequence>
+			<xs:element name="execDocName" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Имя документа</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="execDocNum" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Номер ИД</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="execDocDate" type="Date" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Дата ИД</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="execDocSumm" type="xs:decimal" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Сумма требования по ИД</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="execDocCur" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Валюта ИД</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="execAmount" type="xs:decimal" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Сумма операции в валюте ИД</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="WayDate" type="xs:dateTime">
+				<xs:annotation>
+					<xs:documentation>Дата, время операции</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="PostingDate" type="Date">
+				<xs:annotation>
+					<xs:documentation>Дата, время обработки</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="OperType" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Категория операции</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TransDetails" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Описание операции</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Amount" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Сумма в валюте счета</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Curr" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Буквенное обозначение валюты счета</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TransAmount" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Сумма в валюте операции</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TransCurr" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Буквенное обозначение валюты операции</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Remainder" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Остаток по счету</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="AuthCode" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Код авторизации</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="AllOperationDetailsType">
+		<xs:sequence>
+			<xs:element name="WayDate" type="xs:dateTime">
+				<xs:annotation>
+					<xs:documentation>Дата, время операции</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="PostingDate" type="xs:date">
+				<xs:annotation>
+					<xs:documentation>Дата, время обработки</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="OperType" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Категория операции</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TransDetails" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Описание операции</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Amount" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Сумма в валюте счета</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Curr" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Буквенное обозначение валюты счета</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TransAmount" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Сумма в валюте операции</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TransCurr" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Буквенное обозначение валюты операции</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Remainder" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Остаток по счету</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="AuthCode" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Код авторизации</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="RqUID_Type">
+		<xs:annotation>
+			<xs:documentation>Уникальный идентификатор запроса</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="UUID"/>
+	</xs:simpleType>
+	<xs:simpleType name="UUID">
+		<xs:annotation>
+			<xs:documentation>Тип: Уникальный 16 байтовый идентификатор. Для обмена в рамках интеграционных проектов Сбербанка представляется набором из 32 символов без разделителей в шестнадцатиричной системе.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[0-9a-zA-Z]{32}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="DateTime">
+		<xs:annotation>
+			<xs:documentation>Тип данных для представления дат</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:dateTime">
+			<xs:pattern value="\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d(.[\d]{1,6})?(([+\-]\d\d:\d\d)|Z)?"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="Date">
+		<xs:annotation>
+			<xs:documentation>Тип: Дата</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:date">
+			<xs:pattern value="\d{4}-\d\d-\d\d"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="SPName_Type">
+		<xs:annotation>
+			<xs:documentation>Идентификатор системы, которая отправляет сообщение</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="C50_Type"/>
+	</xs:simpleType>
+	<xs:simpleType name="C50_Type">
+		<xs:annotation>
+			<xs:documentation>Тип: Символьный тип, max длиной 50 символов</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="C">
+			<xs:maxLength value="50"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="C">
+		<xs:annotation>
+			<xs:documentation>Базовый символьный тип, элемент данного типа может содержать количество символов до определенного максимума</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string"/>
+	</xs:simpleType>
+	<xs:simpleType name="SystemId_Type">
+		<xs:annotation>
+			<xs:documentation>Идентификатор системы, в которую отправляется сообщение</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="50"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="CardDetailsType">
+		<xs:sequence>
+			<xs:element name="Currency" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Валюта счета</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CardParams" type="CardParamsType"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CardsType">
+		<xs:sequence>
+			<xs:element name="CardParams" type="CardParamsType" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Параметры карты</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="PeriodType">
+		<xs:sequence>
+			<xs:element name="DateBegin" type="xs:date">
+				<xs:annotation>
+					<xs:documentation>Начало периода</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="DateEnd" type="xs:date">
+				<xs:annotation>
+					<xs:documentation>Конец периода</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CardType">
+		<xs:sequence>
+			<xs:element name="CardDetails" type="CardDetailsType">
+				<xs:annotation>
+					<xs:documentation>Параметры карты</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="OperationDetails" type="OperationDetailsType" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Расшифровка операций за период</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Operation" type="OperationType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Операции за период</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="TotalArrestType">
+		<xs:sequence>
+			<xs:element name="arrestedSumm" type="xs:decimal" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Арестовано за период</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="arrestRemovalSumm" type="xs:decimal" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Общая сумма снятия ареста</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="arrestableSumm" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Подлежит аресту</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="amount" type="xs:decimal">
+							<xs:annotation>
+								<xs:documentation>Сумма</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="currency" type="xs:string">
+							<xs:annotation>
+								<xs:documentation>Валюта</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="recoverableSumm" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Подлжеит взысканию</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="amount" type="xs:decimal">
+							<xs:annotation>
+								<xs:documentation>Сумма</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="currency" type="xs:string">
+							<xs:annotation>
+								<xs:documentation>Валюта</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="RecoveredSumm" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Взыскано за период</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:decimal">
+						<xs:totalDigits value="5"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

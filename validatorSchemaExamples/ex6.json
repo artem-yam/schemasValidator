@@ -1,0 +1,115 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "Body",
+	"description": "Schema for an body",
+	"type": "object",
+	"properties": {
+		"consumerCode": {
+			"description": "Merchant id specified when registering consumer",
+			"type": "string",
+			"pattern": "/d{20}"
+		},
+		"session_state": {
+			"description": "Session state",
+			"type": "string"
+		},
+		"aud": {
+			"oneOf": [
+				{
+					"type": "string",
+					"pattern": "^pprb.kbt$"
+				},
+				{
+					"type": "array",
+					"items": {
+						
+					}
+				}
+			]
+		},
+		"typ": {
+			"description": "Token type",
+			"type": "string",
+			"maxLength": 100
+		},
+		"scope": {
+			"description": "Authorized scopes for execution",
+			"type": "string",
+			"pattern": "(https://api.sberbank.ru/ratingfl|https://api.sberbank.ru/ratingflbki)[ ]?$"
+		},
+		"iss": {
+			"description": "Token publisher",
+			"type": "string",
+			"maxLength": 100
+		},
+		"jti": {
+			"description": "Specifies the unique identifier of this token",
+			"type": "string",
+			"maxLength": 100
+		},
+		"clientId": {
+			"description": "Client id",
+			"type": "string",
+			"maxLength": 100
+		},
+		"sub": {
+			"description": "Unique identifier of the party about which information in this token is contained",
+			"type": "string",
+			"maxLength": 100
+		},
+		"exp": {
+			"description": "Time in unix format",
+			"type": "integer"
+		},
+		"iat": {
+			"description": "UnixTime format token issuance time",
+			"type": "integer"
+		},
+		"clientHost": {
+			"description": "Ip address or http host",
+			"type": "string",
+			"maxLength": 255
+		},
+		"clientAddress": {
+			"description": "Ip address",
+			"type": "string",
+			"maxLength": 15
+		},
+		"owner": {
+			"description": "owner",
+			"type": "string",
+			"maxLength": 50
+		},
+		"cnf": {
+			"description": "Serial number",
+			"type": "object",
+			"properties": {
+				"key": {
+					"description": "Serial number",
+					"type": "string"
+				},
+				"value": {
+					"type": "string"
+				}
+			},
+			"required": [
+				"key"
+			],
+			"additionalProperties": false
+		}
+	},
+	"required": [
+		"session_state",
+		"aud",
+		"typ",
+		"scope",
+		"iss",
+		"jti",
+		"clientId",
+		"sub",
+		"exp",
+		"iat",
+		"cnf"
+	],
+	"additionalProperties": false
+}

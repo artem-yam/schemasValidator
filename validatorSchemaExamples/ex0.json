@@ -1,0 +1,58 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "Body",
+	"description": "Schema for an body",
+	"type": "object",
+	"properties": {
+        "session_state": {
+			"description": "Session state",
+			"type": "string"
+		},
+		"aud": {
+			"oneOf": [
+				{
+					"type": "string",
+					"pattern": "^pprb.kbt$"
+				},
+				{
+					"type": "array",
+					"items": {
+						"type": "string",
+						"maxLength": 150
+					}
+				}
+			]
+		},
+		"cnf": {
+			"description": "Serial number",
+			"type": "object",
+			"properties": {
+				"key": {
+					"description": "Serial number",
+					"type": "string"
+				},
+				"value": {
+					"type": "string"
+				}
+			},
+			"required": [
+				"key"
+			],
+			"additionalProperties": false
+		}
+	},
+	"required": [
+		"session_state",
+		"aud",
+		"typ",
+		"scope",
+		"iss",
+		"jti",
+		"clientId",
+		"sub",
+		"exp",
+		"iat",
+		"cnf"
+	],
+	"additionalProperties": false
+}
