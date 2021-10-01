@@ -11,9 +11,6 @@ class JsonPropertyObject(object):
 
         self.reset()
 
-        # self.PROPERTY_STRING = '\n' + ('\t' * f'{self.tabsCount}') + '%s: %s;'
-        # self.NONE_PROPERTY_STRING = '\n' + ('\t' * '%') + '%s: None;'
-
     def reset(self):
         self.tabsCount = 1
 
@@ -94,6 +91,9 @@ class JsonPropertyObject(object):
 
         if self.name is not None:
             returnString += (PROPERTY_STRING % ('name', self.name))
+
+        if self.fullPath:
+            returnString += (PROPERTY_STRING % ('path', self.fullPath))
 
         if self.description is not None:
             returnString += (PROPERTY_STRING % ('description', self.description))

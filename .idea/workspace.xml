@@ -1,8 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="d3cbf362-201e-41f7-a1b1-92b7c91f73bd" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/design.py" beforeDir="false" afterPath="$PROJECT_DIR$/design.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonParser.py" beforeDir="false" afterPath="$PROJECT_DIR$/jsonParser.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonPropertyObject.py" beforeDir="false" afterPath="$PROJECT_DIR$/jsonPropertyObject.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/outputMessage.py" beforeDir="false" afterPath="$PROJECT_DIR$/outputMessage.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -27,12 +36,20 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="restartRequiresConfirmation" value="false" />
-    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+    <property name="settings.editor.selected.configurable" value="preferences.externalDependencies" />
+  </component>
+  <component name="PyConsoleOptionsProvider">
+    <option name="myPythonConsoleState">
+      <console-settings is-module-sdk="true">
+        <option name="myUseModuleSdk" value="true" />
+      </console-settings>
+    </option>
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -41,17 +58,17 @@
   </component>
   <component name="RunManager">
     <configuration name="main" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
-      <module name="validatorUI" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
-      <option name="SDK_HOME" value="" />
+      <option name="SDK_HOME" value="C:\Program Files\Python\Python39\python.exe" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
+      <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main.py" />
       <option name="PARAMETERS" value="" />
@@ -92,115 +109,50 @@
         </entry>
       </map>
     </option>
-  </component>
-  <component name="WindowStateProjectService">
-    <state x="609" y="336" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1632474285052">
-      <screen x="0" y="25" width="1792" height="1010" />
-    </state>
-    <state x="609" y="336" key="#com.intellij.fileTypes.FileTypeChooser/0.25.1792.1010@0.25.1792.1010" timestamp="1632474285052" />
-    <state x="634" y="281" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1632474674791">
-      <screen x="0" y="25" width="1792" height="1010" />
-    </state>
-    <state x="634" y="281" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.25.1792.1010@0.25.1792.1010" timestamp="1632474674791" />
-    <state x="776" y="252" key="#xdebugger.evaluate" timestamp="1632492805064">
-      <screen x="0" y="25" width="1792" height="1010" />
-    </state>
-    <state x="776" y="252" key="#xdebugger.evaluate/0.25.1792.1010@0.25.1792.1010" timestamp="1632492805064" />
-    <state width="1750" height="262" key="GridCell.Tab.0.bottom" timestamp="1632757010855">
-      <screen x="0" y="25" width="1792" height="1010" />
-    </state>
-    <state width="1750" height="262" key="GridCell.Tab.0.bottom/0.25.1792.1010@0.25.1792.1010" timestamp="1632757010855" />
-    <state width="1750" height="262" key="GridCell.Tab.0.center" timestamp="1632757010854">
-      <screen x="0" y="25" width="1792" height="1010" />
-    </state>
-    <state width="1750" height="262" key="GridCell.Tab.0.center/0.25.1792.1010@0.25.1792.1010" timestamp="1632757010854" />
-    <state width="1750" height="262" key="GridCell.Tab.0.left" timestamp="1632757010853">
-      <screen x="0" y="25" width="1792" height="1010" />
-    </state>
-    <state width="1750" height="262" key="GridCell.Tab.0.left/0.25.1792.1010@0.25.1792.1010" timestamp="1632757010853" />
-    <state width="1750" height="262" key="GridCell.Tab.0.right" timestamp="1632757010854">
-      <screen x="0" y="25" width="1792" height="1010" />
-    </state>
-    <state width="1750" height="262" key="GridCell.Tab.0.right/0.25.1792.1010@0.25.1792.1010" timestamp="1632757010854" />
-    <state width="1750" height="375" key="GridCell.Tab.1.bottom" timestamp="1632493485139">
-      <screen x="0" y="25" width="1792" height="1010" />
-    </state>
-    <state width="1750" height="375" key="GridCell.Tab.1.bottom/0.25.1792.1010@0.25.1792.1010" timestamp="1632493485139" />
-    <state width="1750" height="375" key="GridCell.Tab.1.center" timestamp="1632493485139">
-      <screen x="0" y="25" width="1792" height="1010" />
-    </state>
-    <state width="1750" height="375" key="GridCell.Tab.1.center/0.25.1792.1010@0.25.1792.1010" timestamp="1632493485139" />
-    <state width="1750" height="375" key="GridCell.Tab.1.left" timestamp="1632493485139">
-      <screen x="0" y="25" width="1792" height="1010" />
-    </state>
-    <state width="1750" height="375" key="GridCell.Tab.1.left/0.25.1792.1010@0.25.1792.1010" timestamp="1632493485139" />
-    <state width="1750" height="375" key="GridCell.Tab.1.right" timestamp="1632493485139">
-      <screen x="0" y="25" width="1792" height="1010" />
-    </state>
-    <state width="1750" height="375" key="GridCell.Tab.1.right/0.25.1792.1010@0.25.1792.1010" timestamp="1632493485139" />
-    <state x="405" y="166" key="SettingsEditor" timestamp="1632396016310">
-      <screen x="0" y="25" width="1792" height="1010" />
-    </state>
-    <state x="405" y="166" key="SettingsEditor/0.25.1792.1010@0.25.1792.1010" timestamp="1632396016310" />
-    <state width="896" height="505" key="XDebugger.FullValuePopup" timestamp="1632487358351">
-      <screen x="0" y="25" width="1792" height="1010" />
-    </state>
-    <state width="896" height="505" key="XDebugger.FullValuePopup/0.25.1792.1010@0.25.1792.1010" timestamp="1632487358351" />
-    <state x="561" y="248" width="670" height="676" key="search.everywhere.popup" timestamp="1632480714520">
-      <screen x="0" y="25" width="1792" height="1010" />
-    </state>
-    <state x="561" y="248" width="670" height="676" key="search.everywhere.popup/0.25.1792.1010@0.25.1792.1010" timestamp="1632480714520" />
-    <state x="626" y="446" key="vcs.readOnlyHandler.ReadOnlyStatusDialog" timestamp="1632483276842">
-      <screen x="0" y="25" width="1792" height="1010" />
-    </state>
-    <state x="626" y="446" key="vcs.readOnlyHandler.ReadOnlyStatusDialog/0.25.1792.1010@0.25.1792.1010" timestamp="1632483276842" />
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/jsonPropertyObject.py</url>
-          <line>61</line>
+          <line>62</line>
           <option name="timeStamp" value="13" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <condition expression="propObject.propType == 'object'" language="Python" />
-          <url>file://$PROJECT_DIR$/jsonParser.py</url>
-          <line>49</line>
-          <option name="timeStamp" value="27" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <condition expression="prop=='cnf'" language="Python" />
-          <url>file://$PROJECT_DIR$/jsonParser.py</url>
-          <line>35</line>
-          <option name="timeStamp" value="32" />
+          <url>file://$PROJECT_DIR$/main.py</url>
+          <line>63</line>
+          <option name="timeStamp" value="47" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/jsonParser.py</url>
-          <line>88</line>
-          <option name="timeStamp" value="35" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <condition expression="typeValue == 'object'" language="Python" />
-          <url>file://$PROJECT_DIR$/jsonParser.py</url>
-          <line>84</line>
-          <option name="timeStamp" value="36" />
+          <line>68</line>
+          <option name="timeStamp" value="51" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/jsonParser.py</url>
-          <line>57</line>
-          <option name="timeStamp" value="38" />
+          <line>33</line>
+          <option name="timeStamp" value="53" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <condition expression="obj['type']=='object'" language="Python" />
-          <url>file://$PROJECT_DIR$/jsonParser.py</url>
-          <line>71</line>
-          <option name="timeStamp" value="39" />
+          <url>file://$PROJECT_DIR$/main.py</url>
+          <line>51</line>
+          <option name="timeStamp" value="54" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/jsonParser.py</url>
-          <line>91</line>
-          <option name="timeStamp" value="41" />
+          <line>48</line>
+          <option name="timeStamp" value="55" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/main.py</url>
+          <line>80</line>
+          <option name="timeStamp" value="56" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/main.py</url>
+          <line>52</line>
+          <option name="timeStamp" value="57" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
@@ -211,8 +163,5 @@
         </breakpoint>
       </default-breakpoints>
     </breakpoint-manager>
-  </component>
-  <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/validatorUI$main.coverage" NAME="main Coverage Results" MODIFIED="1632493914052" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

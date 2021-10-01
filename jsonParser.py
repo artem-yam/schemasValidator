@@ -1,23 +1,25 @@
 import json
-
 from jsonPropertyObject import JsonPropertyObject
+import traceback
+import sys
 
 
 class JsonParser(object):
+    # DEFINITIONS = []
 
     def __init__(self, form):
         super().__init__()
         self.form = form
 
-    def parseFileToText(self, filePath):
+    def parseFileToText(self, filePath) -> str:
         jsonString = ''
         try:
-            with open(filePath) as jsonFile:
+            with open(filePath, encoding=sys.getfilesystemencoding()) as jsonFile:
                 jsonString = json.load(jsonFile)
-                jsonPrettyString = json.dumps(jsonString, indent=4)
+                jsonPrettyString = json.dumps(jsonString, indent=4, ensure_ascii=False)
                 jsonFile.close()
         except Exception as err:
-            print('Ошибки открытия файла: ', err)
+            print('Ошибки открытия файла:\n', traceback.format_exc())
 
         if jsonPrettyString is not None:
             jsonString = jsonPrettyString
@@ -26,48 +28,83 @@ class JsonParser(object):
 
         return jsonString
 
-    def parseTextToObjects(self, jsonString):
-        jsonObjects = []
+    def parseTextToObjects(self, jsonString) -> dict:
+        # JsonParser.DEFINITIONS = {}
+
+        jsonObjects = {}
         try:
             jsonString = json.loads(jsonString)
-            jsonProperties = jsonString['properties']
 
-            for prop in jsonProperties:
-                propString = json.dumps(jsonProperties[prop])
-                # print(propString)
-                propObject = json.loads(propString,
-                                        object_hook=JsonParser.jsonPropertyDecoder)
-                propObject.name = prop
-                # if not isinstance(propObject, list):
-                #    propObject.name = prop
-                # else:
-                #    for obj in propObject:
-                #        if obj.name:
-                #            obj.name = prop
-                jsonObjects.append(propObject)
-                # jsonObjects.extend(propObject)
+            # jsonObjects.extend(self.parseDefinitions(jsonString))
+            jsonObjects.update(self.parseDefinitions(jsonString))
+            # jsonObjects.extend(self.parseProperties(jsonString))
 
-                if propObject.propType == 'object' and propObject.extraInfo['properties']:
-                    innerProps = propObject.extraInfo['properties'].extraInfo
-                    for prop in innerProps:
-                        innerObject = innerProps[prop]
-                        innerObject.name = prop
-                        jsonObjects.append(innerObject)
-                    propObject.extraInfo.pop('properties')
-
-            print('\n'.join(map(str, jsonObjects)))
+            print('---------------------------------------------------')
+            print('\n'.join(map(str, jsonObjects.values())))
 
         except Exception as err:
-            print('Ошибки получения объектов из json: ', err)
-            print(err)
+            print('Ошибки получения объектов из json:\n', traceback.format_exc())
             jsonObjects = 'Ошибка преобразования json в объект, проверьте корректность загруженного текста'
+
+        return jsonObjects
+
+    def parseDefinitions(self, jsonString) -> dict:
+        jsonObjects = {}
+        jsonProperties = jsonString['definitions']
+
+        for prop in jsonProperties:
+            propString = json.dumps(jsonProperties[prop], ensure_ascii=False)
+            # print(propString)
+            propObject = json.loads(propString,
+                                    object_hook=JsonParser.jsonPropertyDecoder)
+            propObject.name = prop
+            propObject.fullPath = '/' + prop
+            # jsonObjects.append(propObject)
+            jsonObjects[propObject.fullPath] = propObject
+            # JsonParser.DEFINITIONS[propObject.fullPath] = propObject
+            # print('DEFINITIONS ' + str(JsonParser.DEFINITIONS))
+            # print(propObject)
+
+            if propObject.propType == 'object' and 'properties' in propObject.extraInfo:
+                innerProps = propObject.extraInfo['properties'].extraInfo
+                for prop in innerProps:
+                    innerObject = innerProps[prop]
+                    innerObject.name = prop
+                    innerObject.fullPath += propObject.fullPath + '/' + prop
+                    jsonObjects[innerObject.fullPath] = innerObject
+                propObject.extraInfo.pop('properties')
+
+        return jsonObjects
+
+    def parseProperties(self, jsonString) -> list:
+        jsonObjects = []
+        jsonProperties = jsonString['properties']
+
+        for prop in jsonProperties:
+            propString = json.dumps(jsonProperties[prop], ensure_ascii=False)
+            # print(propString)
+            propObject = json.loads(propString,
+                                    object_hook=JsonParser.jsonPropertyDecoder)
+            propObject.name = prop
+            propObject.fullPath = '/' + prop
+            jsonObjects.append(propObject)
+
+            if propObject.propType == 'object' and propObject.extraInfo['properties']:
+                innerProps = propObject.extraInfo['properties'].extraInfo
+                for prop in innerProps:
+                    innerObject = innerProps[prop]
+                    innerObject.name = prop
+                    innerObject.fullPath += propObject.fullPath + '/' + prop
+                    jsonObjects.append(innerObject)
+                propObject.extraInfo.pop('properties')
 
         return jsonObjects
 
     @staticmethod
     def jsonPropertyDecoder(obj):
-        # decodedObj = []
-        # print(obj)
+        # if '$ref' in obj:
+        # print('Obj ' + str(obj) + " has ref")
+        # print('DEFINITIONS ' + str(JsonParser.DEFINITIONS))
 
         if 'description' in obj:
             descriptionValue = obj['description']
@@ -77,7 +114,7 @@ class JsonParser(object):
             typeValue = obj['type']
             obj.pop('type')
 
-        decodedObj = JsonPropertyObject(None, None, descriptionValue if 'descriptionValue' in locals() else None,
+        decodedObj = JsonPropertyObject(None, '', descriptionValue if 'descriptionValue' in locals() else None,
                                         typeValue if 'typeValue' in locals() else None, obj if obj else None)
 
         # print('obj = ' + str(obj))

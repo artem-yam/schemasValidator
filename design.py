@@ -12,48 +12,49 @@ from PyQt6 import QtCore, QtWidgets
 class Ui_Form(object):
     def setupUi(self, form):
         form.setObjectName("Form")
-        # Form.resize(804, 733)
         # form.resize(form.maximumSize().width(), form.maximumSize().height())
         form.resize(form.width() * 2, form.height() * 2)
         # form.resize(form.width(), form.height())
 
-        self.groupBoxJson = QtWidgets.QGroupBox(form)
-        # self.groupBox.setGeometry(QtCore.QRect(20, 10, 761, 471))
-        self.groupBoxJson.setGeometry(form.rect())
-        self.groupBoxJson.setObjectName("groupBoxJson")
+        self.tabWidget = QtWidgets.QTabWidget(form)
 
-        self.textEditTextJson = QtWidgets.QTextEdit(self.groupBoxJson)
-        # self.textEdit.setGeometry(QtCore.QRect(20, 30, 351, 241))
+        self.jsonTab = QtWidgets.QWidget()
+        self.xsdTab = QtWidgets.QWidget()
+        self.tabWidget.addTab(self.jsonTab, "JSON")
+        self.tabWidget.addTab(self.xsdTab, "XSD")
+
+        self.tabWidget.setGeometry(form.rect())
+        self.tabWidget.setObjectName("tabWidget")
+
+        self.textEditTextJson = QtWidgets.QTextEdit(self.jsonTab)
         self.textEditTextJson.setGeometry(
-            QtCore.QRect(20, 30, (self.groupBoxJson.width() / 2) - 40, self.groupBoxJson.height() / 2))
-        # self.textEdit.setReadOnly(True)
+            QtCore.QRect(20, 30, (self.tabWidget.width() / 2) - 40, self.tabWidget.height() / 2))
         self.textEditTextJson.setObjectName("textEditTextJson")
 
-        self.textEditResultJson = QtWidgets.QTextEdit(self.groupBoxJson)
-        # self.textEditResultJson = QtWidgets.QPlainTextEdit(self.groupBoxJson)
-        # self.plainTextEdit.setGeometry(QtCore.QRect(460, 40, 261, 161))
-        self.textEditResultJson.setReadOnly(True)
+        self.textEditResultJson = QtWidgets.QListWidget(self.jsonTab)
+        # self.textEditResultJson = QtWidgets.QTextEdit(self.tabWidget)
+        # self.textEditResultJson.setReadOnly(True)
         self.textEditResultJson.setGeometry(
             QtCore.QRect(self.textEditTextJson.geometry().right() + 41, 30, self.textEditTextJson.geometry().width(),
                          self.textEditTextJson.geometry().height()))
         self.textEditResultJson.setObjectName("textEditResultJson")
 
-        self.pushButtonLoadJson = QtWidgets.QPushButton(self.groupBoxJson)
+        self.pushButtonLoadJson = QtWidgets.QPushButton(self.jsonTab)
         self.pushButtonLoadJson.setGeometry(
             QtCore.QRect(20, self.textEditTextJson.geometry().bottom() + 20, self.textEditTextJson.geometry().width(),
                          50))
         self.pushButtonLoadJson.setObjectName("pushButtonLoadJson")
 
-        self.pushButtonValidateJson = QtWidgets.QPushButton(self.groupBoxJson)
+        self.pushButtonValidateJson = QtWidgets.QPushButton(self.jsonTab)
         self.pushButtonValidateJson.setGeometry(
             QtCore.QRect(self.textEditResultJson.geometry().left(), self.textEditTextJson.geometry().bottom() + 20,
                          self.textEditTextJson.geometry().width(), 50))
         self.pushButtonValidateJson.setObjectName("pushButtonValidateJson")
 
-        self.groupBoxJsonParams = QtWidgets.QGroupBox(self.groupBoxJson)
-        self.groupBoxJsonParams.setGeometry(QtCore.QRect(20, self.pushButtonValidateJson.geometry().bottom() + 10,
-                                                         self.groupBoxJson.geometry().width() - 40, 400))
-        self.groupBoxJson.setObjectName("groupBoxJsonParams")
+        self.jsonParams = QtWidgets.QGroupBox(self.jsonTab)
+        self.jsonParams.setGeometry(QtCore.QRect(20, self.pushButtonValidateJson.geometry().bottom() + 10,
+                                                 self.tabWidget.geometry().width() - 40, 400))
+        self.jsonParams.setObjectName("jsonParams")
 
         self.retranslateUi(form)
         QtCore.QMetaObject.connectSlotsByName(form)
@@ -61,7 +62,6 @@ class Ui_Form(object):
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Валидатор xsd / json схем"))
-        self.groupBoxJson.setTitle(_translate("Form", "Валидатор json"))
         self.pushButtonLoadJson.setText(_translate("Form", "Загрузить схему"))
         self.pushButtonValidateJson.setText(_translate("Form", "Валидировать схему"))
-        self.groupBoxJsonParams.setTitle(_translate("Form", "Параметры валидации json"))
+        self.jsonParams.setTitle(_translate("Form", "Параметры валидации json"))

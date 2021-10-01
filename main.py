@@ -1,13 +1,16 @@
 import sys
 
-from PyQt6 import QtWidgets
+from PyQt6.QtCore import *
+from PyQt6.QtWidgets import *
+from PyQt6.QtGui import *
 
 import design
 from jsonObjectValidator import JsonObjectValidator
 from jsonParser import JsonParser
+import outputMessage
 
 
-class ExampleApp(QtWidgets.QMainWindow, design.Ui_Form):
+class ExampleApp(QMainWindow, design.Ui_Form):
     def __init__(self):
         super().__init__()
         # self.textEdit.append()
@@ -24,8 +27,8 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_Form):
 
     def loadJson(self):
         filters = 'Файлы схем json (*.json);;Файлы схем xsd (*.xsd)'
-        directory, _ = QtWidgets.QFileDialog.getOpenFileName(QtWidgets.QFileDialog(), caption='Выберите схему',
-                                                             filter=filters)
+        directory, _ = QFileDialog.getOpenFileName(QFileDialog(), caption='Выберите схему',
+                                                   filter=filters)
 
         # print('directory = ' + directory)
 
@@ -40,36 +43,49 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_Form):
                 self.textEditTextJson.append(
                     'Файл в формате ' + directory[directory.rindex('.'):] + ' не может быть загружен')
 
-    # if directory:  # не продолжать выполнение, если пользователь не выбрал директорию
-    #    for file_name in os.listdir(directory):  # для каждого файла в директории
-    #        self.textEdit.append(file_name)
-    #        # self.listWidget.addItem(file_name)  # добавить файл в listWidget
-
     def validateJson(self):
         self.textEditResultJson.clear()
         jsonString = self.textEditTextJson.toPlainText()
         # self.textEditResultJson.append(jsonString)
         jsonObjects = self.jsonParser.parseTextToObjects(jsonString)
 
-        if isinstance(jsonObjects, list):
+        if isinstance(jsonObjects, dict):
             fullValidationResult = []
-            for jsonObject in jsonObjects:
+            for objectPath, jsonObject in jsonObjects.items():
                 #    self.textEditResultJson.append(str(jsonObject))
                 validationResult = self.jsonValidator.validate(jsonObject)
                 fullValidationResult.extend(validationResult)
 
             if fullValidationResult:
                 for msg in fullValidationResult:
-                    self.textEditResultJson.append(str(msg))
+                    # self.textEditResultJson.append(str(msg))
+                    self.textEditResultJson.addItem(str(msg))
+
+                    if msg.msgType == outputMessage.MessageType.INFO_TYPE:
+                        itemColor = Qt.GlobalColor.yellow
+                    else:
+                        itemColor = Qt.GlobalColor.red
+
+                    self.textEditResultJson.item(self.textEditResultJson.count() - 1).setForeground(itemColor)
+                    self.textEditResultJson.item(self.textEditResultJson.count() - 1).setBackground(
+                        Qt.GlobalColor.lightGray)
+
+                    # (',' if fullValidationResult.index(msg) != len(fullValidationResult) - 1 else '')
             else:
-                self.textEditResultJson.append('Схема валидна!')
+                self.textEditResultJson.addItem('Схема валидна!')
+                self.textEditResultJson.item(self.textEditResultJson.count() - 1).setForeground(Qt.GlobalColor.green)
+                self.textEditResultJson.item(self.textEditResultJson.count() - 1).setBackground(
+                    Qt.GlobalColor.lightGray)
 
         else:
-            self.textEditResultJson.append(str(jsonObjects))
+            self.textEditResultJson.addItem(str(jsonObjects))
+            self.textEditResultJson.item(self.textEditResultJson.count() - 1).setForeground(Qt.GlobalColor.red)
+            self.textEditResultJson.item(self.textEditResultJson.count() - 1).setBackground(
+                Qt.GlobalColor.lightGray)
 
 
 def main():
-    app = QtWidgets.QApplication(sys.argv)
+    app = QApplication(sys.argv)
     window = ExampleApp()
 
     # jsonParser.parseJson()
