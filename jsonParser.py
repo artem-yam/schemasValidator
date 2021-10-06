@@ -1,7 +1,7 @@
 import json
-from jsonPropertyObject import JsonPropertyObject
-import traceback
 import sys
+import traceback
+from jsonPropertyObject import JsonPropertyObject
 
 
 class JsonParser(object):
@@ -35,12 +35,13 @@ class JsonParser(object):
         try:
             jsonString = json.loads(jsonString)
 
+            jsonObjects.update(self.parseProperties(jsonString))
             # jsonObjects.extend(self.parseDefinitions(jsonString))
             jsonObjects.update(self.parseDefinitions(jsonString))
             # jsonObjects.extend(self.parseProperties(jsonString))
 
             print('---------------------------------------------------')
-            print('\n'.join(map(str, jsonObjects.values())))
+            # print('\n'.join(map(str, jsonObjects.values())))
 
         except Exception as err:
             print('Ошибки получения объектов из json:\n', traceback.format_exc())
@@ -50,53 +51,59 @@ class JsonParser(object):
 
     def parseDefinitions(self, jsonString) -> dict:
         jsonObjects = {}
-        jsonProperties = jsonString['definitions']
 
-        for prop in jsonProperties:
-            propString = json.dumps(jsonProperties[prop], ensure_ascii=False)
-            # print(propString)
-            propObject = json.loads(propString,
-                                    object_hook=JsonParser.jsonPropertyDecoder)
-            propObject.name = prop
-            propObject.fullPath = '/' + prop
-            # jsonObjects.append(propObject)
-            jsonObjects[propObject.fullPath] = propObject
-            # JsonParser.DEFINITIONS[propObject.fullPath] = propObject
-            # print('DEFINITIONS ' + str(JsonParser.DEFINITIONS))
-            # print(propObject)
+        if 'definitions' in jsonString:
+            jsonProperties = jsonString['definitions']
 
-            if propObject.propType == 'object' and 'properties' in propObject.extraInfo:
-                innerProps = propObject.extraInfo['properties'].extraInfo
-                for prop in innerProps:
-                    innerObject = innerProps[prop]
-                    innerObject.name = prop
-                    innerObject.fullPath += propObject.fullPath + '/' + prop
-                    jsonObjects[innerObject.fullPath] = innerObject
-                propObject.extraInfo.pop('properties')
+            for prop in jsonProperties:
+                propString = json.dumps(jsonProperties[prop], ensure_ascii=False)
+                # print(propString)
+                propObject = json.loads(propString,
+                                        object_hook=JsonParser.jsonPropertyDecoder)
+                propObject.name = prop
+                propObject.fullPath = '/' + prop
+                # jsonObjects.append(propObject)
+                jsonObjects[propObject.fullPath] = propObject
+                # JsonParser.DEFINITIONS[propObject.fullPath] = propObject
+                # print('DEFINITIONS ' + str(JsonParser.DEFINITIONS))
+                # print(propObject)
+
+                if propObject.propType == 'object' and 'properties' in propObject.extraInfo:
+                    innerProps = propObject.extraInfo['properties'].extraInfo
+                    for prop in innerProps:
+                        innerObject = innerProps[prop]
+                        innerObject.name = prop
+                        innerObject.fullPath += propObject.fullPath + '/' + prop
+                        jsonObjects[innerObject.fullPath] = innerObject
+                    propObject.extraInfo.pop('properties')
 
         return jsonObjects
 
-    def parseProperties(self, jsonString) -> list:
-        jsonObjects = []
-        jsonProperties = jsonString['properties']
+    def parseProperties(self, jsonString) -> dict:
+        jsonObjects = {}
 
-        for prop in jsonProperties:
-            propString = json.dumps(jsonProperties[prop], ensure_ascii=False)
-            # print(propString)
-            propObject = json.loads(propString,
-                                    object_hook=JsonParser.jsonPropertyDecoder)
-            propObject.name = prop
-            propObject.fullPath = '/' + prop
-            jsonObjects.append(propObject)
+        if 'properties' in jsonString:
+            jsonProperties = jsonString['properties']
 
-            if propObject.propType == 'object' and propObject.extraInfo['properties']:
-                innerProps = propObject.extraInfo['properties'].extraInfo
-                for prop in innerProps:
-                    innerObject = innerProps[prop]
-                    innerObject.name = prop
-                    innerObject.fullPath += propObject.fullPath + '/' + prop
-                    jsonObjects.append(innerObject)
-                propObject.extraInfo.pop('properties')
+            for prop in jsonProperties:
+                propString = json.dumps(jsonProperties[prop], ensure_ascii=False)
+                # print(propString)
+                propObject = json.loads(propString,
+                                        object_hook=JsonParser.jsonPropertyDecoder)
+                propObject.name = prop
+                propObject.fullPath = '/' + prop
+                # jsonObjects.append(propObject)
+                jsonObjects[propObject.fullPath] = propObject
+
+                if propObject.propType == 'object' and propObject.extraInfo['properties']:
+                    innerProps = propObject.extraInfo['properties'].extraInfo
+                    for prop in innerProps:
+                        innerObject = innerProps[prop]
+                        innerObject.name = prop
+                        innerObject.fullPath += propObject.fullPath + '/' + prop
+                        # jsonObjects.append(innerObject)
+                        jsonObjects[innerObject.fullPath] = innerObject
+                    propObject.extraInfo.pop('properties')
 
         return jsonObjects
 
