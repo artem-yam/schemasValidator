@@ -2,6 +2,7 @@ import copy
 
 
 class JsonPropertyObject(object):
+    #def __init__(self):
     def __init__(self, name, fullPath, description, propType, extraInfo):
         self.name = name
         self.fullPath = fullPath
@@ -17,7 +18,7 @@ class JsonPropertyObject(object):
     def printExtraInfo(self) -> str:
         returnString = ''
 
-        if self.extraInfo is not None:
+        if self.extraInfo:
             returnString += '\n' + ('\t' * self.tabsCount) + 'extraInfo: '
 
             tempExtraInfo = copy.deepcopy(self.extraInfo)
@@ -42,11 +43,15 @@ class JsonPropertyObject(object):
 
             elif 'items' in tempExtraInfo:
                 returnString += '\n' + ('\t' * self.tabsCount) + '{\n'
-                returnString += ('\t' * (self.tabsCount + 1)) + 'items:'
+                returnString += ('\t' * (self.tabsCount + 1)) + 'items: '
 
-                propValue = tempExtraInfo['items']
-                propValue.tabsCount += 4
-                returnString += '\n' + str(propValue)
+                arrayItems = tempExtraInfo['items']
+
+                if isinstance(arrayItems, dict):
+                    arrayItems.tabsCount += 4
+                    returnString += '\n' + str(arrayItems)
+                else:
+                    returnString += str(arrayItems) + ';'
 
                 returnString += '\n' + ('\t' * self.tabsCount) + '};'
                 tempExtraInfo.pop('items')
@@ -89,16 +94,16 @@ class JsonPropertyObject(object):
 
         returnString = ('\t' * (self.tabsCount - 1)) + '{'
 
-        if self.name is not None:
+        if self.name:
             returnString += (PROPERTY_STRING % ('name', self.name))
 
         if self.fullPath:
             returnString += (PROPERTY_STRING % ('path', self.fullPath))
 
-        if self.description is not None:
+        if self.description:
             returnString += (PROPERTY_STRING % ('description', self.description))
 
-        if self.propType is not None:
+        if self.propType:
             returnString += (PROPERTY_STRING % ('type', self.propType))
 
         returnString += self.printExtraInfo()

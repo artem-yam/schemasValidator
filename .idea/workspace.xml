@@ -1,13 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="AutoImportSettings">
-    <option name="autoReloadType" value="SELECTIVE" />
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="BRANCH:origin/main" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </select>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d3cbf362-201e-41f7-a1b1-92b7c91f73bd" name="Default Changelist" comment="">
+    <list default="true" id="d3cbf362-201e-41f7-a1b1-92b7c91f73bd" name="Default Changelist" comment=" Правка парсинга из definitions, проверка ограничения длины строк">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/design.py" beforeDir="false" afterPath="$PROJECT_DIR$/design.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonObjectValidator.py" beforeDir="false" afterPath="$PROJECT_DIR$/jsonObjectValidator.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/jsonParser.py" beforeDir="false" afterPath="$PROJECT_DIR$/jsonParser.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/jsonPropertyObject.py" beforeDir="false" afterPath="$PROJECT_DIR$/jsonPropertyObject.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
@@ -26,11 +48,19 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="main" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="SET_USER_NAME_GLOBALLY" value="false" />
   </component>
   <component name="JupyterTrust" id="cdf2a742-7a0a-408f-9e71-96bab9fe788a" />
   <component name="ProjectId" id="1woDfEVrPMWRKvScJI0Qb1FQGra" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -42,14 +72,7 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="restartRequiresConfirmation" value="false" />
-    <property name="settings.editor.selected.configurable" value="preferences.externalDependencies" />
-  </component>
-  <component name="PyConsoleOptionsProvider">
-    <option name="myPythonConsoleState">
-      <console-settings is-module-sdk="true">
-        <option name="myUseModuleSdk" value="true" />
-      </console-settings>
-    </option>
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -63,7 +86,7 @@
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
-      <option name="SDK_HOME" value="C:\Program Files\Python\Python39\python.exe" />
+      <option name="SDK_HOME" value="/usr/local/bin/python3.9" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
@@ -92,8 +115,25 @@
       <workItem from="1632394640541" duration="115000" />
       <workItem from="1632394812886" duration="1311000" />
       <workItem from="1632396153162" duration="15332000" />
-      <workItem from="1632474583696" duration="20410000" />
+      <workItem from="1632474583696" duration="20641000" />
+      <workItem from="1633419465174" duration="6417000" />
+      <workItem from="1633525955738" duration="33977000" />
     </task>
+    <task id="LOCAL-00001" summary="добавлен валидатор">
+      <created>1632757169983</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1632757169983</updated>
+    </task>
+    <task id="LOCAL-00002" summary=" Правка парсинга из definitions, проверка ограничения длины строк">
+      <created>1633536504937</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1633536504937</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -104,55 +144,167 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="origin/main" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
           </value>
         </entry>
       </map>
     </option>
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+    <MESSAGE value="добавлен валидатор" />
+    <MESSAGE value=" Правка парсинга из definitions, проверка ограничения длины строк" />
+    <option name="LAST_COMMIT_MESSAGE" value=" Правка парсинга из definitions, проверка ограничения длины строк" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="360" y="189" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1633526149860">
+      <screen x="0" y="25" width="1792" height="1010" />
+    </state>
+    <state x="360" y="189" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.25.1792.1010@0.25.1792.1010" timestamp="1633526149860" />
+    <state x="609" y="336" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1632474285052">
+      <screen x="0" y="25" width="1792" height="1010" />
+    </state>
+    <state x="609" y="336" key="#com.intellij.fileTypes.FileTypeChooser/0.25.1792.1010@0.25.1792.1010" timestamp="1632474285052" />
+    <state x="634" y="281" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1632474674791">
+      <screen x="0" y="25" width="1792" height="1010" />
+    </state>
+    <state x="634" y="281" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.25.1792.1010@0.25.1792.1010" timestamp="1632474674791" />
+    <state x="822" y="249" key="#xdebugger.evaluate" timestamp="1633680083485">
+      <screen x="0" y="25" width="1792" height="1010" />
+    </state>
+    <state x="822" y="249" key="#xdebugger.evaluate/0.25.1792.1010@0.25.1792.1010" timestamp="1633680083485" />
+    <state width="1750" height="333" key="GridCell.Tab.0.bottom" timestamp="1633680706501">
+      <screen x="0" y="25" width="1792" height="1010" />
+    </state>
+    <state width="1750" height="333" key="GridCell.Tab.0.bottom/0.25.1792.1010@0.25.1792.1010" timestamp="1633680706501" />
+    <state width="1750" height="333" key="GridCell.Tab.0.center" timestamp="1633680706501">
+      <screen x="0" y="25" width="1792" height="1010" />
+    </state>
+    <state width="1750" height="333" key="GridCell.Tab.0.center/0.25.1792.1010@0.25.1792.1010" timestamp="1633680706501" />
+    <state width="1750" height="333" key="GridCell.Tab.0.left" timestamp="1633680706500">
+      <screen x="0" y="25" width="1792" height="1010" />
+    </state>
+    <state width="1750" height="333" key="GridCell.Tab.0.left/0.25.1792.1010@0.25.1792.1010" timestamp="1633680706500" />
+    <state width="1750" height="333" key="GridCell.Tab.0.right" timestamp="1633680706501">
+      <screen x="0" y="25" width="1792" height="1010" />
+    </state>
+    <state width="1750" height="333" key="GridCell.Tab.0.right/0.25.1792.1010@0.25.1792.1010" timestamp="1633680706501" />
+    <state width="1750" height="333" key="GridCell.Tab.1.bottom" timestamp="1633680674443">
+      <screen x="0" y="25" width="1792" height="1010" />
+    </state>
+    <state width="1750" height="333" key="GridCell.Tab.1.bottom/0.25.1792.1010@0.25.1792.1010" timestamp="1633680674443" />
+    <state width="1750" height="333" key="GridCell.Tab.1.center" timestamp="1633680674442">
+      <screen x="0" y="25" width="1792" height="1010" />
+    </state>
+    <state width="1750" height="333" key="GridCell.Tab.1.center/0.25.1792.1010@0.25.1792.1010" timestamp="1633680674442" />
+    <state width="1750" height="333" key="GridCell.Tab.1.left" timestamp="1633680674442">
+      <screen x="0" y="25" width="1792" height="1010" />
+    </state>
+    <state width="1750" height="333" key="GridCell.Tab.1.left/0.25.1792.1010@0.25.1792.1010" timestamp="1633680674442" />
+    <state width="1750" height="333" key="GridCell.Tab.1.right" timestamp="1633680674443">
+      <screen x="0" y="25" width="1792" height="1010" />
+    </state>
+    <state width="1750" height="333" key="GridCell.Tab.1.right/0.25.1792.1010@0.25.1792.1010" timestamp="1633680674443" />
+    <state x="0" y="25" width="1792" height="1010" key="MergeDialog" timestamp="1633425992522">
+      <screen x="0" y="25" width="1792" height="1010" />
+    </state>
+    <state x="0" y="25" width="1792" height="1010" key="MergeDialog/0.25.1792.1010@0.25.1792.1010" timestamp="1633425992522" />
+    <state x="405" y="166" key="SettingsEditor" timestamp="1633604730536">
+      <screen x="0" y="25" width="1792" height="1010" />
+    </state>
+    <state x="405" y="166" key="SettingsEditor/0.25.1792.1010@0.25.1792.1010" timestamp="1633604730536" />
+    <state x="496" y="267" key="Vcs.Push.Dialog.v2" timestamp="1633536534660">
+      <screen x="0" y="25" width="1792" height="1010" />
+    </state>
+    <state x="496" y="267" key="Vcs.Push.Dialog.v2/0.25.1792.1010@0.25.1792.1010" timestamp="1633536534660" />
+    <state width="896" height="505" key="XDebugger.FullValuePopup" timestamp="1632487358351">
+      <screen x="0" y="25" width="1792" height="1010" />
+    </state>
+    <state width="896" height="505" key="XDebugger.FullValuePopup/0.25.1792.1010@0.25.1792.1010" timestamp="1632487358351" />
+    <state x="649" y="247" key="git4idea.branch.GitSmartOperationDialog" timestamp="1633425920289">
+      <screen x="0" y="25" width="1792" height="1010" />
+    </state>
+    <state x="649" y="247" key="git4idea.branch.GitSmartOperationDialog/0.25.1792.1010@0.25.1792.1010" timestamp="1633425920289" />
+    <state x="676" y="423" key="git4idea.remote.GitConfigureRemotesDialog" timestamp="1633420982567">
+      <screen x="0" y="25" width="1792" height="1010" />
+    </state>
+    <state x="676" y="423" key="git4idea.remote.GitConfigureRemotesDialog/0.25.1792.1010@0.25.1792.1010" timestamp="1633420982567" />
+    <state x="561" y="248" width="670" height="676" key="search.everywhere.popup" timestamp="1633421054371">
+      <screen x="0" y="25" width="1792" height="1010" />
+    </state>
+    <state x="561" y="248" width="670" height="676" key="search.everywhere.popup/0.25.1792.1010@0.25.1792.1010" timestamp="1633421054371" />
+    <state x="626" y="446" key="vcs.readOnlyHandler.ReadOnlyStatusDialog" timestamp="1632483276842">
+      <screen x="0" y="25" width="1792" height="1010" />
+    </state>
+    <state x="626" y="446" key="vcs.readOnlyHandler.ReadOnlyStatusDialog/0.25.1792.1010@0.25.1792.1010" timestamp="1632483276842" />
+  </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+        <line-breakpoint suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/jsonPropertyObject.py</url>
-          <line>62</line>
+          <line>63</line>
           <option name="timeStamp" value="13" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/main.py</url>
-          <line>63</line>
-          <option name="timeStamp" value="47" />
+          <url>file://$PROJECT_DIR$/jsonParser.py</url>
+          <line>61</line>
+          <option name="timeStamp" value="38" />
+        </line-breakpoint>
+        <line-breakpoint suspend="THREAD" type="python-line">
+          <condition expression="obj['type']=='object'" language="Python" />
+          <url>file://$PROJECT_DIR$/jsonParser.py</url>
+          <line>201</line>
+          <option name="timeStamp" value="39" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <condition expression="propObject.extraInfo and 'oneOf' in propObject.extraInfo" language="Python" />
+          <url>file://$PROJECT_DIR$/jsonParser.py</url>
+          <line>111</line>
+          <option name="timeStamp" value="46" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/jsonParser.py</url>
-          <line>68</line>
+          <line>162</line>
+          <option name="timeStamp" value="50" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/jsonParser.py</url>
+          <line>179</line>
           <option name="timeStamp" value="51" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/jsonParser.py</url>
-          <line>33</line>
+          <line>49</line>
           <option name="timeStamp" value="53" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/main.py</url>
-          <line>51</line>
-          <option name="timeStamp" value="54" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/jsonParser.py</url>
-          <line>48</line>
-          <option name="timeStamp" value="55" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/main.py</url>
-          <line>80</line>
+          <line>68</line>
           <option name="timeStamp" value="56" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/main.py</url>
-          <line>52</line>
+        <line-breakpoint suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/jsonParser.py</url>
+          <line>55</line>
           <option name="timeStamp" value="57" />
+        </line-breakpoint>
+        <line-breakpoint suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/jsonParser.py</url>
+          <line>197</line>
+          <option name="timeStamp" value="60" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
@@ -163,5 +315,8 @@
         </breakpoint>
       </default-breakpoints>
     </breakpoint-manager>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/validatorUI$main.coverage" NAME="main Coverage Results" MODIFIED="1633680668819" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

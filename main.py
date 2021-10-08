@@ -1,13 +1,11 @@
-import sys
-
-from PyQt6.QtCore import *
-from PyQt6.QtWidgets import *
-from PyQt6.QtGui import *
-
 import design
+import outputMessage
+import sys
+from PyQt6.QtCore import *
+from PyQt6.QtGui import *
+from PyQt6.QtWidgets import *
 from jsonObjectValidator import JsonObjectValidator
 from jsonParser import JsonParser
-import outputMessage
 
 
 class ExampleApp(QMainWindow, design.Ui_Form):
@@ -46,7 +44,9 @@ class ExampleApp(QMainWindow, design.Ui_Form):
     def validateJson(self):
         self.textEditResultJson.clear()
         jsonString = self.textEditTextJson.toPlainText()
-        # self.textEditResultJson.append(jsonString)
+
+        self.printDraftVersion(jsonString)
+
         jsonObjects = self.jsonParser.parseTextToObjects(jsonString)
 
         if isinstance(jsonObjects, dict):
@@ -59,16 +59,7 @@ class ExampleApp(QMainWindow, design.Ui_Form):
             if fullValidationResult:
                 for msg in fullValidationResult:
                     # self.textEditResultJson.append(str(msg))
-                    self.textEditResultJson.addItem(str(msg))
-
-                    if msg.msgType == outputMessage.MessageType.INFO_TYPE:
-                        itemColor = Qt.GlobalColor.yellow
-                    else:
-                        itemColor = Qt.GlobalColor.red
-
-                    self.textEditResultJson.item(self.textEditResultJson.count() - 1).setForeground(itemColor)
-                    self.textEditResultJson.item(self.textEditResultJson.count() - 1).setBackground(
-                        Qt.GlobalColor.lightGray)
+                    self.printOutputMessage(msg)
 
                     # (',' if fullValidationResult.index(msg) != len(fullValidationResult) - 1 else '')
             else:
@@ -82,6 +73,23 @@ class ExampleApp(QMainWindow, design.Ui_Form):
             self.textEditResultJson.item(self.textEditResultJson.count() - 1).setForeground(Qt.GlobalColor.red)
             self.textEditResultJson.item(self.textEditResultJson.count() - 1).setBackground(
                 Qt.GlobalColor.lightGray)
+
+    def printOutputMessage(self, message):
+        self.textEditResultJson.addItem(str(message))
+
+        if message.msgType == outputMessage.MessageType.INFO_TYPE:
+            itemColor = Qt.GlobalColor.yellow
+        else:
+            itemColor = Qt.GlobalColor.red
+
+        self.textEditResultJson.item(self.textEditResultJson.count() - 1).setForeground(itemColor)
+        self.textEditResultJson.item(self.textEditResultJson.count() - 1).setBackground(
+            Qt.GlobalColor.lightGray)
+
+    def printDraftVersion(self, jsonString):
+        draft = self.jsonParser.getJsonDraftVersion(jsonString)
+        validationResultMessage = self.jsonValidator.checkDraftVersion(draft)
+        self.printOutputMessage(validationResultMessage)
 
 
 def main():

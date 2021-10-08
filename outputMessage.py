@@ -7,10 +7,11 @@ class OutputMessage:
     def __str__(self) -> str:
         returnString = '{\nТип сообщения: ' + self.msgType
 
-        if self.relatedJsonObject.fullPath:
-            returnString += '\nЭлемент: ' + self.relatedJsonObject.fullPath
-        else:
-            returnString += '\nЭлемент: ' + self.relatedJsonObject.name
+        if self.relatedJsonObject:
+            if self.relatedJsonObject.fullPath:
+                returnString += '\nЭлемент: ' + self.relatedJsonObject.fullPath
+            else:
+                returnString += '\nЭлемент: ' + self.relatedJsonObject.name
 
         returnString += '\nТекст сообщения: ' + self.msgContent + '\n}'
 
