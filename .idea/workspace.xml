@@ -26,14 +26,11 @@
     </select>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d3cbf362-201e-41f7-a1b1-92b7c91f73bd" name="Default Changelist" comment=" Правка парсинга из definitions, проверка ограничения длины строк">
+    <list default="true" id="d3cbf362-201e-41f7-a1b1-92b7c91f73bd" name="Default Changelist" comment="Парсинг: items, oneOf;&#10;Проверки: драфт, items">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/jsonObjectValidator.py" beforeDir="false" afterPath="$PROJECT_DIR$/jsonObjectValidator.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/jsonParser.py" beforeDir="false" afterPath="$PROJECT_DIR$/jsonParser.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/jsonPropertyObject.py" beforeDir="false" afterPath="$PROJECT_DIR$/jsonPropertyObject.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/outputMessage.py" beforeDir="false" afterPath="$PROJECT_DIR$/outputMessage.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -117,7 +114,7 @@
       <workItem from="1632396153162" duration="15332000" />
       <workItem from="1632474583696" duration="20641000" />
       <workItem from="1633419465174" duration="6417000" />
-      <workItem from="1633525955738" duration="33977000" />
+      <workItem from="1633525955738" duration="42546000" />
     </task>
     <task id="LOCAL-00001" summary="добавлен валидатор">
       <created>1632757169983</created>
@@ -133,7 +130,14 @@
       <option name="project" value="LOCAL" />
       <updated>1633536504937</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Парсинг: items, oneOf;&#10;Проверки: драфт, items">
+      <created>1633685333709</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1633685333709</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -167,7 +171,8 @@
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="добавлен валидатор" />
     <MESSAGE value=" Правка парсинга из definitions, проверка ограничения длины строк" />
-    <option name="LAST_COMMIT_MESSAGE" value=" Правка парсинга из definitions, проверка ограничения длины строк" />
+    <MESSAGE value="Парсинг: items, oneOf;&#10;Проверки: драфт, items" />
+    <option name="LAST_COMMIT_MESSAGE" value="Парсинг: items, oneOf;&#10;Проверки: драфт, items" />
   </component>
   <component name="WindowStateProjectService">
     <state x="360" y="189" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1633526149860">
@@ -182,42 +187,42 @@
       <screen x="0" y="25" width="1792" height="1010" />
     </state>
     <state x="634" y="281" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.25.1792.1010@0.25.1792.1010" timestamp="1632474674791" />
-    <state x="822" y="249" key="#xdebugger.evaluate" timestamp="1633680083485">
+    <state x="822" y="249" key="#xdebugger.evaluate" timestamp="1633689533246">
       <screen x="0" y="25" width="1792" height="1010" />
     </state>
-    <state x="822" y="249" key="#xdebugger.evaluate/0.25.1792.1010@0.25.1792.1010" timestamp="1633680083485" />
-    <state width="1750" height="333" key="GridCell.Tab.0.bottom" timestamp="1633680706501">
+    <state x="822" y="249" key="#xdebugger.evaluate/0.25.1792.1010@0.25.1792.1010" timestamp="1633689533246" />
+    <state width="1750" height="125" key="GridCell.Tab.0.bottom" timestamp="1633693168936">
       <screen x="0" y="25" width="1792" height="1010" />
     </state>
-    <state width="1750" height="333" key="GridCell.Tab.0.bottom/0.25.1792.1010@0.25.1792.1010" timestamp="1633680706501" />
-    <state width="1750" height="333" key="GridCell.Tab.0.center" timestamp="1633680706501">
+    <state width="1750" height="125" key="GridCell.Tab.0.bottom/0.25.1792.1010@0.25.1792.1010" timestamp="1633693168936" />
+    <state width="1750" height="125" key="GridCell.Tab.0.center" timestamp="1633693168935">
       <screen x="0" y="25" width="1792" height="1010" />
     </state>
-    <state width="1750" height="333" key="GridCell.Tab.0.center/0.25.1792.1010@0.25.1792.1010" timestamp="1633680706501" />
-    <state width="1750" height="333" key="GridCell.Tab.0.left" timestamp="1633680706500">
+    <state width="1750" height="125" key="GridCell.Tab.0.center/0.25.1792.1010@0.25.1792.1010" timestamp="1633693168935" />
+    <state width="1750" height="125" key="GridCell.Tab.0.left" timestamp="1633693168935">
       <screen x="0" y="25" width="1792" height="1010" />
     </state>
-    <state width="1750" height="333" key="GridCell.Tab.0.left/0.25.1792.1010@0.25.1792.1010" timestamp="1633680706500" />
-    <state width="1750" height="333" key="GridCell.Tab.0.right" timestamp="1633680706501">
+    <state width="1750" height="125" key="GridCell.Tab.0.left/0.25.1792.1010@0.25.1792.1010" timestamp="1633693168935" />
+    <state width="1750" height="125" key="GridCell.Tab.0.right" timestamp="1633693168935">
       <screen x="0" y="25" width="1792" height="1010" />
     </state>
-    <state width="1750" height="333" key="GridCell.Tab.0.right/0.25.1792.1010@0.25.1792.1010" timestamp="1633680706501" />
-    <state width="1750" height="333" key="GridCell.Tab.1.bottom" timestamp="1633680674443">
+    <state width="1750" height="125" key="GridCell.Tab.0.right/0.25.1792.1010@0.25.1792.1010" timestamp="1633693168935" />
+    <state width="1750" height="407" key="GridCell.Tab.1.bottom" timestamp="1633689966000">
       <screen x="0" y="25" width="1792" height="1010" />
     </state>
-    <state width="1750" height="333" key="GridCell.Tab.1.bottom/0.25.1792.1010@0.25.1792.1010" timestamp="1633680674443" />
-    <state width="1750" height="333" key="GridCell.Tab.1.center" timestamp="1633680674442">
+    <state width="1750" height="407" key="GridCell.Tab.1.bottom/0.25.1792.1010@0.25.1792.1010" timestamp="1633689966000" />
+    <state width="1750" height="407" key="GridCell.Tab.1.center" timestamp="1633689965999">
       <screen x="0" y="25" width="1792" height="1010" />
     </state>
-    <state width="1750" height="333" key="GridCell.Tab.1.center/0.25.1792.1010@0.25.1792.1010" timestamp="1633680674442" />
-    <state width="1750" height="333" key="GridCell.Tab.1.left" timestamp="1633680674442">
+    <state width="1750" height="407" key="GridCell.Tab.1.center/0.25.1792.1010@0.25.1792.1010" timestamp="1633689965999" />
+    <state width="1750" height="407" key="GridCell.Tab.1.left" timestamp="1633689965999">
       <screen x="0" y="25" width="1792" height="1010" />
     </state>
-    <state width="1750" height="333" key="GridCell.Tab.1.left/0.25.1792.1010@0.25.1792.1010" timestamp="1633680674442" />
-    <state width="1750" height="333" key="GridCell.Tab.1.right" timestamp="1633680674443">
+    <state width="1750" height="407" key="GridCell.Tab.1.left/0.25.1792.1010@0.25.1792.1010" timestamp="1633689965999" />
+    <state width="1750" height="407" key="GridCell.Tab.1.right" timestamp="1633689965999">
       <screen x="0" y="25" width="1792" height="1010" />
     </state>
-    <state width="1750" height="333" key="GridCell.Tab.1.right/0.25.1792.1010@0.25.1792.1010" timestamp="1633680674443" />
+    <state width="1750" height="407" key="GridCell.Tab.1.right/0.25.1792.1010@0.25.1792.1010" timestamp="1633689965999" />
     <state x="0" y="25" width="1792" height="1010" key="MergeDialog" timestamp="1633425992522">
       <screen x="0" y="25" width="1792" height="1010" />
     </state>
@@ -230,10 +235,10 @@
       <screen x="0" y="25" width="1792" height="1010" />
     </state>
     <state x="496" y="267" key="Vcs.Push.Dialog.v2/0.25.1792.1010@0.25.1792.1010" timestamp="1633536534660" />
-    <state width="896" height="505" key="XDebugger.FullValuePopup" timestamp="1632487358351">
+    <state width="896" height="505" key="XDebugger.FullValuePopup" timestamp="1633689531810">
       <screen x="0" y="25" width="1792" height="1010" />
     </state>
-    <state width="896" height="505" key="XDebugger.FullValuePopup/0.25.1792.1010@0.25.1792.1010" timestamp="1632487358351" />
+    <state width="896" height="505" key="XDebugger.FullValuePopup/0.25.1792.1010@0.25.1792.1010" timestamp="1633689531810" />
     <state x="649" y="247" key="git4idea.branch.GitSmartOperationDialog" timestamp="1633425920289">
       <screen x="0" y="25" width="1792" height="1010" />
     </state>
@@ -242,10 +247,10 @@
       <screen x="0" y="25" width="1792" height="1010" />
     </state>
     <state x="676" y="423" key="git4idea.remote.GitConfigureRemotesDialog/0.25.1792.1010@0.25.1792.1010" timestamp="1633420982567" />
-    <state x="561" y="248" width="670" height="676" key="search.everywhere.popup" timestamp="1633421054371">
+    <state x="561" y="248" width="670" height="676" key="search.everywhere.popup" timestamp="1633685296449">
       <screen x="0" y="25" width="1792" height="1010" />
     </state>
-    <state x="561" y="248" width="670" height="676" key="search.everywhere.popup/0.25.1792.1010@0.25.1792.1010" timestamp="1633421054371" />
+    <state x="561" y="248" width="670" height="676" key="search.everywhere.popup/0.25.1792.1010@0.25.1792.1010" timestamp="1633685296449" />
     <state x="626" y="446" key="vcs.readOnlyHandler.ReadOnlyStatusDialog" timestamp="1632483276842">
       <screen x="0" y="25" width="1792" height="1010" />
     </state>
@@ -256,55 +261,44 @@
       <breakpoints>
         <line-breakpoint suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/jsonPropertyObject.py</url>
-          <line>63</line>
+          <line>11</line>
           <option name="timeStamp" value="13" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/jsonParser.py</url>
-          <line>61</line>
-          <option name="timeStamp" value="38" />
-        </line-breakpoint>
         <line-breakpoint suspend="THREAD" type="python-line">
-          <condition expression="obj['type']=='object'" language="Python" />
           <url>file://$PROJECT_DIR$/jsonParser.py</url>
-          <line>201</line>
-          <option name="timeStamp" value="39" />
+          <line>49</line>
+          <option name="timeStamp" value="38" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <condition expression="propObject.extraInfo and 'oneOf' in propObject.extraInfo" language="Python" />
           <url>file://$PROJECT_DIR$/jsonParser.py</url>
-          <line>111</line>
+          <line>98</line>
           <option name="timeStamp" value="46" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/jsonParser.py</url>
-          <line>162</line>
+          <line>149</line>
           <option name="timeStamp" value="50" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/jsonParser.py</url>
-          <line>179</line>
+          <line>166</line>
           <option name="timeStamp" value="51" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/jsonParser.py</url>
-          <line>49</line>
+          <line>47</line>
           <option name="timeStamp" value="53" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/jsonParser.py</url>
-          <line>68</line>
+          <line>56</line>
           <option name="timeStamp" value="56" />
         </line-breakpoint>
-        <line-breakpoint suspend="THREAD" type="python-line">
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/jsonParser.py</url>
-          <line>55</line>
-          <option name="timeStamp" value="57" />
-        </line-breakpoint>
-        <line-breakpoint suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/jsonParser.py</url>
-          <line>197</line>
-          <option name="timeStamp" value="60" />
+          <line>75</line>
+          <option name="timeStamp" value="62" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
@@ -317,6 +311,6 @@
     </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/validatorUI$main.coverage" NAME="main Coverage Results" MODIFIED="1633680668819" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/validatorUI$main.coverage" NAME="main Coverage Results" MODIFIED="1633693168929" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

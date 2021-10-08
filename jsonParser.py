@@ -41,18 +41,14 @@ class JsonParser(object):
         return jsonString
 
     def parseTextToObjects(self, jsonString) -> dict:
-        # JsonParser.DEFINITIONS = {}
-
         jsonObjects = {}
         try:
             jsonString = json.loads(jsonString)
 
             jsonObjects.update(self.parseProperties(jsonString))
 
-            jsonObjects.update(self.checkInnerProperties(propObject))
-
             print('---------------------------------------------------')
-            print('\n'.join(map(str, jsonObjects.values())))
+            print(';\n'.join(map(str, jsonObjects.values())))
 
         except Exception as err:
             print('Ошибки получения объектов из json:\n', traceback.format_exc())
@@ -86,7 +82,6 @@ class JsonParser(object):
                                 object_hook=JsonParser.jsonPropertyDecoder)
         propObject.name = propName
         propObject.fullPath = '/' + propName
-        # jsonObjects.append(propObject)
         jsonObjects[propObject.fullPath] = propObject
 
         jsonObjects.update(self.checkInnerProperties(propObject))
@@ -96,7 +91,7 @@ class JsonParser(object):
     def checkInnerProperties(self, propObject) -> dict:
         jsonObjects = {}
 
-        if propObject.extraInfo:
+        if hasattr(propObject, 'extraInfo') and propObject.extraInfo:
             if 'oneOf' in propObject.extraInfo \
                     and propObject.extraInfo['oneOf']:
                 jsonObjects.update(self.parseOneOf(propObject))
@@ -179,16 +174,4 @@ class JsonParser(object):
 
     @staticmethod
     def jsonPropertyDecoder(obj):
-        if 'description' in obj:
-            descriptionValue = obj['description']
-            obj.pop('description')
-
-        if 'type' in obj:
-            typeValue = obj['type']
-            obj.pop('type')
-        elif 'oneOf' in obj:
-            typeValue = 'oneOf'
-
-        decodedObj = JsonPropertyObject(None, '', descriptionValue if 'descriptionValue' in locals() else None,
-                                        typeValue if 'typeValue' in locals() else None, obj if obj else None)
-        return decodedObj
+        return JsonPropertyObject(obj)

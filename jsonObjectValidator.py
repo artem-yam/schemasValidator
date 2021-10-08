@@ -22,49 +22,43 @@ class JsonObjectValidator(object):
     def validate(self, jsonObject):
         validationResult = []
 
-        if not jsonObject.description:
+        if not (hasattr(jsonObject, 'description') and jsonObject.description):
             validatorMsg = OutputMessage(jsonObject, MessageType.INFO_TYPE,
                                          JsonObjectValidator.NULL_DESCRIPTION_MESSAGE)
             validationResult.append(validatorMsg)
 
-        if jsonObject.propType == 'string':
-            validationResult.extend(self.checkStringTypeRestrictions(jsonObject))
-        elif jsonObject.propType == 'array':
-            validationResult.extend(self.checkArrayTypeRestrictions(jsonObject))
+        if hasattr(jsonObject, 'type'):
+            if jsonObject.type == 'string':
+                validationResult.extend(self.checkStringTypeRestrictions(jsonObject))
+            elif jsonObject.type == 'array':
+                validationResult.extend(self.checkArrayTypeRestrictions(jsonObject))
 
         return validationResult
 
     def checkArrayTypeRestrictions(self, jsonObject) -> list:
         validationResult = []
 
-        if not (jsonObject.extraInfo
-                and 'items' in jsonObject.extraInfo
-                and jsonObject.extraInfo['items']
-                and isinstance(jsonObject.extraInfo['items'], dict)):
+        if not (hasattr(jsonObject, 'items')
+                and jsonObject.items
+                and isinstance(jsonObject.items, dict)):
             validatorMsg = OutputMessage(jsonObject, MessageType.ERROR_TYPE,
                                          JsonObjectValidator.NO_ARRAY_ITEMS_MESSAGE)
             validationResult.append(validatorMsg)
-        #elif (jsonObject.extraInfo):
-
+        # elif (jsonObject.extraInfo):
 
         return validationResult
 
     def checkStringTypeRestrictions(self, jsonObject) -> list:
         validationResult = []
 
-        if jsonObject.extraInfo:
-            # print(f'String object {jsonObject} has extraInfo')
-            extraInfo = jsonObject.extraInfo
-            if 'maxLength' not in extraInfo:
-                # print(f'has max length')
-                validatorMsg = OutputMessage(jsonObject, MessageType.ERROR_TYPE,
-                                             JsonObjectValidator.NO_MAX_LENGTH_MESSAGE)
-                validationResult.append(validatorMsg)
-            elif self.allowedStringMaxLength and extraInfo['maxLength'] > self.allowedStringMaxLength:
-                # print(f'Max length {extraInfo["maxLength"]} is more then allowed {self.allowedStringMaxLength}')
-                validatorMsg = OutputMessage(jsonObject, MessageType.ERROR_TYPE,
-                                             JsonObjectValidator.EXCESS_MAX_LENGTH_MESSAGE)
-                validationResult.append(validatorMsg)
+        if not hasattr(jsonObject, 'maxLength'):
+            validatorMsg = OutputMessage(jsonObject, MessageType.ERROR_TYPE,
+                                         JsonObjectValidator.NO_MAX_LENGTH_MESSAGE)
+            validationResult.append(validatorMsg)
+        elif self.allowedStringMaxLength and jsonObject.maxLength > self.allowedStringMaxLength:
+            validatorMsg = OutputMessage(jsonObject, MessageType.ERROR_TYPE,
+                                         JsonObjectValidator.EXCESS_MAX_LENGTH_MESSAGE)
+            validationResult.append(validatorMsg)
 
         return validationResult
 
