@@ -28,9 +28,10 @@
   <component name="ChangeListManager">
     <list default="true" id="d3cbf362-201e-41f7-a1b1-92b7c91f73bd" name="Default Changelist" comment="Парсинг: items, oneOf;&#10;Проверки: драфт, items">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/jsonObjectValidator.py" beforeDir="false" afterPath="$PROJECT_DIR$/jsonObjectValidator.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/jsonParser.py" beforeDir="false" afterPath="$PROJECT_DIR$/jsonParser.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jsonPropertyObject.py" beforeDir="false" afterPath="$PROJECT_DIR$/jsonPropertyObject.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/outputMessage.py" beforeDir="false" afterPath="$PROJECT_DIR$/outputMessage.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -83,7 +84,7 @@
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
-      <option name="SDK_HOME" value="/usr/local/bin/python3.9" />
+      <option name="SDK_HOME" value="C:\Program Files\Python\Python39\python.exe" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
@@ -154,7 +155,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="origin/main" />
+                        <option value="origin/feature/jsonObjectRefactor" />
                       </list>
                     </value>
                   </entry>
@@ -174,88 +175,6 @@
     <MESSAGE value="Парсинг: items, oneOf;&#10;Проверки: драфт, items" />
     <option name="LAST_COMMIT_MESSAGE" value="Парсинг: items, oneOf;&#10;Проверки: драфт, items" />
   </component>
-  <component name="WindowStateProjectService">
-    <state x="360" y="189" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1633526149860">
-      <screen x="0" y="25" width="1792" height="1010" />
-    </state>
-    <state x="360" y="189" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.25.1792.1010@0.25.1792.1010" timestamp="1633526149860" />
-    <state x="609" y="336" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1632474285052">
-      <screen x="0" y="25" width="1792" height="1010" />
-    </state>
-    <state x="609" y="336" key="#com.intellij.fileTypes.FileTypeChooser/0.25.1792.1010@0.25.1792.1010" timestamp="1632474285052" />
-    <state x="634" y="281" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1632474674791">
-      <screen x="0" y="25" width="1792" height="1010" />
-    </state>
-    <state x="634" y="281" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.25.1792.1010@0.25.1792.1010" timestamp="1632474674791" />
-    <state x="822" y="249" key="#xdebugger.evaluate" timestamp="1633689533246">
-      <screen x="0" y="25" width="1792" height="1010" />
-    </state>
-    <state x="822" y="249" key="#xdebugger.evaluate/0.25.1792.1010@0.25.1792.1010" timestamp="1633689533246" />
-    <state width="1750" height="125" key="GridCell.Tab.0.bottom" timestamp="1633693168936">
-      <screen x="0" y="25" width="1792" height="1010" />
-    </state>
-    <state width="1750" height="125" key="GridCell.Tab.0.bottom/0.25.1792.1010@0.25.1792.1010" timestamp="1633693168936" />
-    <state width="1750" height="125" key="GridCell.Tab.0.center" timestamp="1633693168935">
-      <screen x="0" y="25" width="1792" height="1010" />
-    </state>
-    <state width="1750" height="125" key="GridCell.Tab.0.center/0.25.1792.1010@0.25.1792.1010" timestamp="1633693168935" />
-    <state width="1750" height="125" key="GridCell.Tab.0.left" timestamp="1633693168935">
-      <screen x="0" y="25" width="1792" height="1010" />
-    </state>
-    <state width="1750" height="125" key="GridCell.Tab.0.left/0.25.1792.1010@0.25.1792.1010" timestamp="1633693168935" />
-    <state width="1750" height="125" key="GridCell.Tab.0.right" timestamp="1633693168935">
-      <screen x="0" y="25" width="1792" height="1010" />
-    </state>
-    <state width="1750" height="125" key="GridCell.Tab.0.right/0.25.1792.1010@0.25.1792.1010" timestamp="1633693168935" />
-    <state width="1750" height="407" key="GridCell.Tab.1.bottom" timestamp="1633689966000">
-      <screen x="0" y="25" width="1792" height="1010" />
-    </state>
-    <state width="1750" height="407" key="GridCell.Tab.1.bottom/0.25.1792.1010@0.25.1792.1010" timestamp="1633689966000" />
-    <state width="1750" height="407" key="GridCell.Tab.1.center" timestamp="1633689965999">
-      <screen x="0" y="25" width="1792" height="1010" />
-    </state>
-    <state width="1750" height="407" key="GridCell.Tab.1.center/0.25.1792.1010@0.25.1792.1010" timestamp="1633689965999" />
-    <state width="1750" height="407" key="GridCell.Tab.1.left" timestamp="1633689965999">
-      <screen x="0" y="25" width="1792" height="1010" />
-    </state>
-    <state width="1750" height="407" key="GridCell.Tab.1.left/0.25.1792.1010@0.25.1792.1010" timestamp="1633689965999" />
-    <state width="1750" height="407" key="GridCell.Tab.1.right" timestamp="1633689965999">
-      <screen x="0" y="25" width="1792" height="1010" />
-    </state>
-    <state width="1750" height="407" key="GridCell.Tab.1.right/0.25.1792.1010@0.25.1792.1010" timestamp="1633689965999" />
-    <state x="0" y="25" width="1792" height="1010" key="MergeDialog" timestamp="1633425992522">
-      <screen x="0" y="25" width="1792" height="1010" />
-    </state>
-    <state x="0" y="25" width="1792" height="1010" key="MergeDialog/0.25.1792.1010@0.25.1792.1010" timestamp="1633425992522" />
-    <state x="405" y="166" key="SettingsEditor" timestamp="1633604730536">
-      <screen x="0" y="25" width="1792" height="1010" />
-    </state>
-    <state x="405" y="166" key="SettingsEditor/0.25.1792.1010@0.25.1792.1010" timestamp="1633604730536" />
-    <state x="496" y="267" key="Vcs.Push.Dialog.v2" timestamp="1633536534660">
-      <screen x="0" y="25" width="1792" height="1010" />
-    </state>
-    <state x="496" y="267" key="Vcs.Push.Dialog.v2/0.25.1792.1010@0.25.1792.1010" timestamp="1633536534660" />
-    <state width="896" height="505" key="XDebugger.FullValuePopup" timestamp="1633689531810">
-      <screen x="0" y="25" width="1792" height="1010" />
-    </state>
-    <state width="896" height="505" key="XDebugger.FullValuePopup/0.25.1792.1010@0.25.1792.1010" timestamp="1633689531810" />
-    <state x="649" y="247" key="git4idea.branch.GitSmartOperationDialog" timestamp="1633425920289">
-      <screen x="0" y="25" width="1792" height="1010" />
-    </state>
-    <state x="649" y="247" key="git4idea.branch.GitSmartOperationDialog/0.25.1792.1010@0.25.1792.1010" timestamp="1633425920289" />
-    <state x="676" y="423" key="git4idea.remote.GitConfigureRemotesDialog" timestamp="1633420982567">
-      <screen x="0" y="25" width="1792" height="1010" />
-    </state>
-    <state x="676" y="423" key="git4idea.remote.GitConfigureRemotesDialog/0.25.1792.1010@0.25.1792.1010" timestamp="1633420982567" />
-    <state x="561" y="248" width="670" height="676" key="search.everywhere.popup" timestamp="1633685296449">
-      <screen x="0" y="25" width="1792" height="1010" />
-    </state>
-    <state x="561" y="248" width="670" height="676" key="search.everywhere.popup/0.25.1792.1010@0.25.1792.1010" timestamp="1633685296449" />
-    <state x="626" y="446" key="vcs.readOnlyHandler.ReadOnlyStatusDialog" timestamp="1632483276842">
-      <screen x="0" y="25" width="1792" height="1010" />
-    </state>
-    <state x="626" y="446" key="vcs.readOnlyHandler.ReadOnlyStatusDialog/0.25.1792.1010@0.25.1792.1010" timestamp="1632483276842" />
-  </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
@@ -269,23 +188,23 @@
           <line>49</line>
           <option name="timeStamp" value="38" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+        <line-breakpoint suspend="THREAD" type="python-line">
           <condition expression="propObject.extraInfo and 'oneOf' in propObject.extraInfo" language="Python" />
           <url>file://$PROJECT_DIR$/jsonParser.py</url>
-          <line>98</line>
+          <line>97</line>
           <option name="timeStamp" value="46" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/jsonParser.py</url>
-          <line>149</line>
+          <line>152</line>
           <option name="timeStamp" value="50" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/jsonParser.py</url>
-          <line>166</line>
+          <line>170</line>
           <option name="timeStamp" value="51" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+        <line-breakpoint suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/jsonParser.py</url>
           <line>47</line>
           <option name="timeStamp" value="53" />
@@ -300,6 +219,11 @@
           <line>75</line>
           <option name="timeStamp" value="62" />
         </line-breakpoint>
+        <line-breakpoint suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/jsonParser.py</url>
+          <line>129</line>
+          <option name="timeStamp" value="63" />
+        </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
         <breakpoint type="python-exception">
@@ -309,8 +233,5 @@
         </breakpoint>
       </default-breakpoints>
     </breakpoint-manager>
-  </component>
-  <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/validatorUI$main.coverage" NAME="main Coverage Results" MODIFIED="1633693168929" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

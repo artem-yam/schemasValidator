@@ -8,9 +8,9 @@ class OutputMessage:
         returnString = '{\nТип сообщения: ' + self.msgType
 
         if self.relatedJsonObject:
-            if self.relatedJsonObject.fullPath:
+            if hasattr(self.relatedJsonObject, 'fullPath'):
                 returnString += '\nЭлемент: ' + self.relatedJsonObject.fullPath
-            else:
+            elif hasattr(self.relatedJsonObject, 'name'):
                 returnString += '\nЭлемент: ' + self.relatedJsonObject.name
 
         returnString += '\nТекст сообщения: ' + self.msgContent + '\n}'

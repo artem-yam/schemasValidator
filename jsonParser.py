@@ -91,18 +91,15 @@ class JsonParser(object):
     def checkInnerProperties(self, propObject) -> dict:
         jsonObjects = {}
 
-        if hasattr(propObject, 'extraInfo') and propObject.extraInfo:
-            if 'oneOf' in propObject.extraInfo \
-                    and propObject.extraInfo['oneOf']:
-                jsonObjects.update(self.parseOneOf(propObject))
+        if hasattr(propObject, 'oneOf') and propObject.oneOf:
+            jsonObjects.update(self.parseOneOf(propObject))
 
-            if propObject.propType == 'object' \
-                    and 'properties' in propObject.extraInfo \
-                    and propObject.extraInfo['properties']:
+        if hasattr(propObject, 'type'):
+            if propObject.type == 'object' \
+                    and hasattr(propObject, 'properties') \
+                    and propObject.properties:
                 jsonObjects.update(self.parseInnerProperties(propObject))
-            elif propObject.propType == 'array' \
-                    and 'items' in propObject.extraInfo \
-                    and propObject.extraInfo['items']:
+            elif propObject.type == 'array':
                 jsonObjects.update(self.parseArrayItems(propObject))
 
         return jsonObjects
@@ -110,65 +107,73 @@ class JsonParser(object):
     def parseOneOf(self, propObject) -> dict:
         jsonObjects = {}
 
-        oneOfList = propObject.extraInfo['oneOf']
+        if not hasattr(propObject, 'type'):
+            propObject.type = 'oneOf'
+
+        oneOfList = propObject.oneOf
         for propIndex in range(len(oneOfList)):
-            # for prop in oneOfList:
             innerObject = oneOfList[propIndex]
-            innerObject.fullPath += propObject.fullPath + '/' + \
-                                    (innerObject.name if innerObject.name else 'oneOf#' + str(propIndex + 1))
+            innerObject.fullPath = propObject.fullPath + '/' + \
+                                   (innerObject.name if hasattr(innerObject, 'name') else 'oneOf#' + str(propIndex + 1))
             jsonObjects[innerObject.fullPath] = innerObject
 
             jsonObjects.update(self.checkInnerProperties(innerObject))
 
-        propObject.extraInfo.pop('oneOf')
+        propObject.__dict__.pop('oneOf')
 
         return jsonObjects
 
     def parseInnerProperties(self, propObject) -> dict:
         jsonObjects = {}
 
-        innerProps = propObject.extraInfo['properties'].extraInfo
+        innerProps = propObject.properties.__dict__
         for prop in innerProps:
             innerObject = innerProps[prop]
-            innerObject.name = prop
-            innerObject.fullPath += propObject.fullPath + '/' + prop
-            jsonObjects[innerObject.fullPath] = innerObject
 
-            jsonObjects.update(self.checkInnerProperties(innerObject))
+            if isinstance(innerObject, JsonPropertyObject):
+                innerObject.name = prop
+                innerObject.fullPath = propObject.fullPath + '/' + prop
+                jsonObjects[innerObject.fullPath] = innerObject
 
-        propObject.extraInfo.pop('properties')
+                jsonObjects.update(self.checkInnerProperties(innerObject))
+
+        propObject.__dict__.pop('properties')
 
         return jsonObjects
 
     def parseArrayItems(self, propArrayObject) -> dict:
         jsonObjects = {}
 
-        # if 'items' in propObject.extraInfo and propObject.extraInfo['items']:
+        if hasattr(propArrayObject, 'items'):
 
-        itemsObject = propArrayObject.extraInfo['items']
+            itemsObject = propArrayObject.items
 
-        if itemsObject.propType == 'object':
-            arrayItems = itemsObject.extraInfo['properties'].extraInfo
+            if itemsObject:
 
-            for prop in arrayItems:
-                innerObject = arrayItems[prop]
-                innerObject.name = prop
-                innerObject.fullPath += propArrayObject.fullPath + '/' + prop
-                jsonObjects[innerObject.fullPath] = innerObject
+                if hasattr(itemsObject, 'properties'):
+                    arrayItems = itemsObject.properties.__dict__
 
-                jsonObjects.update(self.checkInnerProperties(innerObject))
+                    for prop in arrayItems:
+                        innerObject = arrayItems[prop]
 
-            # propArrayObject.extraInfo.pop('items')
-        elif isinstance(itemsObject, JsonPropertyObject):
-            itemsObject.fullPath += propArrayObject.fullPath + '/' + \
-                                    (itemsObject.name if itemsObject.name else 'items')
-            jsonObjects[itemsObject.fullPath] = itemsObject
+                        if isinstance(innerObject, JsonPropertyObject):
+                            innerObject.name = prop
+                            innerObject.fullPath = propArrayObject.fullPath + '/' + prop
+                            jsonObjects[innerObject.fullPath] = innerObject
 
-            jsonObjects.update(self.checkInnerProperties(itemsObject))
-            # propArrayObject.extraInfo.pop('items')
+                            jsonObjects.update(self.checkInnerProperties(innerObject))
 
-        # propArrayObject.extraInfo.pop('items')
-        propArrayObject.extraInfo['items'] = 'Все элементы массива запаршены'
+                else:
+                    itemsObject.fullPath = propArrayObject.fullPath + '/' + \
+                                           (itemsObject.name if hasattr(itemsObject, 'name') else 'items')
+                    jsonObjects[itemsObject.fullPath] = itemsObject
+
+                    jsonObjects.update(self.checkInnerProperties(itemsObject))
+
+                propArrayObject.items = 'Все элементы массива запаршены'
+
+            else:
+                propArrayObject.__dict__.pop('items')
 
         return jsonObjects
 

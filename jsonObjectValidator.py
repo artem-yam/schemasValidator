@@ -40,7 +40,7 @@ class JsonObjectValidator(object):
 
         if not (hasattr(jsonObject, 'items')
                 and jsonObject.items
-                and isinstance(jsonObject.items, dict)):
+                and isinstance(jsonObject.items, str)):
             validatorMsg = OutputMessage(jsonObject, MessageType.ERROR_TYPE,
                                          JsonObjectValidator.NO_ARRAY_ITEMS_MESSAGE)
             validationResult.append(validatorMsg)
