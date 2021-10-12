@@ -26,12 +26,10 @@
     </select>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d3cbf362-201e-41f7-a1b1-92b7c91f73bd" name="Default Changelist" comment="Парсинг: items, oneOf;&#10;Проверки: драфт, items">
+    <list default="true" id="d3cbf362-201e-41f7-a1b1-92b7c91f73bd" name="Default Changelist" comment="Доработка динамических json-классов">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/jsonObjectValidator.py" beforeDir="false" afterPath="$PROJECT_DIR$/jsonObjectValidator.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jsonParser.py" beforeDir="false" afterPath="$PROJECT_DIR$/jsonParser.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/outputMessage.py" beforeDir="false" afterPath="$PROJECT_DIR$/outputMessage.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -138,7 +136,14 @@
       <option name="project" value="LOCAL" />
       <updated>1633685333709</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Доработка динамических json-классов">
+      <created>1633967264056</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1633967264056</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -173,7 +178,8 @@
     <MESSAGE value="добавлен валидатор" />
     <MESSAGE value=" Правка парсинга из definitions, проверка ограничения длины строк" />
     <MESSAGE value="Парсинг: items, oneOf;&#10;Проверки: драфт, items" />
-    <option name="LAST_COMMIT_MESSAGE" value="Парсинг: items, oneOf;&#10;Проверки: драфт, items" />
+    <MESSAGE value="Доработка динамических json-классов" />
+    <option name="LAST_COMMIT_MESSAGE" value="Доработка динамических json-классов" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

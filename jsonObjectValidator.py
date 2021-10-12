@@ -4,9 +4,16 @@ from outputMessage import OutputMessage
 
 class JsonObjectValidator(object):
     NULL_DESCRIPTION_MESSAGE = 'Отсутствует описание типа'
-    NO_MAX_LENGTH_MESSAGE = 'Отсутствует ограничение по длине строки'
-    EXCESS_MAX_LENGTH_MESSAGE = 'Указаная максимальная длина строки выше допустимой'
-    NO_ARRAY_ITEMS_MESSAGE = 'Для массива не определен блок items'
+
+    STRING_NO_MAX_LENGTH_MESSAGE = 'Отсутствует ограничение по длине строки'
+    STRING_NO_PATTERN_MESSAGE = 'Отсутствует паттерн для строки'
+    STRING_EXCESS_MAX_LENGTH_MESSAGE = 'Указаная максимальная длина строки выше допустимой'
+
+    ARRAY_NO_ITEMS_MESSAGE = 'Для массива не определен блок items'
+    ARRAY_NO_MAX_ITEMS_MESSAGE = 'Для массива не указано маскимальное количество элементов'
+
+    ARRAY_ADDITIONAL_ITEMS_MESSAGE = 'Для массива не указано "additionalItems": false'
+    ARRAY_UNIQUE_ITEMS_MESSAGE = 'Для массива не указано "uniqueItems": true'
 
     DRAFT_4_SHORT_DEFINITION = 'draft-04'
     DRAFT_7_SHORT_DEFINITION = 'draft-07'
@@ -42,9 +49,23 @@ class JsonObjectValidator(object):
                 and jsonObject.items
                 and isinstance(jsonObject.items, str)):
             validatorMsg = OutputMessage(jsonObject, MessageType.ERROR_TYPE,
-                                         JsonObjectValidator.NO_ARRAY_ITEMS_MESSAGE)
+                                         JsonObjectValidator.ARRAY_NO_ITEMS_MESSAGE)
             validationResult.append(validatorMsg)
-        # elif (jsonObject.extraInfo):
+
+        if not (hasattr(jsonObject, 'maxItems') and jsonObject.maxItems):
+            validatorMsg = OutputMessage(jsonObject, MessageType.ERROR_TYPE,
+                                         JsonObjectValidator.ARRAY_NO_MAX_ITEMS_MESSAGE)
+            validationResult.append(validatorMsg)
+
+        if not (hasattr(jsonObject, 'additionalItems') and not jsonObject.additionalItems):
+            validatorMsg = OutputMessage(jsonObject, MessageType.ERROR_TYPE,
+                                         JsonObjectValidator.ARRAY_ADDITIONAL_ITEMS_MESSAGE)
+            validationResult.append(validatorMsg)
+
+        if not (hasattr(jsonObject, 'uniqueItems') and jsonObject.uniqueItems):
+            validatorMsg = OutputMessage(jsonObject, MessageType.ERROR_TYPE,
+                                         JsonObjectValidator.ARRAY_UNIQUE_ITEMS_MESSAGE)
+            validationResult.append(validatorMsg)
 
         return validationResult
 
@@ -53,11 +74,16 @@ class JsonObjectValidator(object):
 
         if not hasattr(jsonObject, 'maxLength'):
             validatorMsg = OutputMessage(jsonObject, MessageType.ERROR_TYPE,
-                                         JsonObjectValidator.NO_MAX_LENGTH_MESSAGE)
+                                         JsonObjectValidator.STRING_NO_MAX_LENGTH_MESSAGE)
             validationResult.append(validatorMsg)
         elif self.allowedStringMaxLength and jsonObject.maxLength > self.allowedStringMaxLength:
             validatorMsg = OutputMessage(jsonObject, MessageType.ERROR_TYPE,
-                                         JsonObjectValidator.EXCESS_MAX_LENGTH_MESSAGE)
+                                         JsonObjectValidator.STRING_EXCESS_MAX_LENGTH_MESSAGE)
+            validationResult.append(validatorMsg)
+
+        if not hasattr(jsonObject, 'pattern'):
+            validatorMsg = OutputMessage(jsonObject, MessageType.INFO_TYPE,
+                                         JsonObjectValidator.STRING_NO_PATTERN_MESSAGE)
             validationResult.append(validatorMsg)
 
         return validationResult
