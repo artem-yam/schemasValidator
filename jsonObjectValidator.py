@@ -4,6 +4,8 @@ from outputMessage import OutputMessage
 
 class JsonObjectValidator(object):
     NULL_DESCRIPTION_MESSAGE = 'Отсутствует описание типа'
+    COMPLEX_TYPE_ADDITIONAL_PROPERTIES_MESSAGE = 'Для элементов комплексного типа ' \
+                                                 'должно быть указано "additionalProperties": false'
 
     STRING_NO_MAX_LENGTH_MESSAGE = 'Отсутствует ограничение по длине строки'
     STRING_NO_PATTERN_MESSAGE = 'Отсутствует паттерн для строки'
@@ -11,9 +13,11 @@ class JsonObjectValidator(object):
 
     ARRAY_NO_ITEMS_MESSAGE = 'Для массива не определен блок items'
     ARRAY_NO_MAX_ITEMS_MESSAGE = 'Для массива не указано маскимальное количество элементов'
-
     ARRAY_ADDITIONAL_ITEMS_MESSAGE = 'Для массива не указано "additionalItems": false'
     ARRAY_UNIQUE_ITEMS_MESSAGE = 'Для массива не указано "uniqueItems": true'
+
+    NUMERIC_NO_MIN_VALUE_MESSAGE = 'Не указано минимальное значение для числа'
+    NUMERIC_NO_MAX_VALUE_MESSAGE = 'Не указано максимальное значение для числа'
 
     DRAFT_4_SHORT_DEFINITION = 'draft-04'
     DRAFT_7_SHORT_DEFINITION = 'draft-07'
@@ -39,6 +43,29 @@ class JsonObjectValidator(object):
                 validationResult.extend(self.checkStringTypeRestrictions(jsonObject))
             elif jsonObject.type == 'array':
                 validationResult.extend(self.checkArrayTypeRestrictions(jsonObject))
+            elif jsonObject.type == 'number' or jsonObject.type == 'integer':
+                validationResult.extend(self.checkNumericTypeRestrictions(jsonObject))
+
+        if self.isComplexType(jsonObject):
+            if not (hasattr(jsonObject, 'additionalProperties') and jsonObject.additionalProperties == 'false'):
+                validatorMsg = OutputMessage(jsonObject, MessageType.INFO_TYPE,
+                                             JsonObjectValidator.COMPLEX_TYPE_ADDITIONAL_PROPERTIES_MESSAGE)
+                validationResult.append(validatorMsg)
+
+        return validationResult
+
+    def checkNumericTypeRestrictions(self, jsonObject) -> list:
+        validationResult = []
+
+        if not (hasattr(jsonObject, 'minimum') or hasattr(jsonObject, 'exclusiveMinimum')):
+            validatorMsg = OutputMessage(jsonObject, MessageType.INFO_TYPE,
+                                         JsonObjectValidator.NUMERIC_NO_MIN_VALUE_MESSAGE)
+            validationResult.append(validatorMsg)
+
+        if not (hasattr(jsonObject, 'maximum') or hasattr(jsonObject, 'exclusiveMaximum')):
+            validatorMsg = OutputMessage(jsonObject, MessageType.INFO_TYPE,
+                                         JsonObjectValidator.NUMERIC_NO_MAX_VALUE_MESSAGE)
+            validationResult.append(validatorMsg)
 
         return validationResult
 
@@ -101,3 +128,15 @@ class JsonObjectValidator(object):
                                          JsonObjectValidator.INCORRECT_DRAFT_MESSAGE + draftVersion)
 
         return validatorMsg
+
+    def isComplexType(self, jsonObject) -> bool:
+        result = False
+
+        if hasattr(jsonObject, 'type'):
+            objectType = jsonObject.type
+
+            if not (objectType == 'string' or objectType == 'number' or objectType == 'integer'
+                    or objectType == 'boolean' or objectType == 'null'):
+                result = True
+
+        return result
