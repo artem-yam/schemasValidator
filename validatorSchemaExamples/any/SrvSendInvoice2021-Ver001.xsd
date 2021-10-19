@@ -1,0 +1,408 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2020 rel. 2 sp1 (x64) (http://www.altova.com) by Ivchenko-ed (JSC SBERBANK - TECHNOLOGIES) -->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xsd:element name="SendInvoiceRq">
+		<xsd:annotation>
+			<xsd:documentation>Запрос на создание счета-фактуры в ЕКС</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexType>
+			<xsd:complexContent>
+				<xsd:restriction base="SendInvoiceRq_Type">
+					<xsd:sequence>
+						<xsd:element name="RqUID" type="RqUID_Type">
+							<xsd:annotation>
+								<xsd:documentation>Уникальный идентификатор запроса</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="RqTm" type="DateTime">
+							<xsd:annotation>
+								<xsd:documentation>Дата и время передачи сообщения</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="SPName" type="SPName_Type">
+							<xsd:annotation>
+								<xsd:documentation>Идентификатор системы, инициирующей запрос</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="SystemId" type="SystemId_Type" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>ID системы получателя</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="InvoiceInfoList">
+							<xsd:complexType>
+								<xsd:complexContent>
+									<xsd:restriction base="Invoices_Type">
+										<xsd:sequence>
+											<xsd:element name="InvoiceInfo" type="Invoice_Type" form="qualified" maxOccurs="unbounded"/>
+										</xsd:sequence>
+									</xsd:restriction>
+								</xsd:complexContent>
+							</xsd:complexType>
+						</xsd:element>
+						<xsd:element name="ESBSystemData" type="ESBSystemDataUCS_Type" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Служебное поле заполняемое на КСШ. Потребитель поле не заполняет и не передаёт.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:restriction>
+			</xsd:complexContent>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="SendInvoiceRs">
+		<xsd:annotation>
+			<xsd:documentation>Ответ на запрос создания счета-фактуры в ЕКС</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexType>
+			<xsd:complexContent>
+				<xsd:restriction base="SendInvoiceRs_Type">
+					<xsd:sequence>
+						<xsd:element name="RqUID" type="RqUID_Type">
+							<xsd:annotation>
+								<xsd:documentation>Уникальный идентификатор запроса</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="RqTm" type="DateTime">
+							<xsd:annotation>
+								<xsd:documentation>Дата и время передачи сообщения</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="SPName" type="SPName_Type">
+							<xsd:annotation>
+								<xsd:documentation>Идентификатор системы, инициирующей запрос</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="SystemId" type="SystemId_Type" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>ID системы получателя</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="Status">
+							<xsd:complexType>
+								<xsd:complexContent>
+									<xsd:restriction base="Status_Type">
+										<xsd:sequence>
+											<xsd:element name="StatusCode" type="StatusCode_Type">
+												<xsd:annotation>
+													<xsd:documentation>Статусный код возврата</xsd:documentation>
+												</xsd:annotation>
+											</xsd:element>
+											<xsd:element name="StatusDesc" type="StatusDesc_Type" minOccurs="0">
+												<xsd:annotation>
+													<xsd:documentation>Описание статуса</xsd:documentation>
+												</xsd:annotation>
+											</xsd:element>
+										</xsd:sequence>
+									</xsd:restriction>
+								</xsd:complexContent>
+							</xsd:complexType>
+						</xsd:element>
+						<xsd:element name="Result" type="Boolean" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Результат работы сервиса</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="ESBSystemData" type="ESBSystemDataUCS_Type" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Служебное поле заполняемое на КСШ. Потребитель поле не заполняет и не передаёт.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:restriction>
+			</xsd:complexContent>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:complexType name="SendInvoiceRq_Type">
+		<xsd:annotation>
+			<xsd:documentation>Тип: Запрос на создание документа в ЕКС</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="RqUID" type="RqUID_Type">
+				<xsd:annotation>
+					<xsd:documentation>Уникальный идентификатор запроса</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="RqTm" type="DateTime">
+				<xsd:annotation>
+					<xsd:documentation>Дата и время передачи сообщения</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="SPName" type="xsd:anyType">
+				<xsd:annotation>
+					<xsd:documentation>Идентификатор системы, инициирующей запрос</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="SystemId" type="SystemId_Type" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>ID системы получателя</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="InvoiceInfoList" type="Invoices_Type"/>
+			<xsd:element name="ESBSystemData" type="ESBSystemDataUCS_Type" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Служебное поле заполняемое на КСШ. Потребитель поле не заполняет и не передаёт.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="SendInvoiceRs_Type">
+		<xsd:annotation>
+			<xsd:documentation>Тип: Ответ на запрос создания документа в ЕКС</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="RqUID" type="RqUID_Type">
+				<xsd:annotation>
+					<xsd:documentation>Уникальный идентификатор запроса</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="RqTm" type="DateTime">
+				<xsd:annotation>
+					<xsd:documentation>Дата и время передачи сообщения</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="SPName" type="SPName_Type">
+				<xsd:annotation>
+					<xsd:documentation>Идентификатор системы, инициирующей запрос</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="SystemId" type="SystemId_Type" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>ID системы получателя</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Status" type="Status_Type">
+				<xsd:annotation>
+					<xsd:documentation>Статус ответа сервиса</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Result" type="Boolean" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Результат работы сервиса </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="ESBSystemData" type="ESBSystemDataUCS_Type" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Служебное поле заполняемое на КСШ. Потребитель поле не заполняет и не передаёт.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="Invoice_Type">
+		<xsd:annotation>
+			<xsd:documentation>Тип: Данные о счете-фактуре</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="RecordId" type="C128_Type">
+				<xsd:annotation>
+					<xsd:documentation>ID записи в ППРБ</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="BusinessProcess" type="C128_Type">
+				<xsd:annotation>
+					<xsd:documentation>Бизнес-процесс</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="DocumentNumber">
+				<xsd:annotation>
+					<xsd:documentation>Номер документа</xsd:documentation>
+				</xsd:annotation>
+				<xsd:simpleType>
+					<xsd:restriction base="C">
+						<xsd:maxLength value="25"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+			<xsd:element name="PaymentDate" type="Date">
+				<xsd:annotation>
+					<xsd:documentation>Дата проводки</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Amount" type="Decimal">
+				<xsd:annotation>
+					<xsd:documentation>Сумма</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="InvoiceSign" type="C128_Type">
+				<xsd:annotation>
+					<xsd:documentation>Уникальный признак</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="AmountType" type="Integer" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Тип суммы</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="OperationType" type="Integer" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Тип операции</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="NumShipDoc" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Номер документа об отгрузке</xsd:documentation>
+				</xsd:annotation>
+				<xsd:simpleType>
+					<xsd:restriction base="String">
+						<xsd:maxLength value="128"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+			<xsd:element name="DateShipDoc" type="Date" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Дата документа об отгрузке</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="Invoices_Type">
+		<xsd:sequence>
+			<xsd:element name="InvoiceInfo" type="Invoice_Type" minOccurs="1" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="Status_Type">
+		<xsd:sequence>
+			<xsd:element name="StatusCode" type="StatusCode_Type">
+				<xsd:annotation>
+					<xsd:documentation>Статусный код возврата</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="StatusDesc" type="StatusDesc_Type" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Описание статуса</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:simpleType name="StatusCode_Type">
+		<xsd:annotation>
+			<xsd:documentation>Код ответа. Если все хорошо, то значение равно 0</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="Long"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="StatusDesc_Type">
+		<xsd:annotation>
+			<xsd:documentation>Описание ответа - причина ошибки (заполняется только при значении StatusCode, отличном от 0)</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="String">
+			<xsd:maxLength value="1000"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="C">
+		<xsd:annotation>
+			<xsd:documentation>Базовый символьный тип, элемент данного типа может содержать количество символов до определенного максимума</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="String">
+		<xsd:restriction base="xsd:string"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="C10_Type">
+		<xsd:annotation>
+			<xsd:documentation>Символьный тип с ограниченим длины в 10 символов</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="C">
+			<xsd:maxLength value="10"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="C2000_Type">
+		<xsd:annotation>
+			<xsd:documentation>Тип: Символьный тип, max длиной 2000 символов</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="C">
+			<xsd:maxLength value="2000"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="Boolean">
+		<xsd:annotation>
+			<xsd:documentation>Логический тип</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:boolean"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="Date">
+		<xsd:annotation>
+			<xsd:documentation>Тип: Дата</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:date">
+			<xsd:pattern value="\d{4}-\d\d-\d\d(([+\-]\d\d:\d\d)|Z)?"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="DateTime">
+		<xsd:annotation>
+			<xsd:documentation>Тип данных для представления дат</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:dateTime">
+			<xsd:pattern value="\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d(.[\d]{1,6})?(([+\-]\d\d:\d\d)|Z)?"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="Integer">
+		<xsd:annotation>
+			<xsd:documentation>Тип: Целочисленный тип Integer</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:integer"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="Decimal">
+		<xsd:annotation>
+			<xsd:documentation>Тип данных для представления сумм</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:decimal">
+			<xsd:pattern value="(\+|\-)?[0-9]*(\.[0-9]+)?"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="Long">
+		<xsd:annotation>
+			<xsd:documentation/>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:long"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="UUID">
+		<xsd:annotation>
+			<xsd:documentation>Тип: Уникальный 16 байтовый идентификатор. Для обмена в рамках интеграционных проектов Сбербанка представляется набором из 32 символов без разделителей в шестнадцатиричной системе.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="String">
+			<xsd:pattern value="[0-9a-zA-Z]{32}"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="RqUID_Type">
+		<xsd:annotation>
+			<xsd:documentation>Уникальный идентификатор запроса</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="UUID"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="C50_Type">
+		<xsd:annotation>
+			<xsd:documentation>Тип: Символьный тип, max длиной 50 символов</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="C">
+			<xsd:maxLength value="50"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="C128_Type">
+		<xsd:annotation>
+			<xsd:documentation>Тип: Символьный тип, max длиной 128 символов</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="C">
+			<xsd:maxLength value="128"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="SPName_Type">
+		<xsd:annotation>
+			<xsd:documentation>Идентификатор системы, которая отправляет сообщение</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="C50_Type"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="SystemId_Type">
+		<xsd:annotation>
+			<xsd:documentation>Идентификатор системы, в которую отправляется сообщение</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="String">
+			<xsd:maxLength value="50"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="ESBSystemDataUCS_Type">
+		<xsd:annotation>
+			<xsd:documentation>Используется для проброса параметров из запроса в ответ сервисов</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="C2000_Type"/>
+	</xsd:simpleType>
+</xsd:schema>

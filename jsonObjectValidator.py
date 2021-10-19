@@ -3,7 +3,8 @@ from outputMessage import OutputMessage
 
 
 class JsonObjectValidator(object):
-    NULL_DESCRIPTION_MESSAGE = 'Отсутствует описание типа'
+    NULL_DESCRIPTION_MESSAGE = 'Отсутствует описание элемента'
+    NO_TYPE_MESSAGE = 'Не указан тип элемента'
     COMPLEX_TYPE_ADDITIONAL_PROPERTIES_MESSAGE = 'Для элементов комплексного типа ' \
                                                  'должно быть указано "additionalProperties": false'
 
@@ -31,12 +32,7 @@ class JsonObjectValidator(object):
         self.allowedStringMaxLength = 0
 
     def validate(self, jsonObject):
-        validationResult = []
-
-        if not (hasattr(jsonObject, 'description') and jsonObject.description):
-            validatorMsg = OutputMessage(jsonObject, MessageType.INFO_TYPE,
-                                         JsonObjectValidator.NULL_DESCRIPTION_MESSAGE)
-            validationResult.append(validatorMsg)
+        validationResult = self.checkBaseRestrictions(jsonObject)
 
         if hasattr(jsonObject, 'type'):
             if jsonObject.type == 'string':
@@ -45,6 +41,21 @@ class JsonObjectValidator(object):
                 validationResult.extend(self.checkArrayTypeRestrictions(jsonObject))
             elif jsonObject.type == 'number' or jsonObject.type == 'integer':
                 validationResult.extend(self.checkNumericTypeRestrictions(jsonObject))
+
+        return validationResult
+
+    def checkBaseRestrictions(self, jsonObject) -> list:
+        validationResult = []
+
+        if not (hasattr(jsonObject, 'description') and jsonObject.description):
+            validatorMsg = OutputMessage(jsonObject, MessageType.INFO_TYPE,
+                                         JsonObjectValidator.NULL_DESCRIPTION_MESSAGE)
+            validationResult.append(validatorMsg)
+
+        if not hasattr(jsonObject, 'type'):
+            validatorMsg = OutputMessage(jsonObject, MessageType.ERROR_TYPE,
+                                         JsonObjectValidator.NO_TYPE_MESSAGE)
+            validationResult.append(validatorMsg)
 
         if self.isComplexType(jsonObject):
             if not (hasattr(jsonObject, 'additionalProperties') and jsonObject.additionalProperties == 'false'):
@@ -100,9 +111,13 @@ class JsonObjectValidator(object):
         validationResult = []
 
         if not hasattr(jsonObject, 'maxLength'):
-            validatorMsg = OutputMessage(jsonObject, MessageType.ERROR_TYPE,
-                                         JsonObjectValidator.STRING_NO_MAX_LENGTH_MESSAGE)
-            validationResult.append(validatorMsg)
+            # TODO поиск ограничения длины по паттерну
+            if not hasattr(jsonObject, 'pattern') \
+                    or (jsonObject.pattern.__contains__('+') or jsonObject.pattern.__contains__('*')):
+                validatorMsg = OutputMessage(jsonObject, MessageType.ERROR_TYPE,
+                                             JsonObjectValidator.STRING_NO_MAX_LENGTH_MESSAGE)
+                validationResult.append(validatorMsg)
+
         elif self.allowedStringMaxLength and jsonObject.maxLength > self.allowedStringMaxLength:
             validatorMsg = OutputMessage(jsonObject, MessageType.ERROR_TYPE,
                                          JsonObjectValidator.STRING_EXCESS_MAX_LENGTH_MESSAGE)

@@ -1,6 +1,7 @@
 import json
 import sys
 import traceback
+
 from jsonPropertyObject import JsonPropertyObject
 
 
@@ -92,7 +93,13 @@ class JsonParser(object):
         jsonObjects = {}
 
         if hasattr(propObject, 'oneOf') and propObject.oneOf:
-            jsonObjects.update(self.parseOneOf(propObject))
+            jsonObjects.update(self.parseCombinationKeywords(propObject, 'oneOf'))
+        elif hasattr(propObject, 'anyOf') and propObject.anyOf:
+            jsonObjects.update(self.parseCombinationKeywords(propObject, 'anyOf'))
+        elif hasattr(propObject, 'allOf') and propObject.allOf:
+            jsonObjects.update(self.parseCombinationKeywords(propObject, 'allOf'))
+        elif hasattr(propObject, 'not') and propObject.__dict__['not']:
+            jsonObjects.update(self.parseCombinationKeywords(propObject, 'not'))
 
         if hasattr(propObject, 'type'):
             if propObject.type == 'object' \
@@ -104,22 +111,23 @@ class JsonParser(object):
 
         return jsonObjects
 
-    def parseOneOf(self, propObject) -> dict:
+    def parseCombinationKeywords(self, propObject, keyword) -> dict:
         jsonObjects = {}
 
         if not hasattr(propObject, 'type'):
-            propObject.type = 'oneOf'
+            propObject.type = keyword
 
-        oneOfList = propObject.oneOf
+        oneOfList = propObject.__dict__[keyword]
         for propIndex in range(len(oneOfList)):
             innerObject = oneOfList[propIndex]
             innerObject.fullPath = propObject.fullPath + '/' + \
-                                   (innerObject.name if hasattr(innerObject, 'name') else 'oneOf#' + str(propIndex + 1))
+                                   (innerObject.name if hasattr(innerObject, 'name')
+                                    else keyword + '#' + str(propIndex + 1))
             jsonObjects[innerObject.fullPath] = innerObject
 
             jsonObjects.update(self.checkInnerProperties(innerObject))
 
-        propObject.__dict__.pop('oneOf')
+        propObject.__dict__.pop(keyword)
 
         return jsonObjects
 

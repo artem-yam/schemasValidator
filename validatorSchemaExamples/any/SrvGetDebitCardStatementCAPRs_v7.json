@@ -1,0 +1,200 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "SrvGetDebitCardStatementCAPRs",
+	"description": "Ответ на запрос выписки по счёту дебетовой карты",
+	"type": "object",
+	"properties": {
+		"RqUID": {
+			"description": "Уникальный идентификатор запроса",
+			"type": "string",
+			"maxLength": 32,
+			"pattern": "[0-9a-zA-Z]{32}"
+		},
+		"RqTm": {
+			"description": "Дата и время формирования запроса",
+			"type": "string",
+			"pattern": "^\\d{4}-\\d\\d-\\d\\dT\\d\\d:\\d\\d:\\d\\d(.[\\d]{1,6})?(([+\\-]\\d\\d:\\d\\d)|Z)$"
+		},
+		"SPName": {
+			"description": "Идентификатор системы-отправителя",
+			"type": "string",
+			"maxLength": 64
+		},
+		"SystemId": {
+			"description": "Идентификатор системы-получателя",
+			"type": "string",
+			"maxLength": 64
+		},
+		"OperUID": {
+			"description": "Идентификатор операции",
+			"type": "string",
+			"pattern": "^[0-9a-zA-Z]{32}$"
+		},
+		"Status": {
+			"description": "Статус выполнения операции",
+			"type": "object",
+			"properties": {
+				"StatusCode": {
+					"description": "Код статуса выполнения операции",
+					"type": "string",
+					"maxLength": 16
+				},
+				"StatusDesc": {
+					"description": "Описание ошибки",
+					"type": "string",
+					"maxLength": 6000
+				}
+			},
+			"required": [
+				"StatusCode"
+			],
+			"additionalProperties": false
+		},
+		"Card": {
+			"description": "Операции и состояние дебетовой карты",
+			"type": "array",
+			"maxItems": 2000,
+			"items": {
+				"description": "Состояние и список операций",
+				"type": "object",
+				"properties": {
+					"StartDate": {
+						"description": "Начало отчётного периода"
+					},
+					"EndDate": {
+						"description": "Конец отчётного периода",
+						"type": "string",
+						"pattern": "\\d{4}\\d\\d\\d\\d"
+					},
+					"CardNumber": {
+						"description": "Номер карты",
+						"type": "string",
+						"maxLength": 64
+					},
+					"Currency": {
+						"description": "Код валюты в ISO",
+						"type": "string",
+						"maxLength": 8
+					},
+					"Debit": {
+						"description": "Параметры",
+						"type": "object",
+						"properties": {
+							"AmountIncoming": {
+								"description": "Сумма пополнений",
+								"type": "number"
+							},
+							"AmountCash": {
+								"description": "Сумма операций выдачи наличных",
+								"type": "number"
+							},
+							"AmountRetail": {
+								"description": "Сумма расходных безналичных операций в валюте счета карты.",
+								"type": "number"
+							},
+							"FeePaidAmount": {
+								"description": "Уплаченные комиссии банка",
+								"type": "number"
+							},
+							"DepositAmountBgn": {
+								"description": "Входящий остаток средств счета основной карты на дату начала периода, за который сформирован отчет.",
+								"type": "number"
+							},
+							"DepositAmountEnd": {
+								"description": "Исходящий баланс",
+								"type": "number"
+							}
+						},
+						"required": [
+							"AmountIncoming",
+							"AmountCash",
+							"AmountRetail",
+							"FeePaidAmount",
+							"DepositAmountBgn",
+							"DepositAmountEnd"
+						],
+						"additionalProperties": false
+					},
+					"Transactions": {
+						"description": "Операции по карте",
+						"type": "array",
+						"maxItems": 10000,
+						"uniqueItems": true,
+						"items": {
+							"description": "Операция по карте",
+							"properties": {
+								"Amount": {
+									"description": "Сумма операции в валюте счёта",
+									"type": "number"
+								},
+								"AuthCode": {
+									"description": "Код авторизации",
+									"type": "string",
+									"maxLength": 32
+								},
+								"Currency": {
+									"description": "Код валюты в ISO",
+									"type": "string",
+									"maxLength": 8
+								},
+								"Direction": {
+									"description": "Направление расхода (знак + для приходных операций, для расходных - без знака)",
+									"type": "string",
+									"maxLength": 1
+								},
+								"OperType": {
+									"description": "Тип операции",
+									"type": "string",
+									"maxLength": 128
+								},
+								"PostingDate": {
+									"description": "Дата отражения операции по счёту",
+									"type": "string",
+									"pattern": "\\d{4}-\\d\\d-\\d\\d"
+								},
+								"TransAmount": {
+									"description": "Сумма операции в валюте операции",
+									"type": "number"
+								},
+								"TransDetails": {
+									"description": "Описание операции",
+									"type": "string",
+									"maxLength": 1024
+								},
+								"WayDate": {
+									"description": "Дата и время операции",
+									"type": "string",
+									"pattern": "\\d{4}-\\d\\d-\\d\\dT\\d\\d:\\d\\d:\\d\\d"
+								}
+							},
+							"required": [
+								"Amount",
+								"PostingDate",
+								"TransDetails",
+								"WayDate"
+							],
+							"additionalProperties": false
+						}
+					}
+				},
+				"required": [
+					"StartDate",
+					"EndDate",
+					"Currency",
+					"Debit"
+				],
+				"additionalProperties": false
+			}
+		}
+	},
+	"required": [
+		"RqUID",
+		"RqTm",
+		"SPName",
+		"SystemId",
+		"Status"
+	],
+	"additionalProperties": false,
+	"definitions": {
+	}
+}
