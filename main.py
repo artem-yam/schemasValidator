@@ -1,9 +1,10 @@
+import sys
+
+from PyQt6.QtCore import *
+from PyQt6.QtWidgets import *
+
 import design
 import outputMessage
-import sys
-from PyQt6.QtCore import *
-from PyQt6.QtGui import *
-from PyQt6.QtWidgets import *
 from jsonObjectValidator import JsonObjectValidator
 from jsonParser import JsonParser
 
@@ -20,8 +21,6 @@ class ExampleApp(QMainWindow, design.Ui_Form):
         self.setupUi(self)
         self.pushButtonLoadJson.clicked.connect(self.loadJson)
         self.pushButtonValidateJson.clicked.connect(self.validateJson)
-
-    # self.pushButton.clicked.connect(jsonParser.parseJson)
 
     def loadJson(self):
         filters = 'Файлы схем json (*.json);;Файлы схем xsd (*.xsd)'
@@ -65,14 +64,14 @@ class ExampleApp(QMainWindow, design.Ui_Form):
             else:
                 self.textEditResultJson.addItem('Схема валидна!')
                 self.textEditResultJson.item(self.textEditResultJson.count() - 1).setForeground(Qt.GlobalColor.green)
-                self.textEditResultJson.item(self.textEditResultJson.count() - 1).setBackground(
-                    Qt.GlobalColor.lightGray)
+                # self.textEditResultJson.item(self.textEditResultJson.count() - 1).setBackground(
+                #    Qt.GlobalColor.lightGray)
 
         else:
             self.textEditResultJson.addItem(str(jsonObjects))
             self.textEditResultJson.item(self.textEditResultJson.count() - 1).setForeground(Qt.GlobalColor.red)
-            self.textEditResultJson.item(self.textEditResultJson.count() - 1).setBackground(
-                Qt.GlobalColor.lightGray)
+            # self.textEditResultJson.item(self.textEditResultJson.count() - 1).setBackground(
+            #    Qt.GlobalColor.lightGray)
 
     def printOutputMessage(self, message):
         self.textEditResultJson.addItem(str(message))
@@ -83,8 +82,8 @@ class ExampleApp(QMainWindow, design.Ui_Form):
             itemColor = Qt.GlobalColor.red
 
         self.textEditResultJson.item(self.textEditResultJson.count() - 1).setForeground(itemColor)
-        self.textEditResultJson.item(self.textEditResultJson.count() - 1).setBackground(
-            Qt.GlobalColor.lightGray)
+        # self.textEditResultJson.item(self.textEditResultJson.count() - 1).setBackground(
+        #    Qt.GlobalColor.lightGray)
 
     def printDraftVersion(self, jsonString):
         draft = self.jsonParser.getJsonDraftVersion(jsonString)
