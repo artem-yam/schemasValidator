@@ -21,7 +21,7 @@ class JsonParser(object):
         except Exception as err:
             print('Ошибки открытия файла:\n', traceback.format_exc())
 
-        if jsonPrettyString is not None:
+        if jsonPrettyString:
             jsonString = jsonPrettyString
             # print(jsonPrettyString)
             # self.form.textEditTextJson.append(jsonPrettyString)
@@ -29,9 +29,9 @@ class JsonParser(object):
         return jsonString
 
     def getJsonDraftVersion(self, jsonString) -> str:
-        jsonString = json.loads(jsonString)
-
         try:
+            jsonString = json.loads(jsonString)
+
             schemaDraft = jsonString['$schema']
             jsonString = schemaDraft
 

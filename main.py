@@ -16,11 +16,16 @@ class ExampleApp(QMainWindow, design.Ui_Form):
         # print(self.rect())
 
         self.jsonParser = JsonParser(self)
-        self.jsonValidator = JsonObjectValidator()
+        self.jsonValidator = JsonObjectValidator(self)
 
         self.setupUi(self)
         self.pushButtonLoadJson.clicked.connect(self.loadJson)
         self.pushButtonValidateJson.clicked.connect(self.validateJson)
+        self.textEditTextJson.dropEvent = self.jsonFileDropEvent
+
+    def jsonFileDropEvent(self, event):
+        if event.mimeData().hasUrls():
+            self.getJsonFromFile(event.mimeData().urls()[0])
 
     def loadJson(self):
         filters = 'Файлы схем json (*.json);;Файлы схем xsd (*.xsd)'
@@ -28,17 +33,25 @@ class ExampleApp(QMainWindow, design.Ui_Form):
                                                    filter=filters)
 
         # print('directory = ' + directory)
+        self.getJsonFromFile(directory)
 
-        if directory:
+    def getJsonFromFile(self, fileUrl):
+        if fileUrl:
             self.textEditTextJson.clear()
 
-            if directory.endswith('.json'):
+            if isinstance(fileUrl, QUrl):
+                fileUrl = fileUrl.url()
+
+            if fileUrl.startswith('file://'):
+                fileUrl = fileUrl.split('file://')[1]
+
+            if fileUrl.endswith('.json'):
                 # JsonParser(self).parseJson(directory)
-                jsonString = self.jsonParser.parseFileToText(directory)
+                jsonString = self.jsonParser.parseFileToText(fileUrl)
                 self.textEditTextJson.append(jsonString)
             else:
                 self.textEditTextJson.append(
-                    'Файл в формате ' + directory[directory.rindex('.'):] + ' не может быть загружен')
+                    'Файл в формате ' + fileUrl[fileUrl.rindex('.'):] + ' не может быть загружен')
 
     def validateJson(self):
         self.textEditResultJson.clear()
@@ -59,19 +72,13 @@ class ExampleApp(QMainWindow, design.Ui_Form):
                 for msg in fullValidationResult:
                     # self.textEditResultJson.append(str(msg))
                     self.printOutputMessage(msg)
-
-                    # (',' if fullValidationResult.index(msg) != len(fullValidationResult) - 1 else '')
             else:
                 self.textEditResultJson.addItem('Схема валидна!')
                 self.textEditResultJson.item(self.textEditResultJson.count() - 1).setForeground(Qt.GlobalColor.green)
-                # self.textEditResultJson.item(self.textEditResultJson.count() - 1).setBackground(
-                #    Qt.GlobalColor.lightGray)
 
         else:
             self.textEditResultJson.addItem(str(jsonObjects))
             self.textEditResultJson.item(self.textEditResultJson.count() - 1).setForeground(Qt.GlobalColor.red)
-            # self.textEditResultJson.item(self.textEditResultJson.count() - 1).setBackground(
-            #    Qt.GlobalColor.lightGray)
 
     def printOutputMessage(self, message):
         self.textEditResultJson.addItem(str(message))
@@ -82,8 +89,6 @@ class ExampleApp(QMainWindow, design.Ui_Form):
             itemColor = Qt.GlobalColor.red
 
         self.textEditResultJson.item(self.textEditResultJson.count() - 1).setForeground(itemColor)
-        # self.textEditResultJson.item(self.textEditResultJson.count() - 1).setBackground(
-        #    Qt.GlobalColor.lightGray)
 
     def printDraftVersion(self, jsonString):
         draft = self.jsonParser.getJsonDraftVersion(jsonString)

@@ -27,7 +27,7 @@ class JsonObjectValidator(object):
     CORRECT_DRAFT_MESSAGE = 'В схеме использована версия драфта: '
     INCORRECT_DRAFT_MESSAGE = 'В схеме использована некорректная версия драфта: '
 
-    def __init__(self):
+    def __init__(self, form):
         super().__init__()
         self.allowedStringMaxLength = 0
 
