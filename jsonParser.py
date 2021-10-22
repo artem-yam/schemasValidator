@@ -12,6 +12,7 @@ class JsonParser(object):
         self.form = form
 
     def parseFileToText(self, filePath) -> str:
+        print("Url = " + filePath)
         jsonString = ''
         try:
             with open(filePath, encoding=sys.getfilesystemencoding()) as jsonFile:
@@ -21,10 +22,12 @@ class JsonParser(object):
         except Exception as err:
             print('Ошибки открытия файла:\n', traceback.format_exc())
 
-        if jsonPrettyString:
+        if 'jsonPrettyString' in locals() and jsonPrettyString:
             jsonString = jsonPrettyString
             # print(jsonPrettyString)
             # self.form.textEditTextJson.append(jsonPrettyString)
+        else:
+            jsonString = 'Ошибка загрузки файла'
 
         return jsonString
 

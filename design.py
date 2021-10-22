@@ -18,7 +18,7 @@ class Ui_Form(object):
 
         self.tabWidget = QtWidgets.QTabWidget(form)
 
-        form.setStyleSheet('QMainWindow {background-color: rgba(100, 255, 255, 0.1);}')
+        form.setStyleSheet('QMainWindow {background-color: rgba(100, 255, 255, 0.3);}')
 
         self.jsonTab = QtWidgets.QWidget()
         self.xsdTab = QtWidgets.QWidget()
@@ -26,7 +26,7 @@ class Ui_Form(object):
         self.tabWidget.addTab(self.xsdTab, "XSD")
 
         self.textEditTextJson = QtWidgets.QTextEdit(self.jsonTab)
-        self.textEditTextJson.setStyleSheet('QTextEdit {background-color: rgba(0, 0, 0, 0.8);}')
+        self.textEditTextJson.setStyleSheet('QTextEdit {background-color: black; color: white;}')
 
         self.textEditResultJson = QtWidgets.QListWidget(self.jsonTab)
         self.textEditResultJson.setStyleSheet('QListWidget {background-color: rgba(0, 0, 0, 0.8);}')
@@ -35,9 +35,6 @@ class Ui_Form(object):
 
         self.pushButtonValidateJson = QtWidgets.QPushButton(self.jsonTab)
 
-        self.jsonParams = QtWidgets.QGroupBox(self.jsonTab)
-        self.jsonParams.setStyleSheet('QGroupBox {background-color: rgba(100, 255, 255, 0.8);}')
-
         self.setupConfElements()
 
         self.resizeFormObjects(form)
@@ -45,14 +42,19 @@ class Ui_Form(object):
         QtCore.QMetaObject.connectSlotsByName(form)
 
     def setupConfElements(self):
+        self.jsonParams = QtWidgets.QGroupBox(self.jsonTab)
+        self.jsonParams.setStyleSheet('QGroupBox {background-color: rgba(100, 255, 255, 0.8);}')
+
         # TODO конфигурация
         self.confArrayLengthLabel = QtWidgets.QCheckBox(self.jsonParams)
+        self.confArrayLengthLabel.setObjectName('confArrayLengthLabel')
         self.confArrayLengthLabel.toggle()
         self.confArrayLengthLabel.setText("Максимальное число элементов массива:")
         self.confArrayLengthLabel.setGeometry(QtCore.QRect(20, 40, 300, 30))
 
         self.confArrayLengthText = QtWidgets.QTextEdit(self.jsonParams)
-        # self.confArrayLengthText.setPlaceholderText("Число элементов")
+        self.confArrayLengthText.setObjectName('confArrayLengthText')
+        self.confArrayLengthText.setPlaceholderText("∞")
         self.confArrayLengthText.setLineWrapMode(QtWidgets.QTextEdit.LineWrapMode.NoWrap)
         self.confArrayLengthText.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.confArrayLengthText.setGeometry(
@@ -62,12 +64,15 @@ class Ui_Form(object):
         #
 
         self.confNumericMaxLabel = QtWidgets.QCheckBox(self.jsonParams)
+        self.confNumericMaxLabel.setObjectName('confNumericMaxLabel')
         self.confNumericMaxLabel.toggle()
         self.confNumericMaxLabel.setText("Максимальный размер чисел:")
         self.confNumericMaxLabel.setGeometry(
             QtCore.QRect(20, self.confArrayLengthLabel.geometry().bottom() + 20, 300, 30))
 
         self.confNumericMaxText = QtWidgets.QTextEdit(self.jsonParams)
+        self.confNumericMaxText.setObjectName('confNumericMaxText')
+        self.confNumericMaxText.setPlaceholderText("∞")
         self.confNumericMaxText.setLineWrapMode(QtWidgets.QTextEdit.LineWrapMode.NoWrap)
         self.confNumericMaxText.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.confNumericMaxText.setGeometry(
@@ -77,12 +82,15 @@ class Ui_Form(object):
         #
 
         self.confNumericMinLabel = QtWidgets.QCheckBox(self.jsonParams)
+        self.confNumericMinLabel.setObjectName('confNumericMinLabel')
         self.confNumericMinLabel.toggle()
         self.confNumericMinLabel.setText("Минимальный размер чисел:")
         self.confNumericMinLabel.setGeometry(
             QtCore.QRect(20, self.confNumericMaxLabel.geometry().bottom() + 20, 300, 30))
 
         self.confNumericMinText = QtWidgets.QTextEdit(self.jsonParams)
+        self.confNumericMinText.setObjectName('confNumericMinText')
+        self.confNumericMinText.setPlaceholderText("∞")
         self.confNumericMinText.setLineWrapMode(QtWidgets.QTextEdit.LineWrapMode.NoWrap)
         self.confNumericMinText.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.confNumericMinText.setGeometry(
@@ -92,12 +100,15 @@ class Ui_Form(object):
         #
 
         self.confStringLengthLabel = QtWidgets.QCheckBox(self.jsonParams)
+        self.confStringLengthLabel.setObjectName('confStringLengthLabel')
         self.confStringLengthLabel.toggle()
         self.confStringLengthLabel.setText("Максимальная длина строки:")
         self.confStringLengthLabel.setGeometry(
             QtCore.QRect(20, self.confNumericMinLabel.geometry().bottom() + 20, 300, 30))
 
         self.confStringLengthText = QtWidgets.QTextEdit(self.jsonParams)
+        self.confStringLengthText.setObjectName('confStringLengthText')
+        self.confStringLengthText.setPlaceholderText("∞")
         self.confStringLengthText.setLineWrapMode(QtWidgets.QTextEdit.LineWrapMode.NoWrap)
         self.confStringLengthText.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.confStringLengthText.setGeometry(
@@ -113,9 +124,9 @@ class Ui_Form(object):
         self.confCheckTypeLabel.setGeometry(
             QtCore.QRect(20, self.confStringLengthLabel.geometry().bottom() + 20, 500, 30))
 
-        #print("---------")
-        #children = self.confCheckTypeLabel.parent().children()
-        #print(';\n'.join(map(lambda x: x.objectName(), children)))
+        # print("---------")
+        # children = self.confCheckTypeLabel.parent().children()
+        # print(';\n'.join(map(lambda x: x.objectName(), children)))
 
     def resizeFormObjects(self, form):
         self.tabWidget.setGeometry(form.rect())

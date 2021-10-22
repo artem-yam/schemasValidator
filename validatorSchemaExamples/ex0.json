@@ -25,7 +25,6 @@
 		},
 		"cnf": {
 			"description": "Serial number",
-			"type": "object",
 			"properties": {
 				"key": {
 					"description": "Serial number",

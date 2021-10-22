@@ -15,13 +15,13 @@ class ExampleApp(QMainWindow, design.Ui_Form):
         # self.textEdit.append()
         # print(self.rect())
 
-        self.jsonParser = JsonParser(self)
-        self.jsonValidator = JsonObjectValidator(self)
-
         self.setupUi(self)
         self.pushButtonLoadJson.clicked.connect(self.loadJson)
         self.pushButtonValidateJson.clicked.connect(self.validateJson)
         self.textEditTextJson.dropEvent = self.jsonFileDropEvent
+
+        self.jsonParser = JsonParser(self)
+        self.jsonValidator = JsonObjectValidator(self.jsonParams)
 
     def jsonFileDropEvent(self, event):
         if event.mimeData().hasUrls():
@@ -44,6 +44,7 @@ class ExampleApp(QMainWindow, design.Ui_Form):
 
             if fileUrl.startswith('file://'):
                 fileUrl = fileUrl.split('file://')[1]
+                # fileUrl = 'file:' + fileUrl
 
             if fileUrl.endswith('.json'):
                 # JsonParser(self).parseJson(directory)
