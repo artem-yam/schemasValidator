@@ -42,8 +42,8 @@ class ExampleApp(QMainWindow, design.Ui_Form):
             if isinstance(fileUrl, QUrl):
                 fileUrl = fileUrl.url()
 
-            if fileUrl.startswith('file://'):
-                fileUrl = fileUrl.split('file://')[1]
+            if fileUrl.startswith('file:///'):
+                fileUrl = fileUrl.split('file:///')[1]
                 # fileUrl = 'file:' + fileUrl
 
             if fileUrl.endswith('.json'):
