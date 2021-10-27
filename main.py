@@ -1,4 +1,5 @@
 import sys
+import os
 
 from PyQt6.QtCore import *
 from PyQt6.QtWidgets import *
@@ -42,8 +43,9 @@ class ExampleApp(QMainWindow, design.Ui_Form):
             if isinstance(fileUrl, QUrl):
                 fileUrl = fileUrl.url()
 
-            if fileUrl.startswith('file:///'):
-                fileUrl = fileUrl.split('file:///')[1]
+            if fileUrl.startswith('file:'):
+                splitPattern = 'file:' + 3 * os.path.altsep if os.path.altsep else ''
+                fileUrl = fileUrl.split(splitPattern)[1]
                 # fileUrl = 'file:' + fileUrl
 
             if fileUrl.endswith('.json'):
