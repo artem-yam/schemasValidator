@@ -44,7 +44,7 @@ class ExampleApp(QMainWindow, design.Ui_Form):
                 fileUrl = fileUrl.url()
 
             if fileUrl.startswith('file:'):
-                splitPattern = 'file:' + 3 * os.path.altsep if os.path.altsep else ''
+                splitPattern = 'file:' + (3 * os.path.altsep if os.path.altsep else '')
                 fileUrl = fileUrl.split(splitPattern)[1]
                 # fileUrl = 'file:' + fileUrl
 
