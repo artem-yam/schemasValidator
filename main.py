@@ -66,10 +66,10 @@ class ExampleApp(QMainWindow, design.Ui_Form):
 
         if isinstance(jsonObjects, dict):
             fullValidationResult = []
+            stringPatternValidationResult = []
             for objectPath, jsonObject in jsonObjects.items():
-                #    self.textEditResultJson.append(str(jsonObject))
-                validationResult = self.jsonValidator.validate(jsonObject)
-                fullValidationResult.extend(validationResult)
+                fullValidationResult.extend(self.jsonValidator.validate(jsonObject))
+                stringPatternValidationResult.extend(self.jsonValidator.checkStringPattern(jsonObject))
 
             if fullValidationResult:
                 for msg in fullValidationResult:
@@ -78,6 +78,14 @@ class ExampleApp(QMainWindow, design.Ui_Form):
             else:
                 self.textEditResultJson.addItem('Схема валидна!')
                 self.textEditResultJson.item(self.textEditResultJson.count() - 1).setForeground(Qt.GlobalColor.green)
+
+            if stringPatternValidationResult:
+                self.textEditResultJson.addItem('Также отсутствуют паттерны в строковых тегах:')
+                self.textEditResultJson.item(self.textEditResultJson.count() - 1).setForeground(Qt.GlobalColor.white)
+                #self.textEditResultJson.item(self.textEditResultJson.count() - 1).setBackground(Qt.GlobalColor.white)
+
+                for msg in stringPatternValidationResult:
+                    self.printOutputMessage(msg)
 
         else:
             self.textEditResultJson.addItem(str(jsonObjects))

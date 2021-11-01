@@ -72,12 +72,27 @@ class JsonParser(object):
         if 'definitions' in jsonString:
             jsonProperties = jsonString['definitions']
 
+            definitionsObjects = {}
+
             for prop in jsonProperties:
-                jsonObjects.update(self.parseProperty(prop, jsonProperties))
+                definitionsObjects.update(self.parseProperty(prop, jsonProperties))
+
+        # TODO
+
+        definitionsObjectsList = list(definitionsObjects.values())
+        iterator = (x for x in definitionsObjectsList if hasattr(x, '$ref'))
+        elemWithRef = next(iterator, None)
+
+        #while any(x.name == "" for x in definitionsObjectsList):
+        #    print('hi')
+            # next(iterator, None)
+
+        # next((x for x in jsonObjects if x.name == 'test'), None)
+        # list(jsonObjects.values())
 
         return jsonObjects
 
-    def parseProperty(self, propName, jsonPropertiesMap):
+    def parseProperty(self, propName, jsonPropertiesMap) -> dict:
         jsonObjects = {}
 
         propString = json.dumps(jsonPropertiesMap[propName], ensure_ascii=False)

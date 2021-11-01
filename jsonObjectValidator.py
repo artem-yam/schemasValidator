@@ -1,10 +1,12 @@
 from outputMessage import MessageType
 from outputMessage import OutputMessage
+import re
 
 
 class JsonObjectValidator(object):
-    NULL_DESCRIPTION_MESSAGE = 'Отсутствует описание элемента'
+    NULL_DESCRIPTION_MESSAGE = 'Отсутствует описание (аннотация) элемента'
     NO_TYPE_MESSAGE = 'Не указан тип элемента'
+    POSSIBLE_KEY_VALUE_MESSAGE = 'Возможная структура key-value'
     COMPLEX_TYPE_ADDITIONAL_PROPERTIES_MESSAGE = 'Для элементов комплексного типа ' \
                                                  'должно быть указано "additionalProperties": false'
 
@@ -60,10 +62,15 @@ class JsonObjectValidator(object):
             validationResult.append(validatorMsg)
 
         if self.isComplexType(jsonObject):
-            if not (hasattr(jsonObject, 'additionalProperties') and jsonObject.additionalProperties == 'false'):
-                validatorMsg = OutputMessage(jsonObject, MessageType.INFO_TYPE,
+            if not (hasattr(jsonObject, 'additionalProperties') and not jsonObject.additionalProperties):
+                validatorMsg = OutputMessage(jsonObject, MessageType.ERROR_TYPE,
                                              JsonObjectValidator.COMPLEX_TYPE_ADDITIONAL_PROPERTIES_MESSAGE)
                 validationResult.append(validatorMsg)
+
+        if hasattr(jsonObject, 'name') and re.search('key|param|value', jsonObject.name, re.IGNORECASE):
+            validatorMsg = OutputMessage(jsonObject, MessageType.INFO_TYPE,
+                                         JsonObjectValidator.POSSIBLE_KEY_VALUE_MESSAGE)
+            validationResult.append(validatorMsg)
 
         return validationResult
 
@@ -140,9 +147,9 @@ class JsonObjectValidator(object):
 
         if self.configElements.get('confStringLengthLabel').isChecked():
             if not hasattr(jsonObject, 'maxLength'):
-                # TODO поиск ограничения длины по паттерну
+
                 if not hasattr(jsonObject, 'pattern') \
-                        or (jsonObject.pattern.__contains__('+') or jsonObject.pattern.__contains__('*')):
+                        or re.search('([^\\[]+\\+[^]]+)|\\*', jsonObject.pattern):
                     validatorMsg = OutputMessage(jsonObject, MessageType.ERROR_TYPE,
                                                  JsonObjectValidator.STRING_NO_MAX_LENGTH_MESSAGE)
                     validationResult.append(validatorMsg)
@@ -153,7 +160,19 @@ class JsonObjectValidator(object):
                                              JsonObjectValidator.STRING_EXCESS_MAX_LENGTH_MESSAGE)
                 validationResult.append(validatorMsg)
 
-        if not hasattr(jsonObject, 'pattern'):
+        # if not hasattr(jsonObject, 'pattern'):
+        #     validatorMsg = OutputMessage(jsonObject, MessageType.INFO_TYPE,
+        #                                  JsonObjectValidator.STRING_NO_PATTERN_MESSAGE)
+        #     validationResult.append(validatorMsg)
+
+        return validationResult
+
+    def checkStringPattern(self, jsonObject) -> list:
+        validationResult = []
+
+        if hasattr(jsonObject, 'type') \
+                and jsonObject.type == 'string' \
+                and not hasattr(jsonObject, 'pattern'):
             validatorMsg = OutputMessage(jsonObject, MessageType.INFO_TYPE,
                                          JsonObjectValidator.STRING_NO_PATTERN_MESSAGE)
             validationResult.append(validatorMsg)
