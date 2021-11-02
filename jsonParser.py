@@ -67,32 +67,17 @@ class JsonParser(object):
             jsonProperties = jsonString['properties']
 
             for prop in jsonProperties:
-                jsonObjects.update(self.parseProperty(prop, jsonProperties))
+                jsonObjects.update(self.parseProperty(prop, jsonProperties, ''))
 
         if 'definitions' in jsonString:
             jsonProperties = jsonString['definitions']
 
-            definitionsObjects = {}
-
             for prop in jsonProperties:
-                definitionsObjects.update(self.parseProperty(prop, jsonProperties))
-
-        # TODO
-
-        definitionsObjectsList = list(definitionsObjects.values())
-        iterator = (x for x in definitionsObjectsList if hasattr(x, '$ref'))
-        elemWithRef = next(iterator, None)
-
-        #while any(x.name == "" for x in definitionsObjectsList):
-        #    print('hi')
-            # next(iterator, None)
-
-        # next((x for x in jsonObjects if x.name == 'test'), None)
-        # list(jsonObjects.values())
+                jsonObjects.update(self.parseProperty(prop, jsonProperties, '#/definitions'))
 
         return jsonObjects
 
-    def parseProperty(self, propName, jsonPropertiesMap) -> dict:
+    def parseProperty(self, propName, jsonPropertiesMap, pathPrefix) -> dict:
         jsonObjects = {}
 
         propString = json.dumps(jsonPropertiesMap[propName], ensure_ascii=False)
@@ -100,7 +85,7 @@ class JsonParser(object):
         propObject = json.loads(propString,
                                 object_hook=JsonParser.jsonPropertyDecoder)
         propObject.name = propName
-        propObject.fullPath = '/' + propName
+        propObject.fullPath = pathPrefix + '/' + propName
         jsonObjects[propObject.fullPath] = propObject
 
         jsonObjects.update(self.checkInnerProperties(propObject))

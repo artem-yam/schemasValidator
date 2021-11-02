@@ -67,8 +67,8 @@ class ExampleApp(QMainWindow, design.Ui_Form):
         if isinstance(jsonObjects, dict):
             fullValidationResult = []
             stringPatternValidationResult = []
-            for objectPath, jsonObject in jsonObjects.items():
-                fullValidationResult.extend(self.jsonValidator.validate(jsonObject))
+            for jsonObject in jsonObjects.values():
+                fullValidationResult.extend(self.jsonValidator.validate(jsonObject, jsonObjects))
                 stringPatternValidationResult.extend(self.jsonValidator.checkStringPattern(jsonObject))
 
             if fullValidationResult:
@@ -82,7 +82,7 @@ class ExampleApp(QMainWindow, design.Ui_Form):
             if stringPatternValidationResult:
                 self.textEditResultJson.addItem('Также отсутствуют паттерны в строковых тегах:')
                 self.textEditResultJson.item(self.textEditResultJson.count() - 1).setForeground(Qt.GlobalColor.white)
-                #self.textEditResultJson.item(self.textEditResultJson.count() - 1).setBackground(Qt.GlobalColor.white)
+                # self.textEditResultJson.item(self.textEditResultJson.count() - 1).setBackground(Qt.GlobalColor.white)
 
                 for msg in stringPatternValidationResult:
                     self.printOutputMessage(msg)

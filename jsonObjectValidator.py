@@ -35,8 +35,8 @@ class JsonObjectValidator(object):
     def __init__(self, configWidget):
         self.configElements = {elem.objectName(): elem for elem in configWidget.children()}
 
-    def validate(self, jsonObject):
-        validationResult = self.checkBaseRestrictions(jsonObject)
+    def validate(self, jsonObject, objectsDict):
+        validationResult = self.checkBaseRestrictions(jsonObject, objectsDict)
 
         if hasattr(jsonObject, 'type'):
             if jsonObject.type == 'string':
@@ -48,7 +48,7 @@ class JsonObjectValidator(object):
 
         return validationResult
 
-    def checkBaseRestrictions(self, jsonObject) -> list:
+    def checkBaseRestrictions(self, jsonObject, objectsDict) -> list:
         validationResult = []
 
         if not (hasattr(jsonObject, 'description') and jsonObject.description):
@@ -56,16 +56,21 @@ class JsonObjectValidator(object):
                                          JsonObjectValidator.NULL_DESCRIPTION_MESSAGE)
             validationResult.append(validatorMsg)
 
-        if self.configElements.get('confCheckTypeLabel').isChecked() and not hasattr(jsonObject, 'type'):
+        if self.configElements.get('confCheckTypeLabel').isChecked() \
+                and not hasattr(jsonObject, 'type') \
+                and not (hasattr(jsonObject, '$ref')
+                         and isinstance(objectsDict, dict)
+                         and any(hasattr(x, 'fullPath')
+                                 and x.fullPath == jsonObject.__dict__['$ref'] for x in objectsDict.values())):
             validatorMsg = OutputMessage(jsonObject, MessageType.ERROR_TYPE,
                                          JsonObjectValidator.NO_TYPE_MESSAGE)
             validationResult.append(validatorMsg)
 
-        if self.isComplexType(jsonObject):
-            if not (hasattr(jsonObject, 'additionalProperties') and not jsonObject.additionalProperties):
-                validatorMsg = OutputMessage(jsonObject, MessageType.ERROR_TYPE,
-                                             JsonObjectValidator.COMPLEX_TYPE_ADDITIONAL_PROPERTIES_MESSAGE)
-                validationResult.append(validatorMsg)
+        if self.isComplexType(jsonObject) \
+                and not (hasattr(jsonObject, 'additionalProperties') and not jsonObject.additionalProperties):
+            validatorMsg = OutputMessage(jsonObject, MessageType.ERROR_TYPE,
+                                         JsonObjectValidator.COMPLEX_TYPE_ADDITIONAL_PROPERTIES_MESSAGE)
+            validationResult.append(validatorMsg)
 
         if hasattr(jsonObject, 'name') and re.search('key|param|value', jsonObject.name, re.IGNORECASE):
             validatorMsg = OutputMessage(jsonObject, MessageType.INFO_TYPE,
