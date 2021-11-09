@@ -56,7 +56,7 @@ class JsonObjectValidator(object):
                                          JsonObjectValidator.NULL_DESCRIPTION_MESSAGE)
             validationResult.append(validatorMsg)
 
-        if self.configElements.get('confCheckTypeLabel').isChecked() \
+        if self.configElements.get('jsonConfCheckTypeLabel').isChecked() \
                 and not hasattr(jsonObject, 'type') \
                 and not (hasattr(jsonObject, '$ref')
                          and isinstance(objectsDict, dict)
@@ -82,13 +82,13 @@ class JsonObjectValidator(object):
     def checkNumericTypeRestrictions(self, jsonObject) -> list:
         validationResult = []
 
-        if self.configElements.get('confNumericMinLabel').isChecked():
+        if self.configElements.get('jsonConfNumericMinLabel').isChecked():
             if not hasattr(jsonObject, 'minimum'):
                 validatorMsg = OutputMessage(jsonObject, MessageType.ERROR_TYPE,
                                              JsonObjectValidator.NUMERIC_NO_MIN_VALUE_MESSAGE)
                 validationResult.append(validatorMsg)
-            elif self.configElements.get('confNumericMinText').toPlainText().isdigit():
-                expectedMinNumber = int(self.configElements.get('confNumericMinText').toPlainText())
+            elif self.configElements.get('jsonConfNumericMinText').toPlainText().isdigit():
+                expectedMinNumber = int(self.configElements.get('jsonConfNumericMinText').toPlainText())
                 actualMinNumber = jsonObject.minimum + 1 \
                     if hasattr(jsonObject, 'exclusiveMinimum') and jsonObject.exclusiveMinimum else jsonObject.minimum
 
@@ -97,13 +97,13 @@ class JsonObjectValidator(object):
                                                  JsonObjectValidator.NUMERIC_EXCESS_MIN_VALUE_MESSAGE)
                     validationResult.append(validatorMsg)
 
-        if self.configElements.get('confNumericMaxLabel').isChecked():
+        if self.configElements.get('jsonConfNumericMaxLabel').isChecked():
             if not hasattr(jsonObject, 'maximum'):
                 validatorMsg = OutputMessage(jsonObject, MessageType.ERROR_TYPE,
                                              JsonObjectValidator.NUMERIC_NO_MAX_VALUE_MESSAGE)
                 validationResult.append(validatorMsg)
-            elif self.configElements.get('confNumericMaxText').toPlainText().isdigit():
-                expectedMaxNumber = int(self.configElements.get('confNumericMaxText').toPlainText())
+            elif self.configElements.get('jsonConfNumericMaxText').toPlainText().isdigit():
+                expectedMaxNumber = int(self.configElements.get('jsonConfNumericMaxText').toPlainText())
                 actualMaxNumber = jsonObject.minimum - 1 \
                     if hasattr(jsonObject, 'exclusiveMaximum') and jsonObject.exclusiveMaximum else jsonObject.maximum
 
@@ -124,13 +124,13 @@ class JsonObjectValidator(object):
                                          JsonObjectValidator.ARRAY_NO_ITEMS_MESSAGE)
             validationResult.append(validatorMsg)
 
-        if self.configElements.get('confArrayLengthLabel').isChecked():
+        if self.configElements.get('jsonConfArrayLengthLabel').isChecked():
             if not (hasattr(jsonObject, 'maxItems') and jsonObject.maxItems):
                 validatorMsg = OutputMessage(jsonObject, MessageType.ERROR_TYPE,
                                              JsonObjectValidator.ARRAY_NO_MAX_ITEMS_MESSAGE)
                 validationResult.append(validatorMsg)
-            elif self.configElements.get('confArrayLengthText').toPlainText().isdigit() \
-                    and int(self.configElements.get('confArrayLengthText').toPlainText()) < jsonObject.maxItems:
+            elif self.configElements.get('jsonConfArrayLengthText').toPlainText().isdigit() \
+                    and int(self.configElements.get('jsonConfArrayLengthText').toPlainText()) < jsonObject.maxItems:
                 validatorMsg = OutputMessage(jsonObject, MessageType.ERROR_TYPE,
                                              JsonObjectValidator.ARRAY_EXCESS_MAX_ITEMS_MESSAGE)
                 validationResult.append(validatorMsg)
@@ -150,7 +150,7 @@ class JsonObjectValidator(object):
     def checkStringTypeRestrictions(self, jsonObject) -> list:
         validationResult = []
 
-        if self.configElements.get('confStringLengthLabel').isChecked():
+        if self.configElements.get('jsonConfStringLengthLabel').isChecked():
             if not hasattr(jsonObject, 'maxLength'):
 
                 if not hasattr(jsonObject, 'pattern') \
@@ -159,8 +159,8 @@ class JsonObjectValidator(object):
                                                  JsonObjectValidator.STRING_NO_MAX_LENGTH_MESSAGE)
                     validationResult.append(validatorMsg)
 
-            elif self.configElements.get('confStringLengthText').toPlainText().isdigit() \
-                    and int(self.configElements.get('confStringLengthText').toPlainText()) < jsonObject.maxLength:
+            elif self.configElements.get('jsonConfStringLengthText').toPlainText().isdigit() \
+                    and int(self.configElements.get('jsonConfStringLengthText').toPlainText()) < jsonObject.maxLength:
                 validatorMsg = OutputMessage(jsonObject, MessageType.ERROR_TYPE,
                                              JsonObjectValidator.STRING_EXCESS_MAX_LENGTH_MESSAGE)
                 validationResult.append(validatorMsg)

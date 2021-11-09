@@ -25,6 +25,14 @@ class Ui_Form(object):
         self.tabWidget.addTab(self.jsonTab, "JSON")
         self.tabWidget.addTab(self.xsdTab, "XSD")
 
+        self.setupJsonTab()
+        self.setupXsdTab()
+
+        self.resizeFormObjects(form)
+        self.retranslateUi(form)
+        QtCore.QMetaObject.connectSlotsByName(form)
+
+    def setupJsonTab(self):
         self.textEditTextJson = QtWidgets.QTextEdit(self.jsonTab)
         self.textEditTextJson.setStyleSheet('QTextEdit {background-color: black; color: white;}')
 
@@ -32,107 +40,207 @@ class Ui_Form(object):
         self.textEditResultJson.setStyleSheet('QListWidget {background-color: rgba(0, 0, 0, 0.8);}')
 
         self.pushButtonLoadJson = QtWidgets.QPushButton(self.jsonTab)
-
         self.pushButtonValidateJson = QtWidgets.QPushButton(self.jsonTab)
 
-        self.setupConfElements()
+        self.setupJsonConfElements()
 
-        self.resizeFormObjects(form)
-        self.retranslateUi(form)
-        QtCore.QMetaObject.connectSlotsByName(form)
+    def setupXsdTab(self):
+        self.textEditTextXsd = QtWidgets.QTextEdit(self.xsdTab)
+        self.textEditTextXsd.setStyleSheet('QTextEdit {background-color: black; color: white;}')
 
-    def setupConfElements(self):
+        self.textEditResultXsd = QtWidgets.QListWidget(self.xsdTab)
+        self.textEditResultXsd.setStyleSheet('QListWidget {background-color: rgba(0, 0, 0, 0.8);}')
+
+        self.pushButtonLoadXsd = QtWidgets.QPushButton(self.xsdTab)
+        self.pushButtonValidateXsd = QtWidgets.QPushButton(self.xsdTab)
+
+        self.setupXsdConfElements()
+
+    def setupJsonConfElements(self):
         self.jsonParams = QtWidgets.QGroupBox(self.jsonTab)
         self.jsonParams.setStyleSheet('QGroupBox {background-color: rgba(100, 255, 255, 0.8);}')
 
-        # TODO конфигурация
-        self.confArrayLengthLabel = QtWidgets.QCheckBox(self.jsonParams)
-        self.confArrayLengthLabel.setObjectName('confArrayLengthLabel')
-        self.confArrayLengthLabel.toggle()
-        self.confArrayLengthLabel.setText("Максимальное число элементов массива:")
-        self.confArrayLengthLabel.setGeometry(QtCore.QRect(20, 40, 300, 30))
+        #
 
-        self.confArrayLengthText = QtWidgets.QTextEdit(self.jsonParams)
-        self.confArrayLengthText.setObjectName('confArrayLengthText')
-        self.confArrayLengthText.setPlaceholderText("∞")
-        self.confArrayLengthText.setLineWrapMode(QtWidgets.QTextEdit.LineWrapMode.NoWrap)
-        self.confArrayLengthText.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-        self.confArrayLengthText.setGeometry(
-            QtCore.QRect(self.confArrayLengthLabel.geometry().right(),
-                         self.confArrayLengthLabel.geometry().top(), 100, 30))
+        self.jsonConfArrayLengthLabel = QtWidgets.QCheckBox(self.jsonParams)
+        self.jsonConfArrayLengthLabel.setObjectName('jsonConfArrayLengthLabel')
+        self.jsonConfArrayLengthLabel.toggle()
+        self.jsonConfArrayLengthLabel.setText("Максимальное число элементов массива:")
+        self.jsonConfArrayLengthLabel.setGeometry(QtCore.QRect(20, 40, 300, 30))
+
+        self.jsonConfArrayLengthText = QtWidgets.QTextEdit(self.jsonParams)
+        self.jsonConfArrayLengthText.setObjectName('jsonConfArrayLengthText')
+        self.jsonConfArrayLengthText.setPlaceholderText("∞")
+        self.jsonConfArrayLengthText.setLineWrapMode(QtWidgets.QTextEdit.LineWrapMode.NoWrap)
+        self.jsonConfArrayLengthText.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.jsonConfArrayLengthText.setGeometry(
+            QtCore.QRect(self.jsonConfArrayLengthLabel.geometry().right(),
+                         self.jsonConfArrayLengthLabel.geometry().top(), 100, 30))
 
         #
 
-        self.confNumericMaxLabel = QtWidgets.QCheckBox(self.jsonParams)
-        self.confNumericMaxLabel.setObjectName('confNumericMaxLabel')
-        self.confNumericMaxLabel.toggle()
-        self.confNumericMaxLabel.setText("Максимальный размер чисел:")
-        self.confNumericMaxLabel.setGeometry(
-            QtCore.QRect(20, self.confArrayLengthLabel.geometry().bottom() + 20, 300, 30))
+        self.jsonConfNumericMaxLabel = QtWidgets.QCheckBox(self.jsonParams)
+        self.jsonConfNumericMaxLabel.setObjectName('jsonConfNumericMaxLabel')
+        self.jsonConfNumericMaxLabel.toggle()
+        self.jsonConfNumericMaxLabel.setText("Максимальный размер чисел:")
+        self.jsonConfNumericMaxLabel.setGeometry(
+            QtCore.QRect(20, self.jsonConfArrayLengthLabel.geometry().bottom() + 20, 300, 30))
 
-        self.confNumericMaxText = QtWidgets.QTextEdit(self.jsonParams)
-        self.confNumericMaxText.setObjectName('confNumericMaxText')
-        self.confNumericMaxText.setPlaceholderText("∞")
-        self.confNumericMaxText.setLineWrapMode(QtWidgets.QTextEdit.LineWrapMode.NoWrap)
-        self.confNumericMaxText.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-        self.confNumericMaxText.setGeometry(
-            QtCore.QRect(self.confNumericMaxLabel.geometry().right(),
-                         self.confNumericMaxLabel.geometry().top(), 100, 30))
-
-        #
-
-        self.confNumericMinLabel = QtWidgets.QCheckBox(self.jsonParams)
-        self.confNumericMinLabel.setObjectName('confNumericMinLabel')
-        self.confNumericMinLabel.toggle()
-        self.confNumericMinLabel.setText("Минимальный размер чисел:")
-        self.confNumericMinLabel.setGeometry(
-            QtCore.QRect(20, self.confNumericMaxLabel.geometry().bottom() + 20, 300, 30))
-
-        self.confNumericMinText = QtWidgets.QTextEdit(self.jsonParams)
-        self.confNumericMinText.setObjectName('confNumericMinText')
-        self.confNumericMinText.setPlaceholderText("∞")
-        self.confNumericMinText.setLineWrapMode(QtWidgets.QTextEdit.LineWrapMode.NoWrap)
-        self.confNumericMinText.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-        self.confNumericMinText.setGeometry(
-            QtCore.QRect(self.confNumericMinLabel.geometry().right(),
-                         self.confNumericMinLabel.geometry().top(), 100, 30))
+        self.jsonConfNumericMaxText = QtWidgets.QTextEdit(self.jsonParams)
+        self.jsonConfNumericMaxText.setObjectName('jsonConfNumericMaxText')
+        self.jsonConfNumericMaxText.setPlaceholderText("∞")
+        self.jsonConfNumericMaxText.setLineWrapMode(QtWidgets.QTextEdit.LineWrapMode.NoWrap)
+        self.jsonConfNumericMaxText.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.jsonConfNumericMaxText.setGeometry(
+            QtCore.QRect(self.jsonConfNumericMaxLabel.geometry().right(),
+                         self.jsonConfNumericMaxLabel.geometry().top(), 100, 30))
 
         #
 
-        self.confStringLengthLabel = QtWidgets.QCheckBox(self.jsonParams)
-        self.confStringLengthLabel.setObjectName('confStringLengthLabel')
-        self.confStringLengthLabel.toggle()
-        self.confStringLengthLabel.setText("Максимальная длина строки:")
-        self.confStringLengthLabel.setGeometry(
-            QtCore.QRect(20, self.confNumericMinLabel.geometry().bottom() + 20, 300, 30))
+        self.jsonConfNumericMinLabel = QtWidgets.QCheckBox(self.jsonParams)
+        self.jsonConfNumericMinLabel.setObjectName('jsonConfNumericMinLabel')
+        self.jsonConfNumericMinLabel.toggle()
+        self.jsonConfNumericMinLabel.setText("Минимальный размер чисел:")
+        self.jsonConfNumericMinLabel.setGeometry(
+            QtCore.QRect(20, self.jsonConfNumericMaxLabel.geometry().bottom() + 20, 300, 30))
 
-        self.confStringLengthText = QtWidgets.QTextEdit(self.jsonParams)
-        self.confStringLengthText.setObjectName('confStringLengthText')
-        self.confStringLengthText.setPlaceholderText("∞")
-        self.confStringLengthText.setLineWrapMode(QtWidgets.QTextEdit.LineWrapMode.NoWrap)
-        self.confStringLengthText.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-        self.confStringLengthText.setGeometry(
-            QtCore.QRect(self.confStringLengthLabel.geometry().right(),
-                         self.confStringLengthLabel.geometry().top(), 100, 30))
+        self.jsonConfNumericMinText = QtWidgets.QTextEdit(self.jsonParams)
+        self.jsonConfNumericMinText.setObjectName('jsonConfNumericMinText')
+        self.jsonConfNumericMinText.setPlaceholderText("∞")
+        self.jsonConfNumericMinText.setLineWrapMode(QtWidgets.QTextEdit.LineWrapMode.NoWrap)
+        self.jsonConfNumericMinText.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.jsonConfNumericMinText.setGeometry(
+            QtCore.QRect(self.jsonConfNumericMinLabel.geometry().right(),
+                         self.jsonConfNumericMinLabel.geometry().top(), 100, 30))
 
         #
 
-        self.confCheckTypeLabel = QtWidgets.QCheckBox(self.jsonParams)
-        self.confCheckTypeLabel.setObjectName("confCheckTypeLabel")
-        self.confCheckTypeLabel.toggle()
-        self.confCheckTypeLabel.setText("Проверка указания типа для каждого элемента")
-        self.confCheckTypeLabel.setGeometry(
-            QtCore.QRect(20, self.confStringLengthLabel.geometry().bottom() + 20, 500, 30))
+        self.jsonConfStringLengthLabel = QtWidgets.QCheckBox(self.jsonParams)
+        self.jsonConfStringLengthLabel.setObjectName('jsonConfStringLengthLabel')
+        self.jsonConfStringLengthLabel.toggle()
+        self.jsonConfStringLengthLabel.setText("Максимальная длина строки:")
+        self.jsonConfStringLengthLabel.setGeometry(
+            QtCore.QRect(20, self.jsonConfNumericMinLabel.geometry().bottom() + 20, 300, 30))
+
+        self.jsonConfStringLengthText = QtWidgets.QTextEdit(self.jsonParams)
+        self.jsonConfStringLengthText.setObjectName('jsonConfStringLengthText')
+        self.jsonConfStringLengthText.setPlaceholderText("∞")
+        self.jsonConfStringLengthText.setLineWrapMode(QtWidgets.QTextEdit.LineWrapMode.NoWrap)
+        self.jsonConfStringLengthText.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.jsonConfStringLengthText.setGeometry(
+            QtCore.QRect(self.jsonConfStringLengthLabel.geometry().right(),
+                         self.jsonConfStringLengthLabel.geometry().top(), 100, 30))
+
+        #
+
+        self.jsonConfCheckTypeLabel = QtWidgets.QCheckBox(self.jsonParams)
+        self.jsonConfCheckTypeLabel.setObjectName("jsonConfCheckTypeLabel")
+        self.jsonConfCheckTypeLabel.toggle()
+        self.jsonConfCheckTypeLabel.setText("Проверка указания типа для каждого элемента")
+        self.jsonConfCheckTypeLabel.setGeometry(
+            QtCore.QRect(20, self.jsonConfStringLengthLabel.geometry().bottom() + 20, 500, 30))
 
         # print("---------")
         # children = self.confCheckTypeLabel.parent().children()
         # print(';\n'.join(map(lambda x: x.objectName(), children)))
 
+    def setupXsdConfElements(self):
+        self.xsdParams = QtWidgets.QGroupBox(self.xsdTab)
+        self.xsdParams.setStyleSheet('QGroupBox {background-color: rgba(100, 255, 255, 0.8);}')
+
+        #
+
+        self.xsdConfArrayLengthLabel = QtWidgets.QCheckBox(self.xsdParams)
+        self.xsdConfArrayLengthLabel.setObjectName('xsdConfArrayLengthLabel')
+        self.xsdConfArrayLengthLabel.toggle()
+        self.xsdConfArrayLengthLabel.setText("Максимальное число элементов массива:")
+        self.xsdConfArrayLengthLabel.setGeometry(QtCore.QRect(20, 40, 300, 30))
+
+        self.xsdConfArrayLengthText = QtWidgets.QTextEdit(self.xsdParams)
+        self.xsdConfArrayLengthText.setObjectName('xsdConfArrayLengthText')
+        self.xsdConfArrayLengthText.setPlaceholderText("∞")
+        self.xsdConfArrayLengthText.setLineWrapMode(QtWidgets.QTextEdit.LineWrapMode.NoWrap)
+        self.xsdConfArrayLengthText.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.xsdConfArrayLengthText.setGeometry(
+            QtCore.QRect(self.jsonConfArrayLengthLabel.geometry().right(),
+                         self.jsonConfArrayLengthLabel.geometry().top(), 100, 30))
+
+        #
+
+        self.xsdConfNumericMaxLabel = QtWidgets.QCheckBox(self.xsdParams)
+        self.xsdConfNumericMaxLabel.setObjectName('xsdConfNumericMaxLabel')
+        self.xsdConfNumericMaxLabel.toggle()
+        self.xsdConfNumericMaxLabel.setText("Максимальный размер чисел:")
+        self.xsdConfNumericMaxLabel.setGeometry(
+            QtCore.QRect(20, self.jsonConfArrayLengthLabel.geometry().bottom() + 20, 300, 30))
+
+        self.xsdConfNumericMaxText = QtWidgets.QTextEdit(self.xsdParams)
+        self.xsdConfNumericMaxText.setObjectName('xsdConfNumericMaxText')
+        self.xsdConfNumericMaxText.setPlaceholderText("∞")
+        self.xsdConfNumericMaxText.setLineWrapMode(QtWidgets.QTextEdit.LineWrapMode.NoWrap)
+        self.xsdConfNumericMaxText.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.xsdConfNumericMaxText.setGeometry(
+            QtCore.QRect(self.jsonConfNumericMaxLabel.geometry().right(),
+                         self.jsonConfNumericMaxLabel.geometry().top(), 100, 30))
+
+        #
+
+        self.xsdConfNumericMinLabel = QtWidgets.QCheckBox(self.xsdParams)
+        self.xsdConfNumericMinLabel.setObjectName('xsdConfNumericMinLabel')
+        self.xsdConfNumericMinLabel.toggle()
+        self.xsdConfNumericMinLabel.setText("Минимальный размер чисел:")
+        self.xsdConfNumericMinLabel.setGeometry(
+            QtCore.QRect(20, self.jsonConfNumericMaxLabel.geometry().bottom() + 20, 300, 30))
+
+        self.xsdConfNumericMinText = QtWidgets.QTextEdit(self.xsdParams)
+        self.xsdConfNumericMinText.setObjectName('xsdConfNumericMinText')
+        self.xsdConfNumericMinText.setPlaceholderText("∞")
+        self.xsdConfNumericMinText.setLineWrapMode(QtWidgets.QTextEdit.LineWrapMode.NoWrap)
+        self.xsdConfNumericMinText.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.xsdConfNumericMinText.setGeometry(
+            QtCore.QRect(self.jsonConfNumericMinLabel.geometry().right(),
+                         self.jsonConfNumericMinLabel.geometry().top(), 100, 30))
+
+        #
+
+        self.xsdConfStringLengthLabel = QtWidgets.QCheckBox(self.xsdParams)
+        self.xsdConfStringLengthLabel.setObjectName('xsdConfStringLengthLabel')
+        self.xsdConfStringLengthLabel.toggle()
+        self.xsdConfStringLengthLabel.setText("Максимальная длина строки:")
+        self.xsdConfStringLengthLabel.setGeometry(
+            QtCore.QRect(20, self.jsonConfNumericMinLabel.geometry().bottom() + 20, 300, 30))
+
+        self.xsdConfStringLengthText = QtWidgets.QTextEdit(self.xsdParams)
+        self.xsdConfStringLengthText.setObjectName('xsdConfStringLengthText')
+        self.xsdConfStringLengthText.setPlaceholderText("∞")
+        self.xsdConfStringLengthText.setLineWrapMode(QtWidgets.QTextEdit.LineWrapMode.NoWrap)
+        self.xsdConfStringLengthText.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.xsdConfStringLengthText.setGeometry(
+            QtCore.QRect(self.jsonConfStringLengthLabel.geometry().right(),
+                         self.jsonConfStringLengthLabel.geometry().top(), 100, 30))
+
+        #
+
+        self.xsdConfCheckTypeLabel = QtWidgets.QCheckBox(self.xsdParams)
+        self.xsdConfCheckTypeLabel.setObjectName("xsdConfCheckTypeLabel")
+        self.xsdConfCheckTypeLabel.toggle()
+        self.xsdConfCheckTypeLabel.setText("Проверка указания типа для каждого элемента")
+        self.xsdConfCheckTypeLabel.setGeometry(
+            QtCore.QRect(20, self.jsonConfStringLengthLabel.geometry().bottom() + 20, 500, 30))
+
+        # print("---------")
+        # children = self.confCheckTypeLabel.parent().children()
+        # print(';\n'.join(map(lambda x: x.objectName(), children)))
+
+
     def resizeFormObjects(self, form):
         self.tabWidget.setGeometry(form.rect())
+        self.resizeJsonFormObjects()
+        self.resizeXsdFormObjects()
 
+    def resizeJsonFormObjects(self):
         self.textEditTextJson.setGeometry(
-            QtCore.QRect(20, 30, self.tabWidget.width() / 2 - 120, self.tabWidget.height() / 2))
+            QtCore.QRect(20, 30, self.tabWidget.width() // 2 - 120, self.tabWidget.height() // 2))
 
         self.textEditResultJson.setGeometry(
             QtCore.QRect(self.textEditTextJson.geometry().right() + 201, 30,
@@ -153,9 +261,36 @@ class Ui_Form(object):
             QtCore.QRect(20, self.textEditTextJson.geometry().bottom() + 20,
                          self.tabWidget.geometry().width() - 40, 400))
 
+    def resizeXsdFormObjects(self):
+        self.textEditTextXsd.setGeometry(
+            QtCore.QRect(20, 30, self.tabWidget.width() // 2 - 120, self.tabWidget.height() // 2))
+
+        self.textEditResultXsd.setGeometry(
+            QtCore.QRect(self.textEditTextXsd.geometry().right() + 201, 30,
+                         self.textEditTextXsd.geometry().width(),
+                         self.textEditTextXsd.geometry().height()))
+
+        self.pushButtonLoadXsd.setGeometry(
+            QtCore.QRect(self.textEditTextXsd.geometry().right() + 20,
+                         self.textEditTextXsd.geometry().top() + 20,
+                         160, 50))
+
+        self.pushButtonValidateXsd.setGeometry(
+            QtCore.QRect(self.textEditTextXsd.geometry().right() + 20,
+                         self.textEditTextXsd.geometry().top() + 90,
+                         160, 50))
+
+        self.xsdParams.setGeometry(
+            QtCore.QRect(20, self.textEditTextXsd.geometry().bottom() + 20,
+                         self.tabWidget.geometry().width() - 40, 400))
+
     def retranslateUi(self, form):
         _translate = QtCore.QCoreApplication.translate
         form.setWindowTitle(_translate("Form", "Валидатор xsd / json схем"))
         self.pushButtonLoadJson.setText(_translate("Form", "Загрузить схему"))
         self.pushButtonValidateJson.setText(_translate("Form", "Валидировать схему"))
         self.jsonParams.setTitle(_translate("Form", "Параметры валидации json"))
+
+        self.pushButtonLoadXsd.setText(_translate("Form", "Загрузить схему"))
+        self.pushButtonValidateXsd.setText(_translate("Form", "Валидировать схему"))
+        self.xsdParams.setTitle(_translate("Form", "Параметры валидации xsd"))
