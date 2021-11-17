@@ -9,6 +9,7 @@ import outputMessage
 from jsonObjectValidator import JsonObjectValidator
 from jsonParser import JsonParser
 import jsonController
+import xsdController
 
 
 class ExampleApp(QMainWindow, design.Ui_Form):
@@ -19,6 +20,7 @@ class ExampleApp(QMainWindow, design.Ui_Form):
 
         self.setupUi(self)
         jsonController.setup(self)
+        xsdController.setup(self)
 
 
 def main():

@@ -11,7 +11,7 @@ from jsonParser import JsonParser
 
 
 def setup(form):
-    jsonController = JsonController(form)
+    jsonController = XsdController(form)
 
     form.pushButtonLoadJson.clicked.connect(jsonController.loadJson)
     form.pushButtonValidateJson.clicked.connect(jsonController.validateJson)
@@ -21,7 +21,7 @@ def setup(form):
     form.jsonValidator = JsonObjectValidator(form.jsonParams)
 
 
-class JsonController:
+class XsdController:
     def __init__(self, form):
         super().__init__()
         self.form = form
@@ -31,7 +31,7 @@ class JsonController:
             self.getJsonFromFile(event.mimeData().urls()[0])
 
     def loadJson(self):
-        filters = 'Файлы схем json (*.json)'
+        filters = 'Файлы схем xsd (*.xsd)'
         directory, _ = QFileDialog.getOpenFileName(QFileDialog(), caption='Выберите схему',
                                                    filter=filters)
 
@@ -50,10 +50,44 @@ class JsonController:
                 fileUrl = fileUrl.split(splitPattern)[1]
                 # fileUrl = 'file:' + fileUrl
 
-            if fileUrl.endswith('.json'):
+            if fileUrl.endswith('.xsd'):
                 # JsonParser(self.form).parseJson(directory)
                 jsonString = self.form.jsonParser.parseFileToText(fileUrl)
                 self.form.textEditTextJson.append(jsonString)
+
+                #   TODO
+                # with open(xmlFile) as f:
+                #     xml = f.read()
+                #
+                # root = objectify.fromstring(xml)
+                #
+                # # возвращаем атрибуты как словарь.
+                # attrib = root.attrib
+                #
+                # # извлекаем данные данные.
+                # begin = root.appointment.begin
+                # uid = root.appointment.uid
+                #
+                # # в цикле выводим всю информацию про элементы (тэги и текст).
+                # for appt in root.getchildren():
+                #     for e in appt.getchildren():
+                #         print("%s => %s" % (e.tag, e.text))
+                #     print()
+                #
+                # # пример как менять текст внутри элемента.
+                # root.appointment.begin = "something else"
+                # print(root.appointment.begin)
+                #
+                # # добавление нового элемента.
+                # root.appointment.new_element = "new data"
+                #
+                # # удаляем аннотации.
+                # objectify.deannotate(root)
+                # etree.cleanup_namespaces(root)
+                # obj_xml = etree.tostring(root, pretty_print=True)
+                # print(obj_xml)
+
+
             else:
                 self.form.textEditTextJson.append(
                     'Файл в формате ' + fileUrl[fileUrl.rindex('.'):] + ' не может быть загружен')
