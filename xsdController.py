@@ -1,24 +1,23 @@
-import sys
 import os
 
 from PyQt6.QtCore import *
 from PyQt6.QtWidgets import *
 
-import design
 import outputMessage
-from jsonObjectValidator import JsonObjectValidator
-from jsonParser import JsonParser
+from xsdObjectValidator import XsdObjectValidator
+from xsdParser import XsdParser
 
 
 def setup(form):
-    jsonController = XsdController(form)
+    xsdController = XsdController(form)
 
-    form.pushButtonLoadJson.clicked.connect(jsonController.loadJson)
-    form.pushButtonValidateJson.clicked.connect(jsonController.validateJson)
-    form.textEditTextJson.dropEvent = jsonController.jsonFileDropEvent
+    form.pushButtonLoadXsd.clicked.connect(xsdController.loadXsd)
+    form.pushButtonValidateXsd.clicked.connect(xsdController.validateXsd)
+    form.textEditTextXsd.dropEvent = xsdController.xsdFileDropEvent
 
-    form.jsonParser = JsonParser(form)
-    form.jsonValidator = JsonObjectValidator(form.jsonParams)
+    # TODO
+    form.xsdParser = XsdParser(form)
+    form.xsdValidator = XsdObjectValidator(form.xsdParams)
 
 
 class XsdController:
@@ -26,21 +25,21 @@ class XsdController:
         super().__init__()
         self.form = form
 
-    def jsonFileDropEvent(self, event):
+    def xsdFileDropEvent(self, event):
         if event.mimeData().hasUrls():
-            self.getJsonFromFile(event.mimeData().urls()[0])
+            self.getXsdFromFile(event.mimeData().urls()[0])
 
-    def loadJson(self):
+    def loadXsd(self):
         filters = 'Файлы схем xsd (*.xsd)'
         directory, _ = QFileDialog.getOpenFileName(QFileDialog(), caption='Выберите схему',
                                                    filter=filters)
 
         # print('directory = ' + directory)
-        self.getJsonFromFile(directory)
+        self.getXsdFromFile(directory)
 
-    def getJsonFromFile(self, fileUrl):
+    def getXsdFromFile(self, fileUrl):
         if fileUrl:
-            self.form.textEditTextJson.clear()
+            self.form.textEditTextXsd.clear()
 
             if isinstance(fileUrl, QUrl):
                 fileUrl = fileUrl.url()
@@ -51,93 +50,65 @@ class XsdController:
                 # fileUrl = 'file:' + fileUrl
 
             if fileUrl.endswith('.xsd'):
-                # JsonParser(self.form).parseJson(directory)
-                jsonString = self.form.jsonParser.parseFileToText(fileUrl)
-                self.form.textEditTextJson.append(jsonString)
-
-                #   TODO
-                # with open(xmlFile) as f:
-                #     xml = f.read()
-                #
-                # root = objectify.fromstring(xml)
-                #
-                # # возвращаем атрибуты как словарь.
-                # attrib = root.attrib
-                #
-                # # извлекаем данные данные.
-                # begin = root.appointment.begin
-                # uid = root.appointment.uid
-                #
-                # # в цикле выводим всю информацию про элементы (тэги и текст).
-                # for appt in root.getchildren():
-                #     for e in appt.getchildren():
-                #         print("%s => %s" % (e.tag, e.text))
-                #     print()
-                #
-                # # пример как менять текст внутри элемента.
-                # root.appointment.begin = "something else"
-                # print(root.appointment.begin)
-                #
-                # # добавление нового элемента.
-                # root.appointment.new_element = "new data"
-                #
-                # # удаляем аннотации.
-                # objectify.deannotate(root)
-                # etree.cleanup_namespaces(root)
-                # obj_xml = etree.tostring(root, pretty_print=True)
-                # print(obj_xml)
-
+                # XsdParser(self.form).parseXsd(directory)
+                xsdString = self.form.xsdParser.parseFileToText(fileUrl)
+                self.form.textEditTextXsd.append(xsdString)
 
             else:
-                self.form.textEditTextJson.append(
+                self.form.textEditTextXsd.append(
                     'Файл в формате ' + fileUrl[fileUrl.rindex('.'):] + ' не может быть загружен')
 
-    def validateJson(self):
-        self.form.textEditResultJson.clear()
-        jsonString = self.form.textEditTextJson.toPlainText()
+    def validateXsd(self):
+        self.form.textEditResultXsd.clear()
+        xsdString = self.form.textEditTextXsd.toPlainText()
 
-        self.printDraftVersion(jsonString)
+        xsdObjects = self.form.xsdParser.parseTextToObjects(xsdString)
 
-        jsonObjects = self.form.jsonParser.parseTextToObjects(jsonString)
-
-        if isinstance(jsonObjects, dict):
+        if isinstance(xsdObjects, dict):
             fullValidationResult = []
             stringPatternValidationResult = []
-            for jsonObject in jsonObjects.values():
-                fullValidationResult.extend(self.form.jsonValidator.validate(jsonObject, jsonObjects))
-                stringPatternValidationResult.extend(self.form.jsonValidator.checkStringPattern(jsonObject))
+
+            cardNumberCheck = self.form.jsonValidator.checkCardNumber(xsdObjects)
+            if cardNumberCheck:
+                self.printOutputMessage(cardNumberCheck)
+
+            for xsdObject in xsdObjects.values():
+                fullValidationResult.extend(self.form.xsdValidator.validate(xsdObject))
+                stringPatternValidationResult.extend(
+                    self.form.xsdValidator.checkStringPattern(xsdObject))
 
             if fullValidationResult:
                 for msg in fullValidationResult:
-                    # self.form.textEditResultJson.append(str(msg))
+                    # self.form.textEditResultXsd.append(str(msg))
                     self.printOutputMessage(msg)
             else:
-                self.form.textEditResultJson.addItem('Схема валидна!')
-                self.form.textEditResultJson.item(self.form.textEditResultJson.count() - 1).setForeground(Qt.GlobalColor.green)
+                self.form.textEditResultXsd.addItem('Схема валидна!')
+                self.form.textEditResultXsd.item(
+                    self.form.textEditResultXsd.count() - 1).setForeground(
+                    Qt.GlobalColor.green)
 
             if stringPatternValidationResult:
-                self.form.textEditResultJson.addItem('Также отсутствуют паттерны в строковых тегах:')
-                self.form.textEditResultJson.item(self.form.textEditResultJson.count() - 1).setForeground(Qt.GlobalColor.white)
-                # self.form.textEditResultJson.item(self.form.textEditResultJson.count() - 1).setBackground(Qt.GlobalColor.white)
+                self.form.textEditResultXsd.addItem('Также отсутствуют паттерны в строковых тегах:')
+                self.form.textEditResultXsd.item(
+                    self.form.textEditResultXsd.count() - 1).setForeground(
+                    Qt.GlobalColor.white)
+                # self.form.textEditResultXsd.item(self.form.textEditResultXsd.count() - 1).setBackground(Qt.GlobalColor.white)
 
                 for msg in stringPatternValidationResult:
                     self.printOutputMessage(msg)
 
         else:
-            self.form.textEditResultJson.addItem(str(jsonObjects))
-            self.form.textEditResultJson.item(self.form.textEditResultJson.count() - 1).setForeground(Qt.GlobalColor.red)
+            self.form.textEditResultXsd.addItem(str(xsdObjects))
+            self.form.textEditResultXsd.item(self.form.textEditResultXsd.count() - 1).setForeground(
+                Qt.GlobalColor.red)
 
     def printOutputMessage(self, message):
-        self.form.textEditResultJson.addItem(str(message))
+        self.form.textEditResultXsd.addItem(str(message))
 
         if message.msgType == outputMessage.MessageType.INFO_TYPE:
             itemColor = Qt.GlobalColor.yellow
         else:
             itemColor = Qt.GlobalColor.red
 
-        self.form.textEditResultJson.item(self.form.textEditResultJson.count() - 1).setForeground(itemColor)
-
-    def printDraftVersion(self, jsonString):
-        draft = self.form.jsonParser.getJsonDraftVersion(jsonString)
-        validationResultMessage = self.form.jsonValidator.checkDraftVersion(draft)
-        self.printOutputMessage(validationResultMessage)
+        self.form.textEditResultXsd.item(self.form.textEditResultXsd.count() - 1).setForeground(
+            itemColor)

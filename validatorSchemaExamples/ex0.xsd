@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2020 rel. 2 sp1 (x64) (http://www.altova.com) by Ivchenko-ed (JSC SBERBANK - TECHNOLOGIES) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
+           attributeFormDefault="unqualified">
+    <xs:element name="keyElemNoType">
+        <xs:annotation>
+            <xs:documentation>Идентификатор системы, инициирующей запрос</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:element name="elemInnerType">
+        <xs:annotation>
+            <xs:documentation>Идентификатор системы, инициирующей запрос</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+            <xs:annotation>
+                <xs:documentation>Уникальный идентификатор запроса</xs:documentation>
+            </xs:annotation>
+            <xs:restriction base="xs:integer">
+                <xs:minExclusive value="-11"/>
+                <xs:maxExclusive value="111"/>
+                <xs:totalDigits value="2"/>
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+    <xs:element name="NoAnnoElem" type="xs:string">
+    </xs:element>
+    <xs:element name="anyTypeElem" type="xs:anyType">
+        <xs:annotation>
+            <xs:documentation>Идентификатор системы, инициирующей запрос</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:element name="cardnum" type="RqUID_Type">
+        <xs:annotation>
+            <xs:documentation>Уникальный идентификатор запроса</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:simpleType name="Digit_Type">
+        <xs:annotation>
+            <xs:documentation>Уникальный идентификатор запроса</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:integer">
+            <xs:minExclusive value="-11"/>
+            <xs:maxExclusive value="111"/>
+            <xs:totalDigits value="2"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="RqUID_Type">
+        <xs:annotation>
+            <xs:documentation>Уникальный идентификатор запроса</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[0-9a-zA-Z]{32}+"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="UUID">
+        <xs:annotation>
+            <xs:documentation>Тип: Уникальный 16 байтовый идентификатор. Для обмена в рамках
+                интеграционных проектов Сбербанка представляется набором из 32 символов без
+                разделителей в шестнадцатиричной системе.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="50"/>
+            <xs:pattern value="\d{4}-\d\d-\d\d(([+\-]\d\d:\d\d)|Z)?"/>
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

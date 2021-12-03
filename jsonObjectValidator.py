@@ -1,12 +1,14 @@
+import re
+
 from outputMessage import MessageType
 from outputMessage import OutputMessage
-import re
 
 
 class JsonObjectValidator(object):
     NULL_DESCRIPTION_MESSAGE = 'Отсутствует описание (аннотация) элемента'
     NO_TYPE_MESSAGE = 'Не указан тип элемента'
     POSSIBLE_KEY_VALUE_MESSAGE = 'Возможная структура key-value'
+    POSSIBLE_CARD_NUMBER_MESSAGE = 'Возможный элемент с номером карты'
     COMPLEX_TYPE_ADDITIONAL_PROPERTIES_MESSAGE = 'Для элементов комплексного типа ' \
                                                  'должно быть указано "additionalProperties": false'
 
@@ -22,13 +24,14 @@ class JsonObjectValidator(object):
 
     NUMERIC_NO_MIN_VALUE_MESSAGE = 'Не указано минимальное значение для числа'
     NUMERIC_NO_MAX_VALUE_MESSAGE = 'Не указано максимальное значение для числа'
-    NUMERIC_EXCESS_MAX_VALUE_MESSAGE = 'Указанное максимальное значение для числа превышает допустимое'
     NUMERIC_EXCESS_MIN_VALUE_MESSAGE = 'Указанное минимальное значение для числа меньше допустимого'
+    NUMERIC_EXCESS_MAX_VALUE_MESSAGE = 'Указанное максимальное значение для числа больше допустимого'
 
     DRAFT_4_SHORT_DEFINITION = 'draft-04'
     DRAFT_7_SHORT_DEFINITION = 'draft-07'
     AVAILABLE_DRAFT_VERSIONS_SHORT = [DRAFT_4_SHORT_DEFINITION, DRAFT_7_SHORT_DEFINITION]
-    AVAILABLE_DRAFT_VERSIONS = [f'http://json-schema.org/{x}/schema#' for x in AVAILABLE_DRAFT_VERSIONS_SHORT]
+    AVAILABLE_DRAFT_VERSIONS = [f'http://json-schema.org/{x}/schema#' for x in
+                                AVAILABLE_DRAFT_VERSIONS_SHORT]
     CORRECT_DRAFT_MESSAGE = 'В схеме использована версия драфта: '
     INCORRECT_DRAFT_MESSAGE = 'В схеме использована некорректная версия драфта: '
 
@@ -48,6 +51,17 @@ class JsonObjectValidator(object):
 
         return validationResult
 
+    def checkCardNumber(self, objectsDict) -> OutputMessage:
+        validatorMsg = None
+
+        for jsonObject in objectsDict.values():
+            if hasattr(jsonObject, 'name') and re.search('carnum|number|cardnumber',
+                                                         jsonObject.name, re.IGNORECASE):
+                validatorMsg = OutputMessage(jsonObject, MessageType.INFO_TYPE,
+                                             JsonObjectValidator.POSSIBLE_CARD_NUMBER_MESSAGE)
+
+        return validatorMsg
+
     def checkBaseRestrictions(self, jsonObject, objectsDict) -> list:
         validationResult = []
 
@@ -61,18 +75,21 @@ class JsonObjectValidator(object):
                 and not (hasattr(jsonObject, '$ref')
                          and isinstance(objectsDict, dict)
                          and any(hasattr(x, 'fullPath')
-                                 and x.fullPath == jsonObject.__dict__['$ref'] for x in objectsDict.values())):
+                                 and x.fullPath == jsonObject.__dict__['$ref'] for x in
+                                 objectsDict.values())):
             validatorMsg = OutputMessage(jsonObject, MessageType.ERROR_TYPE,
                                          JsonObjectValidator.NO_TYPE_MESSAGE)
             validationResult.append(validatorMsg)
 
         if self.isComplexType(jsonObject) \
-                and not (hasattr(jsonObject, 'additionalProperties') and not jsonObject.additionalProperties):
+                and not (hasattr(jsonObject,
+                                 'additionalProperties') and not jsonObject.additionalProperties):
             validatorMsg = OutputMessage(jsonObject, MessageType.ERROR_TYPE,
                                          JsonObjectValidator.COMPLEX_TYPE_ADDITIONAL_PROPERTIES_MESSAGE)
             validationResult.append(validatorMsg)
 
-        if hasattr(jsonObject, 'name') and re.search('key|param|value', jsonObject.name, re.IGNORECASE):
+        if hasattr(jsonObject, 'name') and re.search('key|param|value', jsonObject.name,
+                                                     re.IGNORECASE):
             validatorMsg = OutputMessage(jsonObject, MessageType.INFO_TYPE,
                                          JsonObjectValidator.POSSIBLE_KEY_VALUE_MESSAGE)
             validationResult.append(validatorMsg)
@@ -88,9 +105,11 @@ class JsonObjectValidator(object):
                                              JsonObjectValidator.NUMERIC_NO_MIN_VALUE_MESSAGE)
                 validationResult.append(validatorMsg)
             elif self.configElements.get('jsonConfNumericMinText').toPlainText().isdigit():
-                expectedMinNumber = int(self.configElements.get('jsonConfNumericMinText').toPlainText())
+                expectedMinNumber = int(
+                    self.configElements.get('jsonConfNumericMinText').toPlainText())
                 actualMinNumber = jsonObject.minimum + 1 \
-                    if hasattr(jsonObject, 'exclusiveMinimum') and jsonObject.exclusiveMinimum else jsonObject.minimum
+                    if hasattr(jsonObject,
+                               'exclusiveMinimum') and jsonObject.exclusiveMinimum else jsonObject.minimum
 
                 if expectedMinNumber > actualMinNumber:
                     validatorMsg = OutputMessage(jsonObject, MessageType.ERROR_TYPE,
@@ -103,9 +122,11 @@ class JsonObjectValidator(object):
                                              JsonObjectValidator.NUMERIC_NO_MAX_VALUE_MESSAGE)
                 validationResult.append(validatorMsg)
             elif self.configElements.get('jsonConfNumericMaxText').toPlainText().isdigit():
-                expectedMaxNumber = int(self.configElements.get('jsonConfNumericMaxText').toPlainText())
+                expectedMaxNumber = int(
+                    self.configElements.get('jsonConfNumericMaxText').toPlainText())
                 actualMaxNumber = jsonObject.minimum - 1 \
-                    if hasattr(jsonObject, 'exclusiveMaximum') and jsonObject.exclusiveMaximum else jsonObject.maximum
+                    if hasattr(jsonObject,
+                               'exclusiveMaximum') and jsonObject.exclusiveMaximum else jsonObject.maximum
 
                 if expectedMaxNumber < actualMaxNumber:
                     validatorMsg = OutputMessage(jsonObject, MessageType.ERROR_TYPE,
@@ -130,7 +151,8 @@ class JsonObjectValidator(object):
                                              JsonObjectValidator.ARRAY_NO_MAX_ITEMS_MESSAGE)
                 validationResult.append(validatorMsg)
             elif self.configElements.get('jsonConfArrayLengthText').toPlainText().isdigit() \
-                    and int(self.configElements.get('jsonConfArrayLengthText').toPlainText()) < jsonObject.maxItems:
+                    and int(self.configElements.get(
+                'jsonConfArrayLengthText').toPlainText()) < jsonObject.maxItems:
                 validatorMsg = OutputMessage(jsonObject, MessageType.ERROR_TYPE,
                                              JsonObjectValidator.ARRAY_EXCESS_MAX_ITEMS_MESSAGE)
                 validationResult.append(validatorMsg)
@@ -154,13 +176,14 @@ class JsonObjectValidator(object):
             if not hasattr(jsonObject, 'maxLength'):
 
                 if not hasattr(jsonObject, 'pattern') \
-                        or re.search('([^\\[]+\\+[^]]+)|\\*', jsonObject.pattern):
+                        or re.search('([^\\[]+\\+)|\\*', jsonObject.pattern):
                     validatorMsg = OutputMessage(jsonObject, MessageType.ERROR_TYPE,
                                                  JsonObjectValidator.STRING_NO_MAX_LENGTH_MESSAGE)
                     validationResult.append(validatorMsg)
 
             elif self.configElements.get('jsonConfStringLengthText').toPlainText().isdigit() \
-                    and int(self.configElements.get('jsonConfStringLengthText').toPlainText()) < jsonObject.maxLength:
+                    and int(self.configElements.get(
+                'jsonConfStringLengthText').toPlainText()) < jsonObject.maxLength:
                 validatorMsg = OutputMessage(jsonObject, MessageType.ERROR_TYPE,
                                              JsonObjectValidator.STRING_EXCESS_MAX_LENGTH_MESSAGE)
                 validationResult.append(validatorMsg)

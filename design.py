@@ -150,29 +150,11 @@ class Ui_Form(object):
 
         #
 
-        self.xsdConfArrayLengthLabel = QtWidgets.QCheckBox(self.xsdParams)
-        self.xsdConfArrayLengthLabel.setObjectName('xsdConfArrayLengthLabel')
-        self.xsdConfArrayLengthLabel.toggle()
-        self.xsdConfArrayLengthLabel.setText("Максимальное число элементов массива:")
-        self.xsdConfArrayLengthLabel.setGeometry(QtCore.QRect(20, 40, 300, 30))
-
-        self.xsdConfArrayLengthText = QtWidgets.QTextEdit(self.xsdParams)
-        self.xsdConfArrayLengthText.setObjectName('xsdConfArrayLengthText')
-        self.xsdConfArrayLengthText.setPlaceholderText("∞")
-        self.xsdConfArrayLengthText.setLineWrapMode(QtWidgets.QTextEdit.LineWrapMode.NoWrap)
-        self.xsdConfArrayLengthText.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-        self.xsdConfArrayLengthText.setGeometry(
-            QtCore.QRect(self.jsonConfArrayLengthLabel.geometry().right(),
-                         self.jsonConfArrayLengthLabel.geometry().top(), 100, 30))
-
-        #
-
         self.xsdConfNumericMaxLabel = QtWidgets.QCheckBox(self.xsdParams)
         self.xsdConfNumericMaxLabel.setObjectName('xsdConfNumericMaxLabel')
         self.xsdConfNumericMaxLabel.toggle()
         self.xsdConfNumericMaxLabel.setText("Максимальный размер чисел:")
-        self.xsdConfNumericMaxLabel.setGeometry(
-            QtCore.QRect(20, self.jsonConfArrayLengthLabel.geometry().bottom() + 20, 300, 30))
+        self.xsdConfNumericMaxLabel.setGeometry(QtCore.QRect(20, 40, 300, 30))
 
         self.xsdConfNumericMaxText = QtWidgets.QTextEdit(self.xsdParams)
         self.xsdConfNumericMaxText.setObjectName('xsdConfNumericMaxText')
@@ -180,8 +162,8 @@ class Ui_Form(object):
         self.xsdConfNumericMaxText.setLineWrapMode(QtWidgets.QTextEdit.LineWrapMode.NoWrap)
         self.xsdConfNumericMaxText.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.xsdConfNumericMaxText.setGeometry(
-            QtCore.QRect(self.jsonConfNumericMaxLabel.geometry().right(),
-                         self.jsonConfNumericMaxLabel.geometry().top(), 100, 30))
+            QtCore.QRect(self.xsdConfNumericMaxLabel.geometry().right(),
+                         self.xsdConfNumericMaxLabel.geometry().top(), 100, 30))
 
         #
 
@@ -190,7 +172,7 @@ class Ui_Form(object):
         self.xsdConfNumericMinLabel.toggle()
         self.xsdConfNumericMinLabel.setText("Минимальный размер чисел:")
         self.xsdConfNumericMinLabel.setGeometry(
-            QtCore.QRect(20, self.jsonConfNumericMaxLabel.geometry().bottom() + 20, 300, 30))
+            QtCore.QRect(20, self.xsdConfNumericMaxLabel.geometry().bottom() + 20, 300, 30))
 
         self.xsdConfNumericMinText = QtWidgets.QTextEdit(self.xsdParams)
         self.xsdConfNumericMinText.setObjectName('xsdConfNumericMinText')
@@ -198,8 +180,8 @@ class Ui_Form(object):
         self.xsdConfNumericMinText.setLineWrapMode(QtWidgets.QTextEdit.LineWrapMode.NoWrap)
         self.xsdConfNumericMinText.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.xsdConfNumericMinText.setGeometry(
-            QtCore.QRect(self.jsonConfNumericMinLabel.geometry().right(),
-                         self.jsonConfNumericMinLabel.geometry().top(), 100, 30))
+            QtCore.QRect(self.xsdConfNumericMinLabel.geometry().right(),
+                         self.xsdConfNumericMinLabel.geometry().top(), 100, 30))
 
         #
 
@@ -208,7 +190,7 @@ class Ui_Form(object):
         self.xsdConfStringLengthLabel.toggle()
         self.xsdConfStringLengthLabel.setText("Максимальная длина строки:")
         self.xsdConfStringLengthLabel.setGeometry(
-            QtCore.QRect(20, self.jsonConfNumericMinLabel.geometry().bottom() + 20, 300, 30))
+            QtCore.QRect(20, self.xsdConfNumericMinLabel.geometry().bottom() + 20, 300, 30))
 
         self.xsdConfStringLengthText = QtWidgets.QTextEdit(self.xsdParams)
         self.xsdConfStringLengthText.setObjectName('xsdConfStringLengthText')
@@ -216,22 +198,21 @@ class Ui_Form(object):
         self.xsdConfStringLengthText.setLineWrapMode(QtWidgets.QTextEdit.LineWrapMode.NoWrap)
         self.xsdConfStringLengthText.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.xsdConfStringLengthText.setGeometry(
-            QtCore.QRect(self.jsonConfStringLengthLabel.geometry().right(),
-                         self.jsonConfStringLengthLabel.geometry().top(), 100, 30))
+            QtCore.QRect(self.xsdConfStringLengthLabel.geometry().right(),
+                         self.xsdConfStringLengthLabel.geometry().top(), 100, 30))
 
         #
 
-        self.xsdConfCheckTypeLabel = QtWidgets.QCheckBox(self.xsdParams)
-        self.xsdConfCheckTypeLabel.setObjectName("xsdConfCheckTypeLabel")
-        self.xsdConfCheckTypeLabel.toggle()
-        self.xsdConfCheckTypeLabel.setText("Проверка указания типа для каждого элемента")
-        self.xsdConfCheckTypeLabel.setGeometry(
-            QtCore.QRect(20, self.jsonConfStringLengthLabel.geometry().bottom() + 20, 500, 30))
+        self.xsdConfAnyCheckLabel = QtWidgets.QCheckBox(self.xsdParams)
+        self.xsdConfAnyCheckLabel.setObjectName("xsdConfAnyCheckLabel")
+        self.xsdConfAnyCheckLabel.toggle()
+        self.xsdConfAnyCheckLabel.setText("Проверка на использование xs:any")
+        self.xsdConfAnyCheckLabel.setGeometry(
+            QtCore.QRect(20, self.xsdConfStringLengthLabel.geometry().bottom() + 20, 500, 30))
 
         # print("---------")
         # children = self.confCheckTypeLabel.parent().children()
         # print(';\n'.join(map(lambda x: x.objectName(), children)))
-
 
     def resizeFormObjects(self, form):
         self.tabWidget.setGeometry(form.rect())
