@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2020 rel. 2 sp1 (x64) (http://www.altova.com) by Ivchenko-ed (JSC SBERBANK - TECHNOLOGIES) -->
+<schema>
+    <element name="elemInnerComplexType">
+        <complexType>
+            <complexContent>
+                <restriction base="SomeComplexType">
+                    <sequence>
+                        <element name="SomeInteger" type="integer">
+                            <annotation>
+                                <documentation>Номер контракта карты</documentation>
+                            </annotation>
+                        </element>
+                    </sequence>
+                </restriction>
+            </complexContent>
+        </complexType>
+    </element>
+
+    <complexType name="SomeComplexType">
+        <sequence>
+            <element name="SomeInteger" type="integer">
+                <annotation>
+                    <documentation>Номер контракта карты</documentation>
+                </annotation>
+            </element>
+            <element name="SomeString" type="string">
+                <annotation>
+                    <documentation>Номер карты</documentation>
+                </annotation>
+            </element>
+        </sequence>
+    </complexType>
+
+</schema>

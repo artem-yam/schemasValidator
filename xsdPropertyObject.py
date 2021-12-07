@@ -12,8 +12,11 @@ class XsdPropertyObject(object):
         # if 'type' in xsdTag.attrib:
         #     self.type = self.getStringWithoutNamespaceNamespace(xsdTag.attrib['type'])
 
-        if not hasattr(self, 'type') and (hasattr(self, 'complexType')):
+        if not hasattr(self, 'type') and (
+                (True for innerTagName in xsdTag.__dict__ if
+                 innerTagName in ['complexType', 'group', 'all', 'choice', 'sequence']), False):
             self.type = 'object'
+            # innerTagName in ['group', 'all', 'choice', 'sequence']),
 
         for propKey in xsdTag.__dict__:
 
@@ -22,7 +25,7 @@ class XsdPropertyObject(object):
             # else:
             #     print("nope")
 
-            if propKey not in ['complexType', 'sequence']:
+            if propKey not in ['complexType', 'group', 'all', 'choice', 'sequence']:
                 if propKey == 'annotation' and 'documentation' in \
                         xsdTag.__dict__[propKey].__dict__.keys():
                     self.__dict__[propKey] = xsdTag.__dict__[propKey].__dict__['documentation'].text
