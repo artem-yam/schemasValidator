@@ -15,7 +15,7 @@ class XsdParser(object):
 
     def parseFileToText(self, filePath) -> str:
         print("Url = " + filePath)
-        xsdString = ''
+        xsdString = 'Ошибка загрузки файла'
         try:
             with open(filePath,
                       encoding=sys.getfilesystemencoding()) as xsdFile:
@@ -25,9 +25,10 @@ class XsdParser(object):
             print('Ошибки открытия файла:\n', traceback.format_exc())
 
         if 'xml' in locals():
-            xsdString = indent(xml, indentation=4 * ' ')
-        else:
-            xsdString = 'Ошибка загрузки файла'
+            try:
+                xsdString = indent(xml, indentation=4 * ' ')
+            except Exception as err:
+                print('Ошибки загрузки файла:\n', traceback.format_exc())
 
         return xsdString
 
