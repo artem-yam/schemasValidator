@@ -41,6 +41,7 @@ class Ui_Form(object):
 
         self.pushButtonLoadJson = QtWidgets.QPushButton(self.jsonTab)
         self.pushButtonValidateJson = QtWidgets.QPushButton(self.jsonTab)
+        self.pushButtonCopyResultJson = QtWidgets.QPushButton(self.jsonTab)
 
         self.setupJsonConfElements()
 
@@ -53,6 +54,7 @@ class Ui_Form(object):
 
         self.pushButtonLoadXsd = QtWidgets.QPushButton(self.xsdTab)
         self.pushButtonValidateXsd = QtWidgets.QPushButton(self.xsdTab)
+        self.pushButtonCopyResultXsd = QtWidgets.QPushButton(self.xsdTab)
 
         self.setupXsdConfElements()
 
@@ -72,7 +74,8 @@ class Ui_Form(object):
         self.jsonConfArrayLengthText.setObjectName('jsonConfArrayLengthText')
         self.jsonConfArrayLengthText.setPlaceholderText("∞")
         self.jsonConfArrayLengthText.setLineWrapMode(QtWidgets.QTextEdit.LineWrapMode.NoWrap)
-        self.jsonConfArrayLengthText.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.jsonConfArrayLengthText.setHorizontalScrollBarPolicy(
+            QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.jsonConfArrayLengthText.setGeometry(
             QtCore.QRect(self.jsonConfArrayLengthLabel.geometry().right(),
                          self.jsonConfArrayLengthLabel.geometry().top(), 100, 30))
@@ -90,7 +93,8 @@ class Ui_Form(object):
         self.jsonConfNumericMaxText.setObjectName('jsonConfNumericMaxText')
         self.jsonConfNumericMaxText.setPlaceholderText("∞")
         self.jsonConfNumericMaxText.setLineWrapMode(QtWidgets.QTextEdit.LineWrapMode.NoWrap)
-        self.jsonConfNumericMaxText.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.jsonConfNumericMaxText.setHorizontalScrollBarPolicy(
+            QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.jsonConfNumericMaxText.setGeometry(
             QtCore.QRect(self.jsonConfNumericMaxLabel.geometry().right(),
                          self.jsonConfNumericMaxLabel.geometry().top(), 100, 30))
@@ -108,7 +112,8 @@ class Ui_Form(object):
         self.jsonConfNumericMinText.setObjectName('jsonConfNumericMinText')
         self.jsonConfNumericMinText.setPlaceholderText("∞")
         self.jsonConfNumericMinText.setLineWrapMode(QtWidgets.QTextEdit.LineWrapMode.NoWrap)
-        self.jsonConfNumericMinText.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.jsonConfNumericMinText.setHorizontalScrollBarPolicy(
+            QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.jsonConfNumericMinText.setGeometry(
             QtCore.QRect(self.jsonConfNumericMinLabel.geometry().right(),
                          self.jsonConfNumericMinLabel.geometry().top(), 100, 30))
@@ -126,7 +131,8 @@ class Ui_Form(object):
         self.jsonConfStringLengthText.setObjectName('jsonConfStringLengthText')
         self.jsonConfStringLengthText.setPlaceholderText("∞")
         self.jsonConfStringLengthText.setLineWrapMode(QtWidgets.QTextEdit.LineWrapMode.NoWrap)
-        self.jsonConfStringLengthText.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.jsonConfStringLengthText.setHorizontalScrollBarPolicy(
+            QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.jsonConfStringLengthText.setGeometry(
             QtCore.QRect(self.jsonConfStringLengthLabel.geometry().right(),
                          self.jsonConfStringLengthLabel.geometry().top(), 100, 30))
@@ -160,7 +166,8 @@ class Ui_Form(object):
         self.xsdConfNumericMaxText.setObjectName('xsdConfNumericMaxText')
         self.xsdConfNumericMaxText.setPlaceholderText("∞")
         self.xsdConfNumericMaxText.setLineWrapMode(QtWidgets.QTextEdit.LineWrapMode.NoWrap)
-        self.xsdConfNumericMaxText.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.xsdConfNumericMaxText.setHorizontalScrollBarPolicy(
+            QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.xsdConfNumericMaxText.setGeometry(
             QtCore.QRect(self.xsdConfNumericMaxLabel.geometry().right(),
                          self.xsdConfNumericMaxLabel.geometry().top(), 100, 30))
@@ -178,7 +185,8 @@ class Ui_Form(object):
         self.xsdConfNumericMinText.setObjectName('xsdConfNumericMinText')
         self.xsdConfNumericMinText.setPlaceholderText("∞")
         self.xsdConfNumericMinText.setLineWrapMode(QtWidgets.QTextEdit.LineWrapMode.NoWrap)
-        self.xsdConfNumericMinText.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.xsdConfNumericMinText.setHorizontalScrollBarPolicy(
+            QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.xsdConfNumericMinText.setGeometry(
             QtCore.QRect(self.xsdConfNumericMinLabel.geometry().right(),
                          self.xsdConfNumericMinLabel.geometry().top(), 100, 30))
@@ -196,7 +204,8 @@ class Ui_Form(object):
         self.xsdConfStringLengthText.setObjectName('xsdConfStringLengthText')
         self.xsdConfStringLengthText.setPlaceholderText("∞")
         self.xsdConfStringLengthText.setLineWrapMode(QtWidgets.QTextEdit.LineWrapMode.NoWrap)
-        self.xsdConfStringLengthText.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.xsdConfStringLengthText.setHorizontalScrollBarPolicy(
+            QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.xsdConfStringLengthText.setGeometry(
             QtCore.QRect(self.xsdConfStringLengthLabel.geometry().right(),
                          self.xsdConfStringLengthLabel.geometry().top(), 100, 30))
@@ -234,8 +243,13 @@ class Ui_Form(object):
                          160, 50))
 
         self.pushButtonValidateJson.setGeometry(
-            QtCore.QRect(self.textEditTextJson.geometry().right() + 20,
-                         self.textEditTextJson.geometry().top() + 90,
+            QtCore.QRect(self.pushButtonLoadJson.geometry().left(),
+                         self.pushButtonLoadJson.geometry().bottom() + 20,
+                         160, 50))
+
+        self.pushButtonCopyResultJson.setGeometry(
+            QtCore.QRect(self.pushButtonValidateJson.geometry().left(),
+                         self.pushButtonValidateJson.geometry().bottom() + 20,
                          160, 50))
 
         self.jsonParams.setGeometry(
@@ -257,8 +271,13 @@ class Ui_Form(object):
                          160, 50))
 
         self.pushButtonValidateXsd.setGeometry(
-            QtCore.QRect(self.textEditTextXsd.geometry().right() + 20,
-                         self.textEditTextXsd.geometry().top() + 90,
+            QtCore.QRect(self.pushButtonLoadXsd.geometry().left(),
+                         self.pushButtonLoadXsd.geometry().bottom() + 20,
+                         160, 50))
+
+        self.pushButtonCopyResultXsd.setGeometry(
+            QtCore.QRect(self.pushButtonValidateXsd.geometry().left(),
+                         self.pushButtonValidateXsd.geometry().bottom() + 20,
                          160, 50))
 
         self.xsdParams.setGeometry(
@@ -270,8 +289,10 @@ class Ui_Form(object):
         form.setWindowTitle(_translate("Form", "Валидатор xsd / json схем"))
         self.pushButtonLoadJson.setText(_translate("Form", "Загрузить схему"))
         self.pushButtonValidateJson.setText(_translate("Form", "Валидировать схему"))
+        self.pushButtonCopyResultJson.setText(_translate("Form", "Скопировать результат"))
         self.jsonParams.setTitle(_translate("Form", "Параметры валидации json"))
 
         self.pushButtonLoadXsd.setText(_translate("Form", "Загрузить схему"))
         self.pushButtonValidateXsd.setText(_translate("Form", "Валидировать схему"))
+        self.pushButtonCopyResultXsd.setText(_translate("Form", "Скопировать результат"))
         self.xsdParams.setTitle(_translate("Form", "Параметры валидации xsd"))

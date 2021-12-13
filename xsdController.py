@@ -1,5 +1,6 @@
 import os
 
+import pyperclip
 from PyQt6.QtCore import *
 from PyQt6.QtWidgets import *
 
@@ -15,7 +16,8 @@ def setup(form):
     form.pushButtonValidateXsd.clicked.connect(xsdController.validateXsd)
     form.textEditTextXsd.dropEvent = xsdController.xsdFileDropEvent
 
-    # TODO
+    form.pushButtonCopyResultXsd.clicked.connect(xsdController.copyResult)
+
     form.xsdParser = XsdParser(form)
     form.xsdValidator = XsdObjectValidator(form.xsdParams)
 
@@ -24,6 +26,16 @@ class XsdController:
     def __init__(self, form):
         super().__init__()
         self.form = form
+
+    def copyResult(self):
+        # itemsTextList = [str(self.form.textEditResultXsd.item(i).text()) for i in
+        #                  range(self.form.textEditResultXsd.count())
+        # subprocess.run("pbcopy", universal_newlines=True, input=str(itemsTextList)) # clip
+        itemsTextString = ''
+        for i in range(self.form.textEditResultXsd.count()):
+            itemsTextString += str(self.form.textEditResultXsd.item(i).text() + '\n')
+
+        pyperclip.copy(itemsTextString)
 
     def xsdFileDropEvent(self, event):
         if event.mimeData().hasUrls():

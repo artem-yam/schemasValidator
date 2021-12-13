@@ -1,0 +1,2483 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2019 sp1 (x64) (http://www.altova.com) by PJSC Sberbank (PJSC Sberbank) -->
+<!--Формат CIT_REQUEST -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="unqualified"
+           attributeFormDefault="unqualified">
+    <xs:annotation>
+        <xs:documentation>------------------------------------new types for
+            ucs--------------------------------------------------------------
+        </xs:documentation>
+    </xs:annotation>
+    <xs:annotation>
+        <xs:documentation>-------------------------------------------ucs complex
+            types-----------------------------------------------------------------
+        </xs:documentation>
+    </xs:annotation>
+    <xs:element name="GetDebtInfoForClassificationRq" type="GetDebtInfoForClassificationRqType"/>
+    <xs:element name="GetDebtInfoForClassificationRs" type="GetDebtInfoForClassificationRsType"/>
+    <xs:annotation>
+        <xs:documentation>
+            -------------------------------------------DebtClassificationInfo-------------------------------------------------
+        </xs:documentation>
+    </xs:annotation>
+    <xs:complexType name="val_date">
+        <xs:attribute name="Value" type="xs:date" use="required"/>
+    </xs:complexType>
+    <xs:complexType name="val_decimal">
+        <xs:attribute name="Value" type="xs:decimal" use="required"/>
+    </xs:complexType>
+    <xs:complexType name="val_boolean">
+        <xs:attribute name="Value" type="xs:boolean" use="required"/>
+    </xs:complexType>
+    <xs:complexType name="val_integer">
+        <xs:attribute name="Value" type="xs:integer" use="required"/>
+    </xs:complexType>
+    <xs:complexType name="String2">
+        <xs:attribute name="Value" use="required">
+            <xs:simpleType>
+                <xs:annotation>
+                    <xs:documentation>Строка 3</xs:documentation>
+                </xs:annotation>
+                <xs:restriction base="xs:string">
+                    <xs:maxLength value="2"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="String12">
+        <xs:attribute name="Value" use="required">
+            <xs:simpleType>
+                <xs:annotation>
+                    <xs:documentation>Строка 3</xs:documentation>
+                </xs:annotation>
+                <xs:restriction base="xs:string">
+                    <xs:maxLength value="12"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="String30">
+        <xs:attribute name="Value" use="required">
+            <xs:simpleType>
+                <xs:annotation>
+                    <xs:documentation>Строка 3</xs:documentation>
+                </xs:annotation>
+                <xs:restriction base="xs:string">
+                    <xs:maxLength value="30"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="String3">
+        <xs:attribute name="Value" use="required">
+            <xs:simpleType>
+                <xs:annotation>
+                    <xs:documentation>Строка 3</xs:documentation>
+                </xs:annotation>
+                <xs:restriction base="xs:string">
+                    <xs:maxLength value="3"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="String36">
+        <xs:attribute name="Value" use="required">
+            <xs:simpleType>
+                <xs:annotation>
+                    <xs:documentation>Строка 36</xs:documentation>
+                </xs:annotation>
+                <xs:restriction base="xs:string">
+                    <xs:maxLength value="36"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="String38">
+        <xs:attribute name="Value" use="required">
+            <xs:simpleType>
+                <xs:annotation>
+                    <xs:documentation>Строка 38</xs:documentation>
+                </xs:annotation>
+                <xs:restriction base="xs:string">
+                    <xs:maxLength value="38"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="String40">
+        <xs:attribute name="Value" use="required">
+            <xs:simpleType>
+                <xs:annotation>
+                    <xs:documentation>Строка 40</xs:documentation>
+                </xs:annotation>
+                <xs:restriction base="xs:string">
+                    <xs:maxLength value="40"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="String25">
+        <xs:attribute name="Value" use="required">
+            <xs:simpleType>
+                <xs:annotation>
+                    <xs:documentation>Строка 25</xs:documentation>
+                </xs:annotation>
+                <xs:restriction base="xs:string">
+                    <xs:maxLength value="25"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="String200">
+        <xs:attribute name="Value" use="required">
+            <xs:simpleType>
+                <xs:annotation>
+                    <xs:documentation>Строка 200</xs:documentation>
+                </xs:annotation>
+                <xs:restriction base="xs:string">
+                    <xs:maxLength value="200"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="ListOfRepaymentScheduleInfo_Type">
+        <xs:sequence>
+            <xs:element name="RepaymentScheduleInfo" type="RepaymentScheduleInfo_Type"
+                        maxOccurs="unbounded">
+                <xs:annotation>
+                    <xs:documentation>Информация о платеже</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="RepaymentScheduleInfo_Type">
+        <xs:sequence>
+            <xs:element name="PayDate" type="val_date">
+                <xs:annotation>
+                    <xs:documentation>Дата платежа</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="Amount" type="val_decimal">
+                <xs:annotation>
+                    <xs:documentation>Сумма платежа</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="PaymentType" type="String200">
+                <xs:annotation>
+                    <xs:documentation>Тип платежа. Main - основной, Percent - по процентам.
+                        Commision - комиссии. Other - прочие
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="CodeOfOperationKind" type="String255">
+                <xs:annotation>
+                    <xs:documentation>Код вида плановых операций</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="NameOfOperationKind" type="String255">
+                <xs:annotation>
+                    <xs:documentation>Наименование вида плановых операций</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="PaymentsCurrency" type="String3">
+                <xs:annotation>
+                    <xs:documentation>Валюта платежей по договору</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="String100">
+        <xs:attribute name="Value" use="required">
+            <xs:simpleType>
+                <xs:annotation>
+                    <xs:documentation>Строка 100</xs:documentation>
+                </xs:annotation>
+                <xs:restriction base="xs:string">
+                    <xs:maxLength value="100"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="String64">
+        <xs:attribute name="Value" use="required">
+            <xs:simpleType>
+                <xs:annotation>
+                    <xs:documentation>Строка 64</xs:documentation>
+                </xs:annotation>
+                <xs:restriction base="xs:string">
+                    <xs:maxLength value="64"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="String1">
+        <xs:attribute name="Value" use="required">
+            <xs:simpleType>
+                <xs:annotation>
+                    <xs:documentation>Строка 1</xs:documentation>
+                </xs:annotation>
+                <xs:restriction base="xs:string">
+                    <xs:maxLength value="1"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="String80">
+        <xs:attribute name="Value" use="required">
+            <xs:simpleType>
+                <xs:annotation>
+                    <xs:documentation>Строка 80</xs:documentation>
+                </xs:annotation>
+                <xs:restriction base="xs:string">
+                    <xs:maxLength value="80"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="String255">
+        <xs:attribute name="Value" use="required">
+            <xs:simpleType>
+                <xs:annotation>
+                    <xs:documentation>Строка 255</xs:documentation>
+                </xs:annotation>
+                <xs:restriction base="xs:string">
+                    <xs:maxLength value="255"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="String4000">
+        <xs:attribute name="Value" use="required">
+            <xs:simpleType>
+                <xs:annotation>
+                    <xs:documentation>Строка 4000</xs:documentation>
+                </xs:annotation>
+                <xs:restriction base="xs:string">
+                    <xs:maxLength value="4000"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="RqUID_Type">
+        <xs:attribute name="Value" use="required">
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:pattern value="([0-9]|[a-f]|[A-F]){32}"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="RsRqTm_type">
+        <xs:attribute name="Value" use="required">
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:pattern
+                            value="[0-9]{4}-[0-9]{2}-[0-9]{2}(T[0-9]{2}:[0-9]{2}(:[0-9]{2}(\.[0-9]{3})?((-|\+)[0-9]{2}:[0-9]{2})?)?)?"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="CurrentRateInfo_Type">
+        <xs:annotation>
+            <xs:documentation>Информация о действующей ставке</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="RateValue" type="val_decimal">
+                <xs:annotation>
+                    <xs:documentation>Значение действующей ставки</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="IsFloat" type="val_boolean">
+                <xs:annotation>
+                    <xs:documentation>Признак плавающей ставки. 1 - ставка плавующая. 0 - ставка
+                        неплавающая
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="CreditTypeForCCF_Type">
+        <xs:annotation>
+            <xs:documentation>Определение типов кредитования для расчета CCF</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="Name" type="String200">
+                <xs:annotation>
+                    <xs:documentation>Наименование</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="Code" type="String30">
+                <xs:annotation>
+                    <xs:documentation>Код</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="TrancheInfo_Type">
+        <xs:annotation>
+            <xs:documentation>Информация о транше</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="EffectiveRate" type="val_decimal" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Эффективная процентная ставка</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="ListOfRepaymentSchedule" type="ListOfRepaymentScheduleInfo_Type"
+                        minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Плановый график платежей</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="TrancheCurrency" type="String3">
+                <xs:annotation>
+                    <xs:documentation>Валюта транша</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="CurrentRate" type="CurrentRateInfo_Type">
+                <xs:annotation>
+                    <xs:documentation>Процентная ставка транша</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="ListOfTranches_Type">
+        <xs:annotation>
+            <xs:documentation>Массив траншей</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="TrancheInfo" type="TrancheInfo_Type" maxOccurs="unbounded">
+                <xs:annotation>
+                    <xs:documentation>Информация о транше</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="SPName_Type">
+        <xs:attribute name="Value" use="required">
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:maxLength value="36"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="SystemId_Type">
+        <xs:attribute name="Value" use="required">
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:maxLength value="36"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="CorrId_type">
+        <xs:attribute name="Value" use="required">
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:pattern value="([0-9]|[A-F]){48}"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="GetDebtInfoForClassificationRqType">
+        <xs:annotation>
+            <xs:documentation>Запрос на получение информации по кредитным договорам, договорам
+                обеспечения и картотекам клиента
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="RqUID" type="RqUID_Type">
+                <xs:annotation>
+                    <xs:documentation>Уникальный идентификатор запроса</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="RqTm" type="RsRqTm_type">
+                <xs:annotation>
+                    <xs:documentation>Дата и время передачи сообщения</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="SPName" type="SPName_Type">
+                <xs:annotation>
+                    <xs:documentation>Идентификатор вызывающей системы</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="SystemId" type="SystemId_Type">
+                <xs:annotation>
+                    <xs:documentation>Идентификатор вызываемой системы</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="ReceiptDate" type="val_date" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Запрос данных на дату (по умолчанию = текущая дата)
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="CorrelationId" type="CorrId_type" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Идентификатор запроса MQ MsgId. Заполняется для взаимодействий
+                        запрос – ответ. По нему система-получатель ответа связывает этот ответ с
+                        запросом.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:choice>
+                <xs:element name="IFRSRM">
+                    <xs:annotation>
+                        <xs:documentation>Ветка данных оценочного резерва</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:choice>
+                            <xs:sequence>
+                                <xs:element name="OrgNumUCP" type="String36">
+                                    <xs:annotation>
+                                        <xs:documentation>Идентификатор организации в ЕПК
+                                        </xs:documentation>
+                                    </xs:annotation>
+                                </xs:element>
+                                <xs:element name="BusinessProcess" type="String36">
+                                    <xs:annotation>
+                                        <xs:documentation>Бизнес-процесс, в рамках которого
+                                            производится вызов сервиса
+                                        </xs:documentation>
+                                    </xs:annotation>
+                                </xs:element>
+                            </xs:sequence>
+                            <xs:element name="ContractID" type="String38" maxOccurs="unbounded">
+                                <xs:annotation>
+                                    <xs:documentation>ИД кредитного договора в ЕКС
+                                    </xs:documentation>
+                                </xs:annotation>
+                            </xs:element>
+                        </xs:choice>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="RASRM">
+                    <xs:annotation>
+                        <xs:documentation>Ветка данных пруденциального резерва</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="OrgRec" minOccurs="0">
+                                <xs:annotation>
+                                    <xs:documentation>Информация о клиенте</xs:documentation>
+                                </xs:annotation>
+                                <xs:complexType>
+                                    <xs:annotation>
+                                        <xs:documentation>Информация о клиенте</xs:documentation>
+                                    </xs:annotation>
+                                    <xs:sequence>
+                                        <xs:element name="OrgNum" type="String36">
+                                            <xs:annotation>
+                                                <xs:documentation>Идентификаторы организации в ЕПК
+                                                </xs:documentation>
+                                            </xs:annotation>
+                                        </xs:element>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="CredContractInfo">
+                                <xs:annotation>
+                                    <xs:documentation>Информация о кредитном договоре
+                                    </xs:documentation>
+                                </xs:annotation>
+                                <xs:complexType>
+                                    <xs:annotation>
+                                        <xs:documentation>Информация о кредитном договоре
+                                        </xs:documentation>
+                                    </xs:annotation>
+                                    <xs:sequence>
+                                        <xs:element name="CredContractID" type="String38">
+                                            <xs:annotation>
+                                                <xs:documentation>ИД кредитного договора в ЕКС
+                                                </xs:documentation>
+                                            </xs:annotation>
+                                        </xs:element>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:choice>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="GetDebtInfoForClassificationRsType">
+        <xs:annotation>
+            <xs:documentation>Ответ: предоставление информации по кредитным договорам, договорам
+                обеспечения и картотекам клиента
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="RqUID" type="RqUID_Type">
+                <xs:annotation>
+                    <xs:documentation>Уникальный идентификатор запроса</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="RsTm" type="RsRqTm_type">
+                <xs:annotation>
+                    <xs:documentation>Дата и время передачи сообщения</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="SPName" type="SPName_Type">
+                <xs:annotation>
+                    <xs:documentation>Идентификатор системы, предоставляющей услуги (провайдер
+                        сервиса)
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="SystemId" type="SystemId_Type">
+                <xs:annotation>
+                    <xs:documentation>Идентификатор системы</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="Status">
+                <xs:annotation>
+                    <xs:documentation>Статусное сообщение (результат выполнения операции)
+                    </xs:documentation>
+                </xs:annotation>
+                <xs:complexType>
+                    <xs:annotation>
+                        <xs:documentation>Статусное сообщение (результат выполнения операции)
+                        </xs:documentation>
+                    </xs:annotation>
+                    <xs:sequence>
+                        <xs:element name="StatusCode" type="String1">
+                            <xs:annotation>
+                                <xs:documentation>Код статуса ответа</xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+                        <xs:element name="ServerStatusCode" type="String255" minOccurs="0">
+                            <xs:annotation>
+                                <xs:documentation>Статусный код сервера. Это значение выдается
+                                    пользователю на экран и позволяет провайдеру лучше
+                                    диагностировать ошибку
+                                </xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+                        <xs:element name="Severity" type="String80" minOccurs="0">
+                            <xs:annotation>
+                                <xs:documentation>Серьезность ошибки. Значения: Error, Warn, Info
+                                </xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+                        <xs:element name="StatusDesc" type="String4000" minOccurs="0">
+                            <xs:annotation>
+                                <xs:documentation>Описание статуса</xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="CorrelationId" type="CorrId_type" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Идентификатор запроса MQ MsgId. Заполняется для взаимодействий
+                        запрос – ответ. По нему система-получатель ответа связывает этот ответ с
+                        запросом.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:choice>
+                <xs:element name="RASRM" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>Ветка данных для пруденциального резерва
+                        </xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="CreditContracts" minOccurs="0">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="OrgInfo">
+                                            <xs:annotation>
+                                                <xs:documentation>Информация о клиенте
+                                                </xs:documentation>
+                                            </xs:annotation>
+                                            <xs:complexType>
+                                                <xs:annotation>
+                                                    <xs:documentation>Информация о картотеке
+                                                        клиента
+                                                    </xs:documentation>
+                                                </xs:annotation>
+                                                <xs:sequence>
+                                                    <xs:element name="OrgNum" type="String36">
+                                                        <xs:annotation>
+                                                            <xs:documentation>ID Контрагента в ЕКС
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    <xs:element name="OrgNumCRM" type="String36"
+                                                                minOccurs="0">
+                                                        <xs:annotation>
+                                                            <xs:documentation>ID Контрагента в CRM
+                                                                из ЕКС
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    <xs:element name="OrgNumMDM" type="String36"
+                                                                minOccurs="0">
+                                                        <xs:annotation>
+                                                            <xs:documentation>ID Контрагента в MDM
+                                                                из ЕКС
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    <xs:element name="OrgNumEPK" type="String36"
+                                                                minOccurs="0">
+                                                        <xs:annotation>
+                                                            <xs:documentation>ID Контрагента в ЕПК
+                                                                из ЕКС
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                </xs:sequence>
+                                            </xs:complexType>
+                                        </xs:element>
+                                        <xs:element name="CreditContract" maxOccurs="unbounded">
+                                            <xs:annotation>
+                                                <xs:documentation>Информация по кредитному
+                                                    договору
+                                                </xs:documentation>
+                                            </xs:annotation>
+                                            <xs:complexType>
+                                                <xs:annotation>
+                                                    <xs:documentation>Информация по кредитному
+                                                        договору
+                                                    </xs:documentation>
+                                                </xs:annotation>
+                                                <xs:sequence>
+                                                    <xs:element name="ContractId" type="String36">
+                                                        <xs:annotation>
+                                                            <xs:documentation>ID Договора в ЕКС
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    <xs:element name="ContractIdCRM" type="String36"
+                                                                minOccurs="0">
+                                                        <xs:annotation>
+                                                            <xs:documentation>Идентификатор продукта
+                                                                CRM из ЕКС
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    <xs:element name="CrConNumber" type="String64">
+                                                        <xs:annotation>
+                                                            <xs:documentation>№ Договора в ЕКС
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    <xs:element name="IsMain" type="val_boolean">
+                                                        <xs:annotation>
+                                                            <xs:documentation>Признак
+                                                                главного/связанного договора
+                                                                1 – для главного договора,
+                                                                0 – для связанного по Контрагенту
+                                                                договора
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    <xs:element name="SevenMinutes"
+                                                                type="val_boolean">
+                                                        <xs:annotation>
+                                                            <xs:documentation>Признак 7m (1 – да, 0
+                                                                – нет)
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    <xs:element name="CrDeptID" type="String36"
+                                                                minOccurs="0">
+                                                        <xs:annotation>
+                                                            <xs:documentation>Подразделение,
+                                                                ответственное за ведение договора в
+                                                                АС ЕКС
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    <xs:element name="IsPOS" type="val_boolean">
+                                                        <xs:annotation>
+                                                            <xs:documentation>Индивидуально
+                                                                классифицируемая ссуда
+                                                                0 – нет (ПОС) 1 – да
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    <xs:element name="Is312P" type="val_boolean">
+                                                        <xs:annotation>
+                                                            <xs:documentation>Признак договора
+                                                                312-П
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    <xs:element name="RiskGroup" type="val_integer"
+                                                                minOccurs="0">
+                                                        <xs:annotation>
+                                                            <xs:documentation>Категория качества по
+                                                                договору
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    <xs:element name="PrcReserv" type="val_decimal"
+                                                                minOccurs="0">
+                                                        <xs:annotation>
+                                                            <xs:documentation>Норматив
+                                                                резервирования по договору (%)
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    <xs:element name="SumReserv" type="val_decimal"
+                                                                minOccurs="0">
+                                                        <xs:annotation>
+                                                            <xs:documentation>Размер минимально
+                                                                формируемого резерва по договору
+                                                                (%), установленный в ЕКС для
+                                                                индивидуально классифицируемой
+                                                                ссуды/обязательства.
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    <xs:element name="ContractObjectMinAmount"
+                                                                type="val_decimal" minOccurs="0">
+                                                        <xs:annotation>
+                                                            <xs:documentation>Сумма минимального
+                                                                резерва по цессии
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    <xs:element name="CreditType"
+                                                                type="val_integer">
+                                                        <xs:annotation>
+                                                            <xs:documentation>Вид кредита: 1 -
+                                                                кредит / 2 - кредитная линия / 3 -
+                                                                овердрафт / 4 – гарантия / 5 –
+                                                                Генеральное соглашение об открытии
+                                                                рамочной кредитной линии / 6 –
+                                                                Договоры о предоставлении банковских
+                                                                гарантий / 7 – цессия
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    <xs:element name="CrConDate" type="val_date">
+                                                        <xs:annotation>
+                                                            <xs:documentation>Дата начала действия
+                                                                договора
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    <xs:element name="FinishDate" type="val_date">
+                                                        <xs:annotation>
+                                                            <xs:documentation>Дата окончания
+                                                                договора
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    <xs:element name="CrContrSum"
+                                                                type="val_decimal">
+                                                        <xs:annotation>
+                                                            <xs:documentation>Сумма кредита по
+                                                                договору на момент заключения
+                                                                договора
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    <xs:element name="CrDuration"
+                                                                type="val_integer">
+                                                        <xs:annotation>
+                                                            <xs:documentation>Срок пользования
+                                                                кредитными средствами, дней
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    <xs:element name="CrPurposes" minOccurs="0">
+                                                        <xs:annotation>
+                                                            <xs:documentation>Цели кредитования
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                        <xs:complexType>
+                                                            <xs:sequence>
+                                                                <xs:element name="CrPurposeInfo"
+                                                                            maxOccurs="unbounded">
+                                                                    <xs:annotation>
+                                                                        <xs:documentation>Информация
+                                                                            и цели кредитования
+                                                                        </xs:documentation>
+                                                                    </xs:annotation>
+                                                                    <xs:complexType>
+                                                                        <xs:sequence>
+                                                                            <xs:element
+                                                                                    name="CrPurpose"
+                                                                                    type="String4000">
+                                                                                <xs:annotation>
+                                                                                    <xs:documentation>
+                                                                                        Цель
+                                                                                        кредитования
+                                                                                    </xs:documentation>
+                                                                                </xs:annotation>
+                                                                            </xs:element>
+                                                                            <xs:element
+                                                                                    name="SourcePurpose"
+                                                                                    type="val_integer">
+                                                                                <xs:annotation>
+                                                                                    <xs:documentation>
+                                                                                        Источник
+                                                                                        цели: 1 -
+                                                                                        Цель для
+                                                                                        Ф303 / 2 -
+                                                                                        Доп.
+                                                                                        Свойство. /
+                                                                                        3 - Объект
+                                                                                        кредитования
+                                                                                    </xs:documentation>
+                                                                                </xs:annotation>
+                                                                            </xs:element>
+                                                                            <xs:element
+                                                                                    name="Comment"
+                                                                                    type="String4000"
+                                                                                    minOccurs="0">
+                                                                                <xs:annotation>
+                                                                                    <xs:documentation>
+                                                                                        Примечание
+                                                                                    </xs:documentation>
+                                                                                </xs:annotation>
+                                                                            </xs:element>
+                                                                        </xs:sequence>
+                                                                    </xs:complexType>
+                                                                </xs:element>
+                                                            </xs:sequence>
+                                                        </xs:complexType>
+                                                    </xs:element>
+                                                    <xs:element name="Accs" minOccurs="0">
+                                                        <xs:annotation>
+                                                            <xs:documentation>Информация о ссудных
+                                                                счетах договора
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                        <xs:complexType>
+                                                            <xs:annotation>
+                                                                <xs:documentation>Информация о
+                                                                    ссудных счетах договора
+                                                                </xs:documentation>
+                                                            </xs:annotation>
+                                                            <xs:sequence>
+                                                                <xs:element name="Acct"
+                                                                            maxOccurs="unbounded">
+                                                                    <xs:annotation>
+                                                                        <xs:documentation>Ссудный
+                                                                            счет
+                                                                        </xs:documentation>
+                                                                    </xs:annotation>
+                                                                    <xs:complexType>
+                                                                        <xs:annotation>
+                                                                            <xs:documentation>
+                                                                                Ссудный счет
+                                                                            </xs:documentation>
+                                                                        </xs:annotation>
+                                                                        <xs:sequence>
+                                                                            <xs:element
+                                                                                    name="AcctNum"
+                                                                                    type="String25">
+                                                                                <xs:annotation>
+                                                                                    <xs:documentation>
+                                                                                        Номер
+                                                                                        ссудного
+                                                                                        счета
+                                                                                    </xs:documentation>
+                                                                                </xs:annotation>
+                                                                            </xs:element>
+                                                                        </xs:sequence>
+                                                                    </xs:complexType>
+                                                                </xs:element>
+                                                            </xs:sequence>
+                                                        </xs:complexType>
+                                                    </xs:element>
+                                                    <xs:element name="IsRestruct"
+                                                                type="val_boolean">
+                                                        <xs:annotation>
+                                                            <xs:documentation>Признак
+                                                                реструктуризации.
+                                                                0 – нет 1 – да
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    <xs:element name="RestructId" type="String36"
+                                                                minOccurs="0">
+                                                        <xs:annotation>
+                                                            <xs:documentation>ID Доп. соглашения по
+                                                                последней реструктуризации
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    <xs:element name="FirstRestructDate"
+                                                                type="val_date" minOccurs="0">
+                                                        <xs:annotation>
+                                                            <xs:documentation>Дата первой
+                                                                реструктуризации
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    <xs:element name="RestructDate" type="val_date"
+                                                                minOccurs="0">
+                                                        <xs:annotation>
+                                                            <xs:documentation>Дата последней
+                                                                реструктуризации
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    <xs:element name="NumberRestruct"
+                                                                type="val_integer" minOccurs="0">
+                                                        <xs:annotation>
+                                                            <xs:documentation>Количество
+                                                                реструктуризации
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    <xs:element name="IsDelayRestruct"
+                                                                type="val_boolean" minOccurs="0">
+                                                        <xs:annotation>
+                                                            <xs:documentation>Факт наличия просрочки
+                                                                по реструктурированной ссуде
+                                                                0 – нет 1 – да
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    <xs:element name="DaysDelayRestructOver"
+                                                                type="val_integer">
+                                                        <xs:annotation>
+                                                            <xs:documentation>Срок просрочки с даты
+                                                                первой реструктуризации
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    <xs:element name="IsRefinancing"
+                                                                type="val_boolean">
+                                                        <xs:annotation>
+                                                            <xs:documentation>Признак
+                                                                «Рефинансирование»
+                                                                0 – нет 1 – да
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    <xs:element name="CrRefinanceId" type="String36"
+                                                                minOccurs="0">
+                                                        <xs:annotation>
+                                                            <xs:documentation>ID рефинансирующего
+                                                                договора в ЕКС
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    <xs:element name="CrRefinanceIdCRM"
+                                                                type="String36" minOccurs="0">
+                                                        <xs:annotation>
+                                                            <xs:documentation>ID продукта в CRM из
+                                                                ЕКС для рефинансирующего договора
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    <xs:element name="CrRefinancedId"
+                                                                type="String36" minOccurs="0">
+                                                        <xs:annotation>
+                                                            <xs:documentation>ID договора в ЕКС,
+                                                                указанного как объект
+                                                                рефинансирования
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    <xs:element name="CrRefinancedIdCRM"
+                                                                type="String36" minOccurs="0">
+                                                        <xs:annotation>
+                                                            <xs:documentation>ID продукта в CRM из
+                                                                ЕКС, указанного как объект
+                                                                рефинансирования
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    <xs:element name="CrRefinancedDate"
+                                                                type="val_date" minOccurs="0">
+                                                        <xs:annotation>
+                                                            <xs:documentation>Дата погашения (в т.ч.
+                                                                частичного) ссуды, являющейся
+                                                                объектом рефинансирования
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    <xs:element name="ConCurr" type="String3">
+                                                        <xs:annotation>
+                                                            <xs:documentation>Валюта договора
+                                                                кредита / цессии / гарантии
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    <xs:element name="CrDate" type="val_date"
+                                                                minOccurs="0">
+                                                        <xs:annotation>
+                                                            <xs:documentation>Фактическая дата
+                                                                выдачи ссуды / отражения лимита
+                                                                гарантии на счетах балансового учета
+                                                                по договору
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    <xs:element name="CrFirstPayDate"
+                                                                type="val_date" minOccurs="0">
+                                                        <xs:annotation>
+                                                            <xs:documentation>Дата самой первой
+                                                                уплаты задолженности (из основного
+                                                                долга, процентов или комиссий по
+                                                                плановому графику договора.
+                                                                В случае КЛ анализируются плановые
+                                                                графики по основному договору и всем
+                                                                траншам (с учетом даты запроса)
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    <xs:element name="CrFirstPayFactDate"
+                                                                type="val_date" minOccurs="0">
+                                                        <xs:annotation>
+                                                            <xs:documentation>Фактическая дата
+                                                                уплаты первого платежа по Договору в
+                                                                т.ч. комиссий вне основного графика
+                                                                погашения.
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    <xs:element name="CrLastPayFactDate"
+                                                                type="val_date" minOccurs="0">
+                                                        <xs:annotation>
+                                                            <xs:documentation>Дата самого последнего
+                                                                фактически произведенного платежа
+                                                                (основного долга, процентов или
+                                                                комиссий) по действующей ссуде (Для
+                                                                главного договора, по признаку
+                                                                IsMain=1).
+                                                                В случае отсутствия платежей, не
+                                                                передается.
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    <xs:element name="CrParentID" type="String36"
+                                                                minOccurs="0">
+                                                        <xs:annotation>
+                                                            <xs:documentation>ID Родительского
+                                                                договора
+                                                                Id генерального соглашения о
+                                                                предоставлении кредита/овердрафта
+                                                                при наличии.
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    <xs:element name="IsPayDebt" type="val_boolean">
+                                                        <xs:annotation>
+                                                            <xs:documentation>Признак наличия
+                                                                погашенной ссудной задолженности: 0
+                                                                – нет, 1 – да
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    <xs:element name="IsDelay" type="val_boolean">
+                                                        <xs:annotation>
+                                                            <xs:documentation>Наличие текущей
+                                                                просроченной задолженности: 0 – нет
+                                                                1 – да
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    <xs:element name="DaysDelay" type="val_integer">
+                                                        <xs:annotation>
+                                                            <xs:documentation>Срок текущей
+                                                                просроченной задолженности в днях.
+                                                                При отсутствии = 0.
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    <xs:element name="DaysDelayOver"
+                                                                type="val_integer">
+                                                        <xs:annotation>
+                                                            <xs:documentation>Общая
+                                                                продолжительность просроченных
+                                                                платежей по ОД или %% за последние
+                                                                180 календарных дней.
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    <xs:element name="CountDelayOver"
+                                                                type="val_integer">
+                                                        <xs:annotation>
+                                                            <xs:documentation>Число выходов на
+                                                                просрочку за последние 180
+                                                                календарных дней
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    <xs:element name="Debts">
+                                                        <xs:annotation>
+                                                            <xs:documentation>Расшифровка по видам
+                                                                задолженности
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                        <xs:complexType>
+                                                            <xs:annotation>
+                                                                <xs:documentation>Расшифровка по
+                                                                    видам задолженности
+                                                                </xs:documentation>
+                                                            </xs:annotation>
+                                                            <xs:sequence>
+                                                                <xs:element name="DebtRest">
+                                                                    <xs:annotation>
+                                                                        <xs:documentation>Полный
+                                                                            остаток задолженности
+                                                                        </xs:documentation>
+                                                                    </xs:annotation>
+                                                                    <xs:complexType>
+                                                                        <xs:annotation>
+                                                                            <xs:documentation>Полный
+                                                                                остаток
+                                                                                задолженности
+                                                                            </xs:documentation>
+                                                                        </xs:annotation>
+                                                                        <xs:sequence>
+                                                                            <xs:element name="Amt"
+                                                                                        type="val_decimal">
+                                                                                <xs:annotation>
+                                                                                    <xs:documentation>
+                                                                                        Сумма
+                                                                                    </xs:documentation>
+                                                                                </xs:annotation>
+                                                                            </xs:element>
+                                                                            <xs:element
+                                                                                    name="CurCode"
+                                                                                    type="String3">
+                                                                                <xs:annotation>
+                                                                                    <xs:documentation>
+                                                                                        Код валюты
+                                                                                    </xs:documentation>
+                                                                                </xs:annotation>
+                                                                            </xs:element>
+                                                                        </xs:sequence>
+                                                                    </xs:complexType>
+                                                                </xs:element>
+                                                                <xs:element
+                                                                        name="DebtCredContractInfo"
+                                                                        minOccurs="0"
+                                                                        maxOccurs="unbounded">
+                                                                    <xs:annotation>
+                                                                        <xs:documentation>
+                                                                            Задолженность
+                                                                        </xs:documentation>
+                                                                    </xs:annotation>
+                                                                    <xs:complexType>
+                                                                        <xs:annotation>
+                                                                            <xs:documentation>
+                                                                                Задолженность
+                                                                            </xs:documentation>
+                                                                        </xs:annotation>
+                                                                        <xs:sequence>
+                                                                            <xs:element
+                                                                                    name="DebtType"
+                                                                                    type="String40">
+                                                                                <xs:annotation>
+                                                                                    <xs:documentation>
+                                                                                        Вид
+                                                                                        задолженности
+                                                                                        (на
+                                                                                        балансовых и
+                                                                                        внебалансовых
+                                                                                        счетах)
+                                                                                    </xs:documentation>
+                                                                                </xs:annotation>
+                                                                            </xs:element>
+                                                                            <xs:element
+                                                                                    name="DebtRestBefore"
+                                                                                    type="val_decimal">
+                                                                                <xs:annotation>
+                                                                                    <xs:documentation>
+                                                                                        Остаток
+                                                                                        задолженности
+                                                                                        в валюте
+                                                                                        договора
+                                                                                    </xs:documentation>
+                                                                                </xs:annotation>
+                                                                            </xs:element>
+                                                                        </xs:sequence>
+                                                                    </xs:complexType>
+                                                                </xs:element>
+                                                            </xs:sequence>
+                                                        </xs:complexType>
+                                                    </xs:element>
+                                                    <xs:element name="ReservationObjects"
+                                                                minOccurs="0">
+                                                        <xs:annotation>
+                                                            <xs:documentation>Объекты резервирования
+                                                                по договору
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                        <xs:complexType>
+                                                            <xs:sequence>
+                                                                <xs:element name="ReservationObject"
+                                                                            minOccurs="0"
+                                                                            maxOccurs="unbounded">
+                                                                    <xs:annotation>
+                                                                        <xs:documentation>Объект
+                                                                            резервирования по
+                                                                            договору
+                                                                        </xs:documentation>
+                                                                    </xs:annotation>
+                                                                    <xs:complexType>
+                                                                        <xs:sequence>
+                                                                            <xs:element
+                                                                                    name="ContractObjectCode"
+                                                                                    type="String36">
+                                                                                <xs:annotation>
+                                                                                    <xs:documentation>
+                                                                                        Вид резерва
+                                                                                    </xs:documentation>
+                                                                                </xs:annotation>
+                                                                            </xs:element>
+                                                                            <xs:element
+                                                                                    name="ContractObjectIsRVP"
+                                                                                    type="val_boolean">
+                                                                                <xs:annotation>
+                                                                                    <xs:documentation>
+                                                                                        Принадлежность
+                                                                                        объекта к
+                                                                                        элементам
+                                                                                        РВПС - 0/РВП
+                                                                                        - 1
+                                                                                    </xs:documentation>
+                                                                                </xs:annotation>
+                                                                            </xs:element>
+                                                                            <xs:element
+                                                                                    name="ContractObjectReservAmount"
+                                                                                    type="val_decimal">
+                                                                                <xs:annotation>
+                                                                                    <xs:documentation>
+                                                                                        Сумма
+                                                                                        сформированного
+                                                                                        резерва на
+                                                                                        дату запроса
+                                                                                    </xs:documentation>
+                                                                                </xs:annotation>
+                                                                            </xs:element>
+                                                                        </xs:sequence>
+                                                                    </xs:complexType>
+                                                                </xs:element>
+                                                            </xs:sequence>
+                                                        </xs:complexType>
+                                                    </xs:element>
+                                                    <xs:element name="CrContrStatus"
+                                                                type="val_boolean">
+                                                        <xs:annotation>
+                                                            <xs:documentation>Статус договора
+                                                                0 – закрыт,1 – открыт
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    <xs:element name="isBKIAgree" type="val_boolean"
+                                                                minOccurs="0">
+                                                        <xs:annotation>
+                                                            <xs:documentation>Согласие на передачу в
+                                                                БКИ.
+                                                                1 - Согласен, 0 не согласен
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    <xs:element name="isFinGuarantee"
+                                                                type="val_boolean" minOccurs="0">
+                                                        <xs:annotation>
+                                                            <xs:documentation>Признак фин гарантии
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                </xs:sequence>
+                                            </xs:complexType>
+                                        </xs:element>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="RepaidContracts" minOccurs="0">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="RepaidContract" maxOccurs="unbounded">
+                                            <xs:annotation>
+                                                <xs:documentation>Информация по закрытым кредитным
+                                                    договорам клиента
+                                                </xs:documentation>
+                                            </xs:annotation>
+                                            <xs:complexType>
+                                                <xs:annotation>
+                                                    <xs:documentation>Информация по закрытым
+                                                        кредитным договорам клиента
+                                                    </xs:documentation>
+                                                </xs:annotation>
+                                                <xs:sequence>
+                                                    <xs:element name="RepaidContractID"
+                                                                type="String36">
+                                                        <xs:annotation>
+                                                            <xs:documentation>ID погашенного
+                                                                договора
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    <xs:element name="RepaidContractIDCRM"
+                                                                type="String36" minOccurs="0">
+                                                        <xs:annotation>
+                                                            <xs:documentation>ID продукта в CRM из
+                                                                ЕКС для погашенного договора
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    <xs:element name="RpdContrSum"
+                                                                type="val_decimal">
+                                                        <xs:annotation>
+                                                            <xs:documentation>Сумма кредита по
+                                                                договору на момент заключения
+                                                                договора
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    <xs:element name="RpdDuration"
+                                                                type="val_integer">
+                                                        <xs:annotation>
+                                                            <xs:documentation>Срок кредита в днях
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    <xs:element name="RpdCurr" type="String3">
+                                                        <xs:annotation>
+                                                            <xs:documentation>Валюта договора
+                                                                кредита / цессии / гарантии
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    <xs:element name="RpdIsDelay"
+                                                                type="val_boolean">
+                                                        <xs:annotation>
+                                                            <xs:documentation>Наличие просроченных
+                                                                платежей по погашенной ссуде: 0 –
+                                                                нет 1 – да
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    <xs:element name="RpdDaysDelayOver"
+                                                                type="val_integer">
+                                                        <xs:annotation>
+                                                            <xs:documentation>Общая
+                                                                продолжительность просроченной
+                                                                задолженности по погашенной ссуде в
+                                                                днях. При отсутствии = 0.
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    <xs:element name="PayDate" type="val_date">
+                                                        <xs:annotation>
+                                                            <xs:documentation>Дата полного погашения
+                                                                ссуды (для ЕКС – дата закрытия
+                                                                договора)
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                </xs:sequence>
+                                            </xs:complexType>
+                                        </xs:element>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="ZalogContracts" minOccurs="0">
+                                <xs:annotation>
+                                    <xs:documentation>Информация по договорам обеспечения кредитного
+                                        договора
+                                    </xs:documentation>
+                                </xs:annotation>
+                                <xs:complexType>
+                                    <xs:annotation>
+                                        <xs:documentation>Информация по договорам обеспечения
+                                            кредитного договора
+                                        </xs:documentation>
+                                    </xs:annotation>
+                                    <xs:sequence>
+                                        <xs:element name="ZalogContract" maxOccurs="unbounded">
+                                            <xs:annotation>
+                                                <xs:documentation>Информация по договору
+                                                    обеспечения
+                                                </xs:documentation>
+                                            </xs:annotation>
+                                            <xs:complexType>
+                                                <xs:annotation>
+                                                    <xs:documentation>Информация по договору
+                                                        обеспечения
+                                                    </xs:documentation>
+                                                </xs:annotation>
+                                                <xs:sequence>
+                                                    <xs:element name="ContractId" type="String36">
+                                                        <xs:annotation>
+                                                            <xs:documentation>Идентификатор договора
+                                                                обеспечения в ЕКС
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    <xs:element name="ZalogConNumber"
+                                                                type="String64">
+                                                        <xs:annotation>
+                                                            <xs:documentation>Номер договора
+                                                                обеспечения в ЕКС
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    <xs:element name="ZalogType" type="val_integer">
+                                                        <xs:annotation>
+                                                            <xs:documentation>Вид договора
+                                                                обеспечения: 1 - Залог/ 2 -
+                                                                Поручительство/ 3 - Гарантия
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    <xs:element name="ZalogKind" type="String30"
+                                                                minOccurs="0">
+                                                        <xs:annotation>
+                                                            <xs:documentation>Вид залога
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    <xs:element name="ZalogClientId"
+                                                                type="String36">
+                                                        <xs:annotation>
+                                                            <xs:documentation>ID Залогодателя /
+                                                                Поручителя / Гаранта в ЕКС
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    <xs:element name="ZalogClientIdCRM"
+                                                                type="String36" minOccurs="0">
+                                                        <xs:annotation>
+                                                            <xs:documentation>ID Залогодателя /
+                                                                Поручителя / Гаранта в CRM
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    <xs:element name="ZalogClientIdMDM"
+                                                                type="String36" minOccurs="0">
+                                                        <xs:annotation>
+                                                            <xs:documentation>ID Залогодателя /
+                                                                Поручителя / Гаранта в MDM
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    <xs:element name="ZalogClientIdEPK"
+                                                                type="String36" minOccurs="0">
+                                                        <xs:annotation>
+                                                            <xs:documentation>ID Залогодателя /
+                                                                Поручителя / Гаранта в ЕПК. До
+                                                                момента реализации, возвращается
+                                                                пустым
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    <xs:element name="ZalogConSum"
+                                                                type="val_decimal" minOccurs="0">
+                                                        <xs:annotation>
+                                                            <xs:documentation>Сумма договора
+                                                                обеспечения
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    <xs:element name="ZalogConDate" type="val_date">
+                                                        <xs:annotation>
+                                                            <xs:documentation>Дата договора
+                                                                обеспечения
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    <xs:element name="Qcategory" type="val_integer"
+                                                                minOccurs="0">
+                                                        <xs:annotation>
+                                                            <xs:documentation>Категория качества
+                                                                обеспечения
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    <xs:element name="ZalogDistribType"
+                                                                type="val_integer">
+                                                        <xs:annotation>
+                                                            <xs:documentation>Тип распределения
+                                                                обеспечения
+                                                                1 - Пропорционально / 2- В долях/3 -
+                                                                процент
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    <xs:element name="ZalogDistribCur"
+                                                                type="String3" minOccurs="0">
+                                                        <xs:annotation>
+                                                            <xs:documentation>Валюта доли
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    <xs:element name="ZalogDistribPart"
+                                                                type="val_decimal" minOccurs="0">
+                                                        <xs:annotation>
+                                                            <xs:documentation>Распределение
+                                                                обеспечения
+                                                                Передается значение в процентах или
+                                                                абсолютной величине доли обеспечения
+                                                                на главный договор
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    <xs:element name="ZalogDeals" minOccurs="0">
+                                                        <xs:annotation>
+                                                            <xs:documentation>Информация о связанных
+                                                                договорах (КД, КЛ, овердрафты,
+                                                                гарантии)
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                        <xs:complexType>
+                                                            <xs:annotation>
+                                                                <xs:documentation>Информация о
+                                                                    связанных договорах (КД, КЛ,
+                                                                    овердрафты, гарантии)
+                                                                </xs:documentation>
+                                                            </xs:annotation>
+                                                            <xs:sequence>
+                                                                <xs:element name="ZalogDeal"
+                                                                            maxOccurs="unbounded">
+                                                                    <xs:annotation>
+                                                                        <xs:documentation>Информация
+                                                                            о связанном договоре.
+                                                                        </xs:documentation>
+                                                                    </xs:annotation>
+                                                                    <xs:complexType>
+                                                                        <xs:annotation>
+                                                                            <xs:documentation>
+                                                                                Информация о
+                                                                                связанном договоре.
+                                                                            </xs:documentation>
+                                                                        </xs:annotation>
+                                                                        <xs:sequence>
+                                                                            <xs:element
+                                                                                    name="ZlDealId"
+                                                                                    type="String36">
+                                                                                <xs:annotation>
+                                                                                    <xs:documentation>
+                                                                                        ID
+                                                                                        кредитного
+                                                                                        договора в
+                                                                                        ЕКС,
+                                                                                        связанного с
+                                                                                        договором
+                                                                                        обеспечения
+                                                                                    </xs:documentation>
+                                                                                </xs:annotation>
+                                                                            </xs:element>
+                                                                            <xs:element
+                                                                                    name="ZlDealIdCRM"
+                                                                                    type="String36"
+                                                                                    minOccurs="0">
+                                                                                <xs:annotation>
+                                                                                    <xs:documentation>
+                                                                                        ID продукта
+                                                                                        в CRM, по
+                                                                                        договору
+                                                                                        связанному с
+                                                                                        договором
+                                                                                        обеспечения
+                                                                                    </xs:documentation>
+                                                                                </xs:annotation>
+                                                                            </xs:element>
+                                                                            <xs:element
+                                                                                    name="ZlDealClientId"
+                                                                                    type="String36"
+                                                                                    minOccurs="0">
+                                                                                <xs:annotation>
+                                                                                    <xs:documentation>
+                                                                                        ID
+                                                                                        Контрагента
+                                                                                        ЕКС для
+                                                                                        каждого ID
+                                                                                        кредитного
+                                                                                        договора
+                                                                                        (включая
+                                                                                        гарантии и
+                                                                                        овердрафты),
+                                                                                        связанного с
+                                                                                        договором
+                                                                                        обеспечения,
+                                                                                        если ID
+                                                                                        этого
+                                                                                        Контрагента
+                                                                                        отличается
+                                                                                        от ID
+                                                                                        Контрагента
+                                                                                        по главному
+                                                                                        договору
+                                                                                    </xs:documentation>
+                                                                                </xs:annotation>
+                                                                            </xs:element>
+                                                                            <xs:element
+                                                                                    name="ZlDealClientIdCRM"
+                                                                                    type="String36"
+                                                                                    minOccurs="0">
+                                                                                <xs:annotation>
+                                                                                    <xs:documentation>
+                                                                                        ID
+                                                                                        Контрагента
+                                                                                        CRM для
+                                                                                        каждого ID
+                                                                                        кредитного
+                                                                                        договора
+                                                                                        (включая
+                                                                                        гарантии и
+                                                                                        овердрафты),
+                                                                                        связанного с
+                                                                                        договором
+                                                                                        обеспечения,
+                                                                                        если ID
+                                                                                        этого
+                                                                                        Контрагента
+                                                                                        отличается
+                                                                                        от ID
+                                                                                        Контрагента
+                                                                                        по главному
+                                                                                        договору
+                                                                                    </xs:documentation>
+                                                                                </xs:annotation>
+                                                                            </xs:element>
+                                                                            <xs:element
+                                                                                    name="ZlDealClientIdMDM"
+                                                                                    type="String36"
+                                                                                    minOccurs="0">
+                                                                                <xs:annotation>
+                                                                                    <xs:documentation>
+                                                                                        ID
+                                                                                        Контрагента
+                                                                                        MDM для
+                                                                                        каждого ID
+                                                                                        кредитного
+                                                                                        договора
+                                                                                        (включая
+                                                                                        гарантии и
+                                                                                        овердрафты),
+                                                                                        связанного с
+                                                                                        договором
+                                                                                        обеспечения,
+                                                                                        если ID
+                                                                                        этого
+                                                                                        Контрагента
+                                                                                        отличается
+                                                                                        от ID
+                                                                                        Контрагента
+                                                                                        по главному
+                                                                                        договору
+                                                                                    </xs:documentation>
+                                                                                </xs:annotation>
+                                                                            </xs:element>
+                                                                            <xs:element
+                                                                                    name="ZlDealClientIdEPK"
+                                                                                    type="String36"
+                                                                                    minOccurs="0">
+                                                                                <xs:annotation>
+                                                                                    <xs:documentation>
+                                                                                        ID
+                                                                                        Контрагента
+                                                                                        ЕПК для
+                                                                                        каждого ID
+                                                                                        кредитного
+                                                                                        договора
+                                                                                        (включая
+                                                                                        гарантии и
+                                                                                        овердрафты),
+                                                                                        связанного с
+                                                                                        договором
+                                                                                        обеспечения,
+                                                                                        если ID
+                                                                                        этого
+                                                                                        Контрагента
+                                                                                        отличается
+                                                                                        от ID
+                                                                                        Контрагента
+                                                                                        по главному
+                                                                                        договору
+                                                                                        До момента
+                                                                                        реализации,
+                                                                                        возвращается
+                                                                                        пустым
+                                                                                    </xs:documentation>
+                                                                                </xs:annotation>
+                                                                            </xs:element>
+                                                                            <xs:element
+                                                                                    name="ZlDealDistribPart"
+                                                                                    type="val_decimal"
+                                                                                    minOccurs="0">
+                                                                                <xs:annotation>
+                                                                                    <xs:documentation>
+                                                                                        Доля
+                                                                                        распределения
+                                                                                        обеспечения
+                                                                                    </xs:documentation>
+                                                                                </xs:annotation>
+                                                                            </xs:element>
+                                                                            <xs:element
+                                                                                    name="ZlDealDistribParttype"
+                                                                                    type="val_integer">
+                                                                                <xs:annotation>
+                                                                                    <xs:documentation>
+                                                                                        Тип
+                                                                                        распределения
+                                                                                        обеспечения
+                                                                                        1 -
+                                                                                        Пропорционально
+                                                                                        / 2- В
+                                                                                        долях/3 -
+                                                                                        процент
+                                                                                    </xs:documentation>
+                                                                                </xs:annotation>
+                                                                            </xs:element>
+                                                                            <xs:element
+                                                                                    name="Debts">
+                                                                                <xs:annotation>
+                                                                                    <xs:documentation>
+                                                                                        Расшифровка
+                                                                                        по видам
+                                                                                        задолженности
+                                                                                    </xs:documentation>
+                                                                                </xs:annotation>
+                                                                                <xs:complexType>
+                                                                                    <xs:annotation>
+                                                                                        <xs:documentation>
+                                                                                            Расшифровка
+                                                                                            по видам
+                                                                                            задолженности
+                                                                                        </xs:documentation>
+                                                                                    </xs:annotation>
+                                                                                    <xs:sequence>
+                                                                                        <xs:element
+                                                                                                name="DebtRest">
+                                                                                            <xs:annotation>
+                                                                                                <xs:documentation>
+                                                                                                    Полный
+                                                                                                    остаток
+                                                                                                    задолженности
+                                                                                                </xs:documentation>
+                                                                                            </xs:annotation>
+                                                                                            <xs:complexType>
+                                                                                                <xs:annotation>
+                                                                                                    <xs:documentation>
+                                                                                                        Полный
+                                                                                                        остаток
+                                                                                                        задолженности
+                                                                                                    </xs:documentation>
+                                                                                                </xs:annotation>
+                                                                                                <xs:sequence>
+                                                                                                    <xs:element
+                                                                                                            name="Amt"
+                                                                                                            type="val_decimal">
+                                                                                                        <xs:annotation>
+                                                                                                            <xs:documentation>
+                                                                                                                Сумма
+                                                                                                            </xs:documentation>
+                                                                                                        </xs:annotation>
+                                                                                                    </xs:element>
+                                                                                                    <xs:element
+                                                                                                            name="CurCode"
+                                                                                                            type="String3">
+                                                                                                        <xs:annotation>
+                                                                                                            <xs:documentation>
+                                                                                                                Код
+                                                                                                                валюты
+                                                                                                            </xs:documentation>
+                                                                                                        </xs:annotation>
+                                                                                                    </xs:element>
+                                                                                                </xs:sequence>
+                                                                                            </xs:complexType>
+                                                                                        </xs:element>
+                                                                                        <xs:element
+                                                                                                name="DebtCredContractInfo"
+                                                                                                minOccurs="0"
+                                                                                                maxOccurs="unbounded">
+                                                                                            <xs:annotation>
+                                                                                                <xs:documentation>
+                                                                                                    Задолженность
+                                                                                                </xs:documentation>
+                                                                                            </xs:annotation>
+                                                                                            <xs:complexType>
+                                                                                                <xs:annotation>
+                                                                                                    <xs:documentation>
+                                                                                                        Задолженность
+                                                                                                    </xs:documentation>
+                                                                                                </xs:annotation>
+                                                                                                <xs:sequence>
+                                                                                                    <xs:element
+                                                                                                            name="DebtType"
+                                                                                                            type="String40">
+                                                                                                        <xs:annotation>
+                                                                                                            <xs:documentation>
+                                                                                                                Вид
+                                                                                                                задолженности
+                                                                                                                (на
+                                                                                                                балансовых
+                                                                                                                и
+                                                                                                                внебалансовых
+                                                                                                                счетах)
+                                                                                                            </xs:documentation>
+                                                                                                        </xs:annotation>
+                                                                                                    </xs:element>
+                                                                                                    <xs:element
+                                                                                                            name="DebtRestBefore"
+                                                                                                            type="val_decimal">
+                                                                                                        <xs:annotation>
+                                                                                                            <xs:documentation>
+                                                                                                                Остаток
+                                                                                                                задолженности
+                                                                                                                в
+                                                                                                                валюте
+                                                                                                                договора
+                                                                                                            </xs:documentation>
+                                                                                                        </xs:annotation>
+                                                                                                    </xs:element>
+                                                                                                </xs:sequence>
+                                                                                            </xs:complexType>
+                                                                                        </xs:element>
+                                                                                    </xs:sequence>
+                                                                                </xs:complexType>
+                                                                            </xs:element>
+                                                                        </xs:sequence>
+                                                                    </xs:complexType>
+                                                                </xs:element>
+                                                            </xs:sequence>
+                                                        </xs:complexType>
+                                                    </xs:element>
+                                                </xs:sequence>
+                                            </xs:complexType>
+                                        </xs:element>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="ZalogClientContracts" minOccurs="0">
+                                <xs:annotation>
+                                    <xs:documentation>Информация о Поручительствах / Гарантиях,
+                                        найденные в АС ЕКС по ZalogClientId (только поручительства и
+                                        гарантии, без залогов)
+                                    </xs:documentation>
+                                </xs:annotation>
+                                <xs:complexType>
+                                    <xs:annotation>
+                                        <xs:documentation>Информация о Поручительствах / Гарантиях,
+                                            найденные в АС ЕКС по ZalogClientId (только
+                                            поручительства и гарантии, без залогов)
+                                        </xs:documentation>
+                                    </xs:annotation>
+                                    <xs:sequence>
+                                        <xs:element name="ZalogClientContract"
+                                                    maxOccurs="unbounded">
+                                            <xs:annotation>
+                                                <xs:documentation>Договор Поручительства /
+                                                    Гарантии
+                                                </xs:documentation>
+                                            </xs:annotation>
+                                            <xs:complexType>
+                                                <xs:annotation>
+                                                    <xs:documentation>Договор Поручительства /
+                                                        Гарантии
+                                                    </xs:documentation>
+                                                </xs:annotation>
+                                                <xs:sequence>
+                                                    <xs:element name="ZalogClientId"
+                                                                type="String36">
+                                                        <xs:annotation>
+                                                            <xs:documentation>ID Залогодателя /
+                                                                Поручителя / Гаранта
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    <xs:element name="ClConId" type="String36">
+                                                        <xs:annotation>
+                                                            <xs:documentation>Идентификатор договора
+                                                                обеспечения в ЕКС
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    <xs:element name="ClConContracts">
+                                                        <xs:annotation>
+                                                            <xs:documentation>Информация о связанных
+                                                                с ДО поручителей кредитных договорах
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                        <xs:complexType>
+                                                            <xs:annotation>
+                                                                <xs:documentation>Информация о
+                                                                    связанных с ДО поручителей
+                                                                    кредитных договорах
+                                                                </xs:documentation>
+                                                            </xs:annotation>
+                                                            <xs:sequence>
+                                                                <xs:element name="ClConContract"
+                                                                            maxOccurs="unbounded">
+                                                                    <xs:annotation>
+                                                                        <xs:documentation>Информация
+                                                                            о связанном с ДО
+                                                                            поручителей кредитном
+                                                                            договоре
+                                                                        </xs:documentation>
+                                                                    </xs:annotation>
+                                                                    <xs:complexType>
+                                                                        <xs:annotation>
+                                                                            <xs:documentation>
+                                                                                Информация о
+                                                                                связанном с ДО
+                                                                                поручителей
+                                                                                кредитном договоре
+                                                                            </xs:documentation>
+                                                                        </xs:annotation>
+                                                                        <xs:sequence>
+                                                                            <xs:element
+                                                                                    name="ClConContractID"
+                                                                                    type="String36">
+                                                                                <xs:annotation>
+                                                                                    <xs:documentation>
+                                                                                        Идентификатор
+                                                                                        в ЕКС
+                                                                                        связанного
+                                                                                        кредитного
+                                                                                        договора
+                                                                                    </xs:documentation>
+                                                                                </xs:annotation>
+                                                                            </xs:element>
+                                                                            <xs:element
+                                                                                    name="Debts">
+                                                                                <xs:annotation>
+                                                                                    <xs:documentation>
+                                                                                        Расшифровка
+                                                                                        по видам
+                                                                                        задолженности
+                                                                                    </xs:documentation>
+                                                                                </xs:annotation>
+                                                                                <xs:complexType>
+                                                                                    <xs:annotation>
+                                                                                        <xs:documentation>
+                                                                                            Расшифровка
+                                                                                            по видам
+                                                                                            задолженности
+                                                                                        </xs:documentation>
+                                                                                    </xs:annotation>
+                                                                                    <xs:sequence>
+                                                                                        <xs:element
+                                                                                                name="DebtRest">
+                                                                                            <xs:annotation>
+                                                                                                <xs:documentation>
+                                                                                                    Полный
+                                                                                                    остаток
+                                                                                                    задолженности
+                                                                                                    (учитывается
+                                                                                                    сумма
+                                                                                                    ссудной
+                                                                                                    задолженности
+                                                                                                    и
+                                                                                                    сумма
+                                                                                                    неиспользованного
+                                                                                                    лимита)
+                                                                                                </xs:documentation>
+                                                                                            </xs:annotation>
+                                                                                            <xs:complexType>
+                                                                                                <xs:annotation>
+                                                                                                    <xs:documentation>
+                                                                                                        Полный
+                                                                                                        остаток
+                                                                                                        задолженности
+                                                                                                        (учитывается
+                                                                                                        сумма
+                                                                                                        ссудной
+                                                                                                        задолженности
+                                                                                                        и
+                                                                                                        сумма
+                                                                                                        неиспользованного
+                                                                                                        лимита)
+                                                                                                    </xs:documentation>
+                                                                                                </xs:annotation>
+                                                                                                <xs:sequence>
+                                                                                                    <xs:element
+                                                                                                            name="Amt"
+                                                                                                            type="val_decimal">
+                                                                                                        <xs:annotation>
+                                                                                                            <xs:documentation>
+                                                                                                                Сумма
+                                                                                                            </xs:documentation>
+                                                                                                        </xs:annotation>
+                                                                                                    </xs:element>
+                                                                                                    <xs:element
+                                                                                                            name="CurCode"
+                                                                                                            type="String3">
+                                                                                                        <xs:annotation>
+                                                                                                            <xs:documentation>
+                                                                                                                Код
+                                                                                                                валюты
+                                                                                                            </xs:documentation>
+                                                                                                        </xs:annotation>
+                                                                                                    </xs:element>
+                                                                                                </xs:sequence>
+                                                                                            </xs:complexType>
+                                                                                        </xs:element>
+                                                                                    </xs:sequence>
+                                                                                </xs:complexType>
+                                                                            </xs:element>
+                                                                        </xs:sequence>
+                                                                    </xs:complexType>
+                                                                </xs:element>
+                                                            </xs:sequence>
+                                                        </xs:complexType>
+                                                    </xs:element>
+                                                </xs:sequence>
+                                            </xs:complexType>
+                                        </xs:element>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="CardIndexInfo" minOccurs="0">
+                                <xs:annotation>
+                                    <xs:documentation>Информация о картотеке клиента
+                                    </xs:documentation>
+                                </xs:annotation>
+                                <xs:complexType>
+                                    <xs:annotation>
+                                        <xs:documentation>Информация о картотеке клиента
+                                        </xs:documentation>
+                                    </xs:annotation>
+                                    <xs:sequence>
+                                        <xs:element name="CardIndexSum" type="val_decimal">
+                                            <xs:annotation>
+                                                <xs:documentation>Сумма картотеки</xs:documentation>
+                                            </xs:annotation>
+                                        </xs:element>
+                                        <xs:element name="CardIndexPeriod" type="val_integer">
+                                            <xs:annotation>
+                                                <xs:documentation>Срок картотеки</xs:documentation>
+                                            </xs:annotation>
+                                        </xs:element>
+                                        <xs:element name="IsPriorityThree" type="val_boolean">
+                                            <xs:annotation>
+                                                <xs:documentation>Наличие платежных документов с
+                                                    очередностью, равной 3
+                                                </xs:documentation>
+                                            </xs:annotation>
+                                        </xs:element>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="IFRSRM" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>Ветка данных оценочного резерва</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="OrgInfo">
+                                <xs:annotation>
+                                    <xs:documentation>Информация о клиенте</xs:documentation>
+                                </xs:annotation>
+                                <xs:complexType>
+                                    <xs:annotation>
+                                        <xs:documentation>Информация о картотеке клиента
+                                        </xs:documentation>
+                                    </xs:annotation>
+                                    <xs:sequence>
+                                        <xs:element name="ListOfOrgIDs">
+                                            <xs:annotation>
+                                                <xs:documentation>Массив идентификаторов клиента
+                                                </xs:documentation>
+                                            </xs:annotation>
+                                            <xs:complexType>
+                                                <xs:sequence>
+                                                    <xs:element name="OrgID" maxOccurs="unbounded">
+                                                        <xs:annotation>
+                                                            <xs:documentation>Идентификатор
+                                                                клиента
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                        <xs:complexType>
+                                                            <xs:sequence>
+                                                                <xs:element name="OrgNum">
+                                                                    <xs:annotation>
+                                                                        <xs:documentation>
+                                                                            Идентификатор заемщика
+                                                                        </xs:documentation>
+                                                                    </xs:annotation>
+                                                                </xs:element>
+                                                                <xs:element name="NumType">
+                                                                    <xs:annotation>
+                                                                        <xs:documentation>Тип
+                                                                            идентификатора.
+                                                                            Заполняется значениями:
+                                                                            EKS, CRM, MDM, UCP
+                                                                        </xs:documentation>
+                                                                    </xs:annotation>
+                                                                </xs:element>
+                                                            </xs:sequence>
+                                                        </xs:complexType>
+                                                    </xs:element>
+                                                </xs:sequence>
+                                            </xs:complexType>
+                                        </xs:element>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="ListOfCreditContracts">
+                                <xs:annotation>
+                                    <xs:documentation>Массив договоров</xs:documentation>
+                                </xs:annotation>
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="ContractInfo" maxOccurs="unbounded">
+                                            <xs:annotation>
+                                                <xs:documentation>Информация о договоре
+                                                </xs:documentation>
+                                            </xs:annotation>
+                                            <xs:complexType>
+                                                <xs:sequence>
+                                                    <xs:element name="ContractId" type="String36">
+                                                        <xs:annotation>
+                                                            <xs:documentation>ID Договора в ЕКС
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    <xs:element name="CrConNumber" type="String64">
+                                                        <xs:annotation>
+                                                            <xs:documentation>№ Договора в ЕКС
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    <xs:element name="ContractIdCRM" type="String36"
+                                                                minOccurs="0">
+                                                        <xs:annotation>
+                                                            <xs:documentation>Идентификатор продукта
+                                                                CRM из ЕКС
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    <xs:element name="Accs" minOccurs="0">
+                                                        <xs:annotation>
+                                                            <xs:documentation>Информация о ссудных
+                                                                счетах договора
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                        <xs:complexType>
+                                                            <xs:annotation>
+                                                                <xs:documentation>Информация о
+                                                                    ссудных счетах договора
+                                                                </xs:documentation>
+                                                            </xs:annotation>
+                                                            <xs:sequence>
+                                                                <xs:element name="Acct"
+                                                                            maxOccurs="unbounded">
+                                                                    <xs:annotation>
+                                                                        <xs:documentation>Ссудный
+                                                                            счет
+                                                                        </xs:documentation>
+                                                                    </xs:annotation>
+                                                                    <xs:complexType>
+                                                                        <xs:annotation>
+                                                                            <xs:documentation>
+                                                                                Ссудный счет
+                                                                            </xs:documentation>
+                                                                        </xs:annotation>
+                                                                        <xs:sequence>
+                                                                            <xs:element
+                                                                                    name="AcctNum"
+                                                                                    type="String25">
+                                                                                <xs:annotation>
+                                                                                    <xs:documentation>
+                                                                                        Номер
+                                                                                        ссудного
+                                                                                        счета
+                                                                                    </xs:documentation>
+                                                                                </xs:annotation>
+                                                                            </xs:element>
+                                                                        </xs:sequence>
+                                                                    </xs:complexType>
+                                                                </xs:element>
+                                                            </xs:sequence>
+                                                        </xs:complexType>
+                                                    </xs:element>
+                                                    <xs:element name="CrConDate" type="val_date">
+                                                        <xs:annotation>
+                                                            <xs:documentation>Дата начала действия
+                                                                договора
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    <xs:element name="CrDate" type="val_date"
+                                                                minOccurs="0">
+                                                        <xs:annotation>
+                                                            <xs:documentation>Фактическая дата
+                                                                выдачи ссуды / отражения лимита
+                                                                гарантии на счетах балансового учета
+                                                                по договору
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    <xs:element name="FinishDate" type="val_date">
+                                                        <xs:annotation>
+                                                            <xs:documentation>Дата окончания
+                                                                договора
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    <xs:element name="FutureAccountingModel"
+                                                                minOccurs="0">
+                                                        <xs:annotation>
+                                                            <xs:documentation>Модель последующего
+                                                                учета
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                        <xs:complexType>
+                                                            <xs:sequence>
+                                                                <xs:element name="ModelCode"
+                                                                            type="String40">
+                                                                    <xs:annotation>
+                                                                        <xs:documentation>Код модели
+                                                                            из ЕКС
+                                                                        </xs:documentation>
+                                                                    </xs:annotation>
+                                                                </xs:element>
+                                                                <xs:element name="ModelName"
+                                                                            type="String40">
+                                                                    <xs:annotation>
+                                                                        <xs:documentation>
+                                                                            Наименование модели из
+                                                                            ЕКС
+                                                                        </xs:documentation>
+                                                                    </xs:annotation>
+                                                                </xs:element>
+                                                            </xs:sequence>
+                                                        </xs:complexType>
+                                                    </xs:element>
+                                                    <xs:element name="GrossCarryingAmount"
+                                                                type="val_decimal" minOccurs="0">
+                                                        <xs:annotation>
+                                                            <xs:documentation>Валовая балансовая
+                                                                стоимость
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    <xs:element name="ConCurr" type="String3">
+                                                        <xs:annotation>
+                                                            <xs:documentation>Валюта договора
+                                                                кредита / цессии / гарантии
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    <xs:element name="Debts">
+                                                        <xs:annotation>
+                                                            <xs:documentation>Расшифровка по видам
+                                                                задолженности
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                        <xs:complexType>
+                                                            <xs:annotation>
+                                                                <xs:documentation>Расшифровка по
+                                                                    видам задолженности
+                                                                </xs:documentation>
+                                                            </xs:annotation>
+                                                            <xs:sequence>
+                                                                <xs:element name="DebtRest">
+                                                                    <xs:annotation>
+                                                                        <xs:documentation>Полный
+                                                                            остаток задолженности
+                                                                        </xs:documentation>
+                                                                    </xs:annotation>
+                                                                    <xs:complexType>
+                                                                        <xs:annotation>
+                                                                            <xs:documentation>Полный
+                                                                                остаток
+                                                                                задолженности
+                                                                            </xs:documentation>
+                                                                        </xs:annotation>
+                                                                        <xs:sequence>
+                                                                            <xs:element name="Amt"
+                                                                                        type="val_decimal">
+                                                                                <xs:annotation>
+                                                                                    <xs:documentation>
+                                                                                        Сумма
+                                                                                    </xs:documentation>
+                                                                                </xs:annotation>
+                                                                            </xs:element>
+                                                                            <xs:element
+                                                                                    name="CurCode"
+                                                                                    type="String3">
+                                                                                <xs:annotation>
+                                                                                    <xs:documentation>
+                                                                                        Код валюты
+                                                                                    </xs:documentation>
+                                                                                </xs:annotation>
+                                                                            </xs:element>
+                                                                        </xs:sequence>
+                                                                    </xs:complexType>
+                                                                </xs:element>
+                                                                <xs:element
+                                                                        name="DebtCredContractInfo"
+                                                                        minOccurs="0"
+                                                                        maxOccurs="unbounded">
+                                                                    <xs:annotation>
+                                                                        <xs:documentation>
+                                                                            Задолженность
+                                                                        </xs:documentation>
+                                                                    </xs:annotation>
+                                                                    <xs:complexType>
+                                                                        <xs:annotation>
+                                                                            <xs:documentation>
+                                                                                Задолженность
+                                                                            </xs:documentation>
+                                                                        </xs:annotation>
+                                                                        <xs:sequence>
+                                                                            <xs:element
+                                                                                    name="DebtType"
+                                                                                    type="String40">
+                                                                                <xs:annotation>
+                                                                                    <xs:documentation>
+                                                                                        Вид
+                                                                                        задолженности
+                                                                                        (на
+                                                                                        балансовых и
+                                                                                        внебалансовых
+                                                                                        счетах)
+                                                                                    </xs:documentation>
+                                                                                </xs:annotation>
+                                                                            </xs:element>
+                                                                            <xs:element
+                                                                                    name="DebtRestBefore"
+                                                                                    type="val_decimal">
+                                                                                <xs:annotation>
+                                                                                    <xs:documentation>
+                                                                                        Остаток
+                                                                                        задолженности
+                                                                                        в валюте
+                                                                                        договора
+                                                                                    </xs:documentation>
+                                                                                </xs:annotation>
+                                                                            </xs:element>
+                                                                        </xs:sequence>
+                                                                    </xs:complexType>
+                                                                </xs:element>
+                                                            </xs:sequence>
+                                                        </xs:complexType>
+                                                    </xs:element>
+                                                    <xs:element name="ProjectKind"
+                                                                type="CreditTypeForCCF_Type"
+                                                                minOccurs="0">
+                                                        <xs:annotation>
+                                                            <xs:documentation>Тип проекта. Код и
+                                                                наименование из справочника
+                                                                KIND_PROJECT
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    <xs:element name="CreditMode"
+                                                                type="CreditTypeForCCF_Type"
+                                                                minOccurs="0">
+                                                        <xs:annotation>
+                                                            <xs:documentation>Режим кредитования.
+                                                                Код и наименование из справочника
+                                                                CRED_MODE
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    <xs:element name="IsFinanceGarantee"
+                                                                type="val_boolean" minOccurs="0">
+                                                        <xs:annotation>
+                                                            <xs:documentation>Флаг финансовой
+                                                                гарантии по кредитному договору
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    <xs:element name="CreditKind"
+                                                                type="CreditTypeForCCF_Type"
+                                                                minOccurs="0">
+                                                        <xs:annotation>
+                                                            <xs:documentation>Вид кредита. Код и
+                                                                наименование из справочника "Виды
+                                                                кредитов"
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    <xs:element name="IsPOCI" type="val_boolean">
+                                                        <xs:annotation>
+                                                            <xs:documentation>Флаг POCI-актива
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    <xs:element name="IsCashSweep"
+                                                                type="val_boolean">
+                                                        <xs:annotation>
+                                                            <xs:documentation>Флаг наличия опции
+                                                                CashSweep
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    <xs:element name="DaysDelay" type="val_integer">
+                                                        <xs:annotation>
+                                                            <xs:documentation>Срок текущей
+                                                                просроченной задолженности в днях.
+                                                                При отсутствии = 0.
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    <xs:element name="DaysDelayMax"
+                                                                type="val_integer">
+                                                        <xs:annotation>
+                                                            <xs:documentation>Максимальный срок
+                                                                текущей просроченной задолженности в
+                                                                днях по всем договорам клиента. При
+                                                                отсутствии = 0.
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    <xs:element name="ListOfTranches"
+                                                                type="ListOfTranches_Type"
+                                                                minOccurs="0">
+                                                        <xs:annotation>
+                                                            <xs:documentation>Массив траншей
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    <xs:element name="IsRestruct"
+                                                                type="val_boolean">
+                                                        <xs:annotation>
+                                                            <xs:documentation>Признак
+                                                                реструктуризации.
+                                                                0 – нет 1 – да
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    <xs:element name="RestructDate" type="val_date"
+                                                                minOccurs="0">
+                                                        <xs:annotation>
+                                                            <xs:documentation>Дата последней
+                                                                реструктуризации
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                    <xs:element name="GeneralAgreementID"
+                                                                type="String64" minOccurs="0">
+                                                        <xs:annotation>
+                                                            <xs:documentation>Идентификатор
+                                                                генерального соглашения
+                                                            </xs:documentation>
+                                                        </xs:annotation>
+                                                    </xs:element>
+                                                </xs:sequence>
+                                            </xs:complexType>
+                                        </xs:element>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="BusinessProcess" type="String36">
+                                <xs:annotation>
+                                    <xs:documentation>Бизнес-процесс, в рамках которого производится
+                                        вызов сервиса
+                                    </xs:documentation>
+                                </xs:annotation>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:choice>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>

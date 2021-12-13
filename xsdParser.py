@@ -1,8 +1,9 @@
 import sys
 import traceback
+from xml.dom.minidom import parseString
+from yattag import indent
 
 from lxml import objectify
-from yattag import indent
 
 from xsdPropertyObject import XsdPropertyObject
 
@@ -26,7 +27,13 @@ class XsdParser(object):
 
         if 'xml' in locals():
             try:
-                xsdString = indent(xml, indentation=4 * ' ')
+                # from yattag import indent
+                # xsdString = indent(xml, indentation=4 * ' ')
+
+                # from xml.dom.minidom import parseString
+                xsdString = '\n'.join(
+                    [line for line in parseString(xml).toprettyxml(indent=4 * ' ').split('\n') if
+                     line.strip()])
             except Exception as err:
                 print('Ошибки загрузки файла:\n', traceback.format_exc())
 
