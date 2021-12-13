@@ -1,10 +1,9 @@
-import sys
 import os
 
+import pyperclip
 from PyQt6.QtCore import *
 from PyQt6.QtWidgets import *
 
-import design
 import outputMessage
 from jsonObjectValidator import JsonObjectValidator
 from jsonParser import JsonParser
@@ -17,6 +16,8 @@ def setup(form):
     form.pushButtonValidateJson.clicked.connect(jsonController.validateJson)
     form.textEditTextJson.dropEvent = jsonController.jsonFileDropEvent
 
+    form.pushButtonCopyResultJson.clicked.connect(jsonController.copyResult)
+
     form.jsonParser = JsonParser(form)
     form.jsonValidator = JsonObjectValidator(form.jsonParams)
 
@@ -25,6 +26,16 @@ class JsonController:
     def __init__(self, form):
         super().__init__()
         self.form = form
+
+    def copyResult(self):
+        # itemsTextList = [str(self.form.textEditResultXsd.item(i).text()) for i in
+        #                  range(self.form.textEditResultXsd.count())
+        # subprocess.run("pbcopy", universal_newlines=True, input=str(itemsTextList)) # clip
+        itemsTextString = ''
+        for i in range(self.form.textEditResultJson.count()):
+            itemsTextString += str(self.form.textEditResultJson.item(i).text() + '\n')
+
+        pyperclip.copy(itemsTextString)
 
     def jsonFileDropEvent(self, event):
         if event.mimeData().hasUrls():
@@ -75,8 +86,10 @@ class JsonController:
                 self.printOutputMessage(cardNumberCheck)
 
             for jsonObject in jsonObjects.values():
-                fullValidationResult.extend(self.form.jsonValidator.validate(jsonObject, jsonObjects))
-                stringPatternValidationResult.extend(self.form.jsonValidator.checkStringPattern(jsonObject))
+                fullValidationResult.extend(
+                    self.form.jsonValidator.validate(jsonObject, jsonObjects))
+                stringPatternValidationResult.extend(
+                    self.form.jsonValidator.checkStringPattern(jsonObject))
 
             if fullValidationResult:
                 for msg in fullValidationResult:
@@ -84,11 +97,14 @@ class JsonController:
                     self.printOutputMessage(msg)
             else:
                 self.form.textEditResultJson.addItem('Схема валидна!')
-                self.form.textEditResultJson.item(self.form.textEditResultJson.count() - 1).setForeground(Qt.GlobalColor.green)
+                self.form.textEditResultJson.item(
+                    self.form.textEditResultJson.count() - 1).setForeground(Qt.GlobalColor.green)
 
             if stringPatternValidationResult:
-                self.form.textEditResultJson.addItem('Также отсутствуют паттерны в строковых тегах:')
-                self.form.textEditResultJson.item(self.form.textEditResultJson.count() - 1).setForeground(Qt.GlobalColor.white)
+                self.form.textEditResultJson.addItem(
+                    'Также отсутствуют паттерны в строковых тегах:')
+                self.form.textEditResultJson.item(
+                    self.form.textEditResultJson.count() - 1).setForeground(Qt.GlobalColor.white)
                 # self.form.textEditResultJson.item(self.form.textEditResultJson.count() - 1).setBackground(Qt.GlobalColor.white)
 
                 for msg in stringPatternValidationResult:
@@ -96,7 +112,8 @@ class JsonController:
 
         else:
             self.form.textEditResultJson.addItem(str(jsonObjects))
-            self.form.textEditResultJson.item(self.form.textEditResultJson.count() - 1).setForeground(Qt.GlobalColor.red)
+            self.form.textEditResultJson.item(
+                self.form.textEditResultJson.count() - 1).setForeground(Qt.GlobalColor.red)
 
     def printOutputMessage(self, message):
         self.form.textEditResultJson.addItem(str(message))
@@ -106,7 +123,8 @@ class JsonController:
         else:
             itemColor = Qt.GlobalColor.red
 
-        self.form.textEditResultJson.item(self.form.textEditResultJson.count() - 1).setForeground(itemColor)
+        self.form.textEditResultJson.item(self.form.textEditResultJson.count() - 1).setForeground(
+            itemColor)
 
     def printDraftVersion(self, jsonString):
         draft = self.form.jsonParser.getJsonDraftVersion(jsonString)
