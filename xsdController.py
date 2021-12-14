@@ -2,6 +2,7 @@ import os
 
 import pyperclip
 from PyQt6.QtCore import *
+from PyQt6.QtGui import *
 from PyQt6.QtWidgets import *
 
 import outputMessage
@@ -16,7 +17,10 @@ def setup(form):
     form.pushButtonValidateXsd.clicked.connect(xsdController.validateXsd)
     form.textEditTextXsd.dropEvent = xsdController.xsdFileDropEvent
 
-    form.pushButtonCopyResultXsd.clicked.connect(xsdController.copyResult)
+    form.pushButtonCopySelectedResultXsd.clicked.connect(xsdController.copySelectedResult)
+    form.pushButtonCopyFullResultXsd.clicked.connect(xsdController.copyFullResult)
+
+    form.textEditResultXsd.keyPressEvent = xsdController.keyPressEvent
 
     form.xsdParser = XsdParser(form)
     form.xsdValidator = XsdObjectValidator(form.xsdParams)
@@ -27,13 +31,33 @@ class XsdController:
         super().__init__()
         self.form = form
 
-    def copyResult(self):
+    def keyPressEvent(self, event):
+        if event.matches(QKeySequence.StandardKey.Copy):
+            # event.accept()
+            self.copySelectedResult()
+        else:
+            return QListWidget.keyPressEvent(self.form.textEditResultXsd, event)
+
+    def copySelectedResult(self):
         # itemsTextList = [str(self.form.textEditResultXsd.item(i).text()) for i in
         #                  range(self.form.textEditResultXsd.count())
         # subprocess.run("pbcopy", universal_newlines=True, input=str(itemsTextList)) # clip
         itemsTextString = ''
-        for i in range(self.form.textEditResultXsd.count()):
-            itemsTextString += str(self.form.textEditResultXsd.item(i).text() + '\n')
+        for item in self.form.textEditResultXsd.selectedItems():
+            itemsTextString += str(item.text() + '\n')
+
+        pyperclip.copy(itemsTextString)
+
+    def copyFullResult(self):
+        # itemsTextList = [str(self.form.textEditResultXsd.item(i).text()) for i in
+        #                  range(self.form.textEditResultXsd.count())
+        # subprocess.run("pbcopy", universal_newlines=True, input=str(itemsTextList)) # clip
+        itemsTextString = ''
+        # for i in range(self.form.textEditResultXsd.count()):
+        #     itemsTextString += str(self.form.textEditResultXsd.item(i).text() + '\n')
+        self.form.textEditResultXsd.selectAll()
+        for item in self.form.textEditResultXsd.selectedItems():
+            itemsTextString += str(item.text() + '\n')
 
         pyperclip.copy(itemsTextString)
 

@@ -46,7 +46,7 @@ class XsdObjectValidator(object):
         validatorMsg = None
 
         for jsonObject in objectsDict.values():
-            if hasattr(jsonObject, 'name') and re.search('carnum|number|cardnumber',
+            if hasattr(jsonObject, 'name') and re.search('cardnum|number|cardnumber',
                                                          jsonObject.name, re.IGNORECASE):
                 validatorMsg = OutputMessage(jsonObject, MessageType.INFO_TYPE,
                                              XsdObjectValidator.POSSIBLE_CARD_NUMBER_MESSAGE)

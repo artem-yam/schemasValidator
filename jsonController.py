@@ -2,6 +2,7 @@ import os
 
 import pyperclip
 from PyQt6.QtCore import *
+from PyQt6.QtGui import *
 from PyQt6.QtWidgets import *
 
 import outputMessage
@@ -16,7 +17,10 @@ def setup(form):
     form.pushButtonValidateJson.clicked.connect(jsonController.validateJson)
     form.textEditTextJson.dropEvent = jsonController.jsonFileDropEvent
 
-    form.pushButtonCopyResultJson.clicked.connect(jsonController.copyResult)
+    form.pushButtonCopySelectedResultJson.clicked.connect(jsonController.copySelectedResult)
+    form.pushButtonCopyFullResultJson.clicked.connect(jsonController.copyFullResult)
+
+    form.textEditResultJson.keyPressEvent = jsonController.keyPressEvent
 
     form.jsonParser = JsonParser(form)
     form.jsonValidator = JsonObjectValidator(form.jsonParams)
@@ -27,15 +31,34 @@ class JsonController:
         super().__init__()
         self.form = form
 
-    def copyResult(self):
+    def keyPressEvent(self, event):
+        if event.matches(QKeySequence.StandardKey.Copy):
+            # event.accept()
+            self.copySelectedResult()
+        else:
+            return QListWidget.keyPressEvent(self.form.textEditResultJson, event)
+
+    def copySelectedResult(self):
         # itemsTextList = [str(self.form.textEditResultXsd.item(i).text()) for i in
         #                  range(self.form.textEditResultXsd.count())
         # subprocess.run("pbcopy", universal_newlines=True, input=str(itemsTextList)) # clip
         itemsTextString = ''
-        for i in range(self.form.textEditResultJson.count()):
-            itemsTextString += str(self.form.textEditResultJson.item(i).text() + '\n')
+        for item in self.form.textEditResultJson.selectedItems():
+            itemsTextString += str(item.text() + '\n')
 
         pyperclip.copy(itemsTextString)
+        self.form.comboBoxChooseElementsJson.setCurrentIndex(-1)
+
+    def copyFullResult(self):
+        # itemsTextList = [str(self.form.textEditResultXsd.item(i).text()) for i in
+        #                  range(self.form.textEditResultXsd.count())
+        # subprocess.run("pbcopy", universal_newlines=True, input=str(itemsTextList)) # clip
+        itemsTextString = ''
+        # for i in range(self.form.textEditResultXsd.count()):
+        #     itemsTextString += str(self.form.textEditResultXsd.item(i).text() + '\n')
+        self.form.textEditResultJson.selectAll()
+        for item in self.form.textEditResultJson.selectedItems():
+            itemsTextString += str(item.text() + '\n')
 
     def jsonFileDropEvent(self, event):
         if event.mimeData().hasUrls():
