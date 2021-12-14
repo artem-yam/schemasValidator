@@ -1,0 +1,704 @@
+<?xml version="1.0" standalone="yes"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" version="1.0" targetNamespace="http://www.sbrf.ru/ecm/v3" xmlns="http://www.sbrf.ru/ecm/v3" xmlns:tns="http://www.sbrf.ru/ecm/v3" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+    <xs:element name="acquireTicket" type="acquireTicket"/>
+
+    <xs:element name="attrs" type="attrs"/>
+
+    <xs:element name="changeConfiguration" type="changeConfiguration"/>
+
+    <xs:element name="convertObjects" type="convertObjects"/>
+
+    <xs:element name="convertedObjects" type="convertedObjects"/>
+
+    <xs:element name="copyObjects" type="copyObjects"/>
+
+    <xs:element name="createArchiveRq" type="createArchiveRq"/>
+
+    <xs:element name="createArchiveRs" type="createArchiveRs"/>
+
+    <xs:element name="createObjects" type="createObjects"/>
+
+    <xs:element name="crossMoveObjects" type="crossMoveObjects"/>
+
+    <xs:element name="crossMovedObjects" type="crossMovedObjects"/>
+
+    <xs:element name="deleteObjects" type="deleteObjects"/>
+
+    <xs:element name="document" type="document"/>
+
+    <xs:element name="documentSpecArch" type="documentSpecArch"/>
+
+    <xs:element name="documentSpecWithFailureError" type="documentSpecWithFailureError"/>
+
+    <xs:element name="findData" type="findData"/>
+
+    <xs:element name="findObjects" type="findObjects"/>
+
+    <xs:element name="folder" type="folder"/>
+
+    <xs:element name="folderSpecWithFailureError" type="folderSpecWithFailureError"/>
+
+    <xs:element name="foundData" type="foundData"/>
+
+    <xs:element name="foundObjects" type="foundObjects"/>
+
+    <xs:element name="modifyObjects" type="modifyObjects"/>
+
+    <xs:element name="moveObjects" type="moveObjects"/>
+
+    <xs:element name="movedObjects" type="movedObjects"/>
+
+    <xs:element name="query" type="query"/>
+
+    <xs:element name="recreateObjects" type="recreateObjects"/>
+
+    <xs:element name="recreatedObjects" type="recreatedObjects"/>
+
+    <xs:element name="requestFailed" type="requestFailed"/>
+
+    <xs:element name="resolveIdentifiers" type="resolveIdentifiers"/>
+
+    <xs:element name="retrieveObjects" type="retrieveObjects"/>
+
+    <xs:element name="row" type="row"/>
+
+    <xs:element name="ticket" type="ticket"/>
+
+    <xs:element name="verifySignatures" type="verifySignatures"/>
+
+    <xs:complexType name="createObjects">
+        <xs:sequence>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="folder"/>
+                <xs:element ref="document"/>
+            </xs:choice>
+        </xs:sequence>
+        <xs:attribute name="client" type="xs:string" use="required"/>
+        <xs:attribute name="user" type="xs:string" use="required"/>
+        <xs:attribute name="id" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="folder">
+        <xs:sequence>
+            <xs:element ref="attrs" minOccurs="0"/>
+            <xs:element name="templateAttrs" type="attrs" minOccurs="0"/>
+            <xs:element name="failureCode" type="failureCode" minOccurs="0"/>
+            <xs:element ref="folder" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element ref="document" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="failure" type="failure" minOccurs="0"/>
+        </xs:sequence>
+        <xs:attribute name="template" type="xs:string"/>
+        <xs:attribute name="class" type="xs:string"/>
+        <xs:attribute name="ref" type="xs:string"/>
+        <xs:attribute name="target" type="xs:string"/>
+        <xs:attribute name="source" type="xs:string"/>
+        <xs:attribute name="withContent" type="withContent"/>
+        <xs:attribute name="depth" type="xs:int"/>
+        <xs:attribute name="id" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:complexType name="attrs">
+        <xs:sequence>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element name="bool" type="attrBool"/>
+                <xs:element name="str" type="attrStr"/>
+                <xs:element name="strs" type="attrStrs"/>
+                <xs:element name="date" type="attrDate"/>
+                <xs:element name="dbl" type="attrDbl"/>
+                <xs:element name="int" type="attrInt"/>
+                <xs:element name="bin" type="attrBin"/>
+            </xs:choice>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="attrBool">
+        <xs:simpleContent>
+            <xs:extension base="xs:boolean">
+                <xs:attribute name="id" type="xs:string" use="required"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:complexType name="attrStr">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="id" type="xs:string" use="required"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:complexType name="attrStrs">
+        <xs:sequence>
+            <xs:element name="str" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:string" use="required"/>
+        <xs:attribute name="action" type="multifieldAction"/>
+    </xs:complexType>
+
+    <xs:complexType name="attrDate">
+        <xs:simpleContent>
+            <xs:extension base="xs:dateTime">
+                <xs:attribute name="id" type="xs:string" use="required"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:complexType name="attrDbl">
+        <xs:simpleContent>
+            <xs:extension base="xs:double">
+                <xs:attribute name="id" type="xs:string" use="required"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:complexType name="attrInt">
+        <xs:simpleContent>
+            <xs:extension base="xs:int">
+                <xs:attribute name="id" type="xs:string" use="required"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:complexType name="attrBin">
+        <xs:sequence>
+            <xs:element name="value" type="xs:base64Binary" minOccurs="0"/>
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="failureCode">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="id" type="xs:string"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:complexType name="document">
+        <xs:sequence>
+            <xs:element ref="attrs" minOccurs="0"/>
+            <xs:element name="templateAttrs" type="attrs" minOccurs="0"/>
+            <xs:element name="failureCode" type="failureCode" minOccurs="0"/>
+            <xs:element name="encryption" type="encryption" minOccurs="0"/>
+            <xs:element name="content" type="contentSpec" minOccurs="0"/>
+            <xs:element name="failure" type="failure" minOccurs="0"/>
+        </xs:sequence>
+        <xs:attribute name="template" type="xs:string"/>
+        <xs:attribute name="class" type="xs:string"/>
+        <xs:attribute name="ref" type="xs:string"/>
+        <xs:attribute name="target" type="xs:string"/>
+        <xs:attribute name="source" type="xs:string"/>
+        <xs:attribute name="withContent" type="withContent"/>
+        <xs:attribute name="id" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:complexType name="encryption">
+        <xs:sequence>
+            <xs:element name="permissions" type="encryptionUserRight" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="operationInitiator" type="xs:string"/>
+        <xs:attribute name="decrypt" type="xs:boolean"/>
+        <xs:attribute name="owner" type="xs:string"/>
+        <xs:attribute name="expiration" type="xs:string"/>
+        <xs:attribute name="template" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:complexType name="encryptionUserRight">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="user" type="xs:string" use="required"/>
+                <xs:attribute name="type" type="xs:string" use="required"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:complexType name="contentSpec">
+        <xs:simpleContent>
+            <xs:extension base="xs:base64Binary">
+                <xs:attribute name="name" type="xs:string" use="required"/>
+                <xs:attribute name="contentType" type="xs:string"/>
+                <xs:attribute name="source" type="xs:string"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:complexType name="failure">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="id" type="xs:string" use="required"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:complexType name="failureError">
+        <xs:sequence>
+            <xs:element name="errorCode" type="xs:string" minOccurs="0"/>
+            <xs:element name="errorReason" type="xs:string" minOccurs="0"/>
+            <xs:element name="stackTraceInfo" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="ticket">
+        <xs:sequence>
+            <xs:element name="failure" type="failure" minOccurs="0"/>
+            <xs:element name="failureCode" type="failureCode" minOccurs="0"/>
+            <xs:element name="parameters" type="attrs" minOccurs="0"/>
+            <xs:element name="permissions" type="permissions" minOccurs="0"/>
+            <xs:element name="templateAttrs" type="attrs" minOccurs="0"/>
+        </xs:sequence>
+        <xs:attribute name="template" type="xs:string"/>
+        <xs:attribute name="id" type="xs:string"/>
+        <xs:attribute name="user" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:complexType name="permissions">
+        <xs:sequence>
+            <xs:element name="allow" type="permission" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="deny" type="permission" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="permission">
+        <xs:complexContent>
+            <xs:extension base="attrs">
+                <xs:sequence/>
+                <xs:attribute name="path" type="xs:string"/>
+                <xs:attribute name="actions">
+                    <xs:simpleType>
+                        <xs:list itemType="xs:string"/>
+                    </xs:simpleType>
+                </xs:attribute>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="query">
+        <xs:sequence>
+            <xs:element name="failure" type="failure" minOccurs="0"/>
+            <xs:element name="failureCode" type="failureCode" minOccurs="0"/>
+            <xs:element name="parameters" type="attrs" minOccurs="0"/>
+            <xs:element name="sql" type="xs:string" minOccurs="0"/>
+            <xs:element name="templateAttrs" type="attrs" minOccurs="0"/>
+        </xs:sequence>
+        <xs:attribute name="template" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:complexType name="documentSpecArch">
+        <xs:sequence>
+            <xs:element ref="attrs" minOccurs="0"/>
+            <xs:element name="templateAttrs" type="attrs" minOccurs="0"/>
+            <xs:element name="failureCode" type="failureCode" minOccurs="0"/>
+            <xs:element name="failure" type="failureError" minOccurs="0"/>
+            <xs:element name="idDoc" type="xs:string"/>
+            <xs:element name="withAttr" type="xs:boolean"/>
+            <xs:element name="withSignature" type="xs:boolean"/>
+            <xs:element name="withVerification" type="xs:boolean"/>
+        </xs:sequence>
+        <xs:attribute name="template" type="xs:string"/>
+        <xs:attribute name="class" type="xs:string"/>
+        <xs:attribute name="ref" type="xs:string"/>
+        <xs:attribute name="target" type="xs:string"/>
+        <xs:attribute name="source" type="xs:string"/>
+        <xs:attribute name="withContent" type="withContent"/>
+    </xs:complexType>
+
+    <xs:complexType name="folderSpecArch">
+        <xs:sequence>
+            <xs:element ref="attrs" minOccurs="0"/>
+            <xs:element name="templateAttrs" type="attrs" minOccurs="0"/>
+            <xs:element name="failureCode" type="failureCode" minOccurs="0"/>
+            <xs:element name="failure" type="failureError" minOccurs="0"/>
+            <xs:element name="id" type="xs:string"/>
+            <xs:element name="withAttr" type="xs:boolean"/>
+            <xs:element name="withSignature" type="xs:boolean"/>
+            <xs:element name="withVerification" type="xs:boolean"/>
+        </xs:sequence>
+        <xs:attribute name="template" type="xs:string"/>
+        <xs:attribute name="class" type="xs:string"/>
+        <xs:attribute name="ref" type="xs:string"/>
+        <xs:attribute name="target" type="xs:string"/>
+        <xs:attribute name="source" type="xs:string"/>
+        <xs:attribute name="withContent" type="withContent"/>
+    </xs:complexType>
+
+    <xs:complexType name="documentSpecWithFailureError">
+        <xs:sequence>
+            <xs:element ref="attrs" minOccurs="0"/>
+            <xs:element name="templateAttrs" type="attrs" minOccurs="0"/>
+            <xs:element name="failureCode" type="failureCode" minOccurs="0"/>
+            <xs:element name="failure" type="failureError" minOccurs="0"/>
+            <xs:element name="status" type="status" minOccurs="0"/>
+        </xs:sequence>
+        <xs:attribute name="template" type="xs:string"/>
+        <xs:attribute name="class" type="xs:string"/>
+        <xs:attribute name="ref" type="xs:string"/>
+        <xs:attribute name="target" type="xs:string"/>
+        <xs:attribute name="source" type="xs:string"/>
+        <xs:attribute name="withContent" type="withContent"/>
+        <xs:attribute name="id" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="status">
+        <xs:sequence>
+            <xs:element name="resultCode" type="xs:long"/>
+            <xs:element name="resultDesc" type="xs:string" nillable="true"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="folderSpecWithFailureError">
+        <xs:sequence>
+            <xs:element ref="attrs" minOccurs="0"/>
+            <xs:element name="templateAttrs" type="attrs" minOccurs="0"/>
+            <xs:element name="failureCode" type="failureCode" minOccurs="0"/>
+            <xs:element name="failure" type="failureError" minOccurs="0"/>
+            <xs:element name="status" type="status" minOccurs="0"/>
+        </xs:sequence>
+        <xs:attribute name="template" type="xs:string"/>
+        <xs:attribute name="class" type="xs:string"/>
+        <xs:attribute name="ref" type="xs:string"/>
+        <xs:attribute name="target" type="xs:string"/>
+        <xs:attribute name="source" type="xs:string"/>
+        <xs:attribute name="withContent" type="withContent"/>
+        <xs:attribute name="id" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="recreateObjects">
+        <xs:sequence>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="folder"/>
+                <xs:element ref="document"/>
+            </xs:choice>
+        </xs:sequence>
+        <xs:attribute name="client" type="xs:string" use="required"/>
+        <xs:attribute name="user" type="xs:string" use="required"/>
+        <xs:attribute name="id" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="recreatedObjects">
+        <xs:sequence>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="folder"/>
+                <xs:element ref="document"/>
+            </xs:choice>
+        </xs:sequence>
+        <xs:attribute name="client" type="xs:string" use="required"/>
+        <xs:attribute name="user" type="xs:string" use="required"/>
+        <xs:attribute name="id" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="modifyObjects">
+        <xs:sequence>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="folder"/>
+                <xs:element ref="document"/>
+            </xs:choice>
+        </xs:sequence>
+        <xs:attribute name="client" type="xs:string" use="required"/>
+        <xs:attribute name="user" type="xs:string" use="required"/>
+        <xs:attribute name="id" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="deleteObjects">
+        <xs:sequence>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="folder"/>
+                <xs:element ref="document"/>
+            </xs:choice>
+        </xs:sequence>
+        <xs:attribute name="client" type="xs:string" use="required"/>
+        <xs:attribute name="user" type="xs:string" use="required"/>
+        <xs:attribute name="id" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="retrieveObjects">
+        <xs:sequence>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="folder"/>
+                <xs:element ref="document"/>
+            </xs:choice>
+        </xs:sequence>
+        <xs:attribute name="client" type="xs:string" use="required"/>
+        <xs:attribute name="user" type="xs:string" use="required"/>
+        <xs:attribute name="id" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="changeConfiguration">
+        <xs:sequence>
+            <xs:choice minOccurs="0">
+                <xs:element ref="folder"/>
+                <xs:element ref="document"/>
+                <xs:element ref="query"/>
+                <xs:element ref="ticket"/>
+            </xs:choice>
+        </xs:sequence>
+        <xs:attribute name="client" type="xs:string" use="required"/>
+        <xs:attribute name="user" type="xs:string" use="required"/>
+        <xs:attribute name="entity" type="xs:string" use="required"/>
+        <xs:attribute name="id" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="requestFailed">
+        <xs:sequence>
+            <xs:element name="failureCode" type="failureCode" minOccurs="0"/>
+            <xs:element name="failure" type="failure"/>
+        </xs:sequence>
+        <xs:attribute name="client" type="xs:string" use="required"/>
+        <xs:attribute name="user" type="xs:string" use="required"/>
+        <xs:attribute name="id" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="resolveIdentifiers">
+        <xs:sequence>
+            <xs:element name="identifiers" type="identifiers" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="client" type="xs:string" use="required"/>
+        <xs:attribute name="user" type="xs:string" use="required"/>
+        <xs:attribute name="id" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="identifiers">
+        <xs:sequence/>
+        <xs:attribute name="id" type="xs:string"/>
+        <xs:attribute name="seriesId" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:complexType name="moveObjects">
+        <xs:sequence>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="folder"/>
+                <xs:element ref="document"/>
+            </xs:choice>
+        </xs:sequence>
+        <xs:attribute name="client" type="xs:string" use="required"/>
+        <xs:attribute name="user" type="xs:string" use="required"/>
+        <xs:attribute name="id" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="movedObjects">
+        <xs:sequence>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="folder"/>
+                <xs:element ref="document"/>
+            </xs:choice>
+        </xs:sequence>
+        <xs:attribute name="client" type="xs:string" use="required"/>
+        <xs:attribute name="user" type="xs:string" use="required"/>
+        <xs:attribute name="id" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="acquireTicket">
+        <xs:sequence>
+            <xs:element ref="ticket"/>
+        </xs:sequence>
+        <xs:attribute name="client" type="xs:string" use="required"/>
+        <xs:attribute name="user" type="xs:string" use="required"/>
+        <xs:attribute name="id" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="findObjects">
+        <xs:sequence>
+            <xs:element ref="query"/>
+        </xs:sequence>
+        <xs:attribute name="client" type="xs:string" use="required"/>
+        <xs:attribute name="user" type="xs:string" use="required"/>
+        <xs:attribute name="id" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="foundObjects">
+        <xs:sequence>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="folder"/>
+                <xs:element ref="document"/>
+            </xs:choice>
+        </xs:sequence>
+        <xs:attribute name="client" type="xs:string" use="required"/>
+        <xs:attribute name="user" type="xs:string" use="required"/>
+        <xs:attribute name="id" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="findData">
+        <xs:complexContent>
+            <xs:extension base="findObjects">
+                <xs:sequence/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="foundData">
+        <xs:sequence>
+            <xs:element ref="row" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="client" type="xs:string" use="required"/>
+        <xs:attribute name="user" type="xs:string" use="required"/>
+        <xs:attribute name="id" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="row">
+        <xs:sequence>
+            <xs:element ref="attrs" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="verifySignatures">
+        <xs:sequence>
+            <xs:element name="signatures" type="signatures" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="client" type="xs:string" use="required"/>
+        <xs:attribute name="user" type="xs:string" use="required"/>
+        <xs:attribute name="id" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="signatures">
+        <xs:sequence>
+            <xs:element name="signature" type="signatureInfo" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="docId" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="signatureInfo">
+        <xs:sequence>
+            <xs:element name="certificate" type="certificateInfo" minOccurs="0"/>
+        </xs:sequence>
+        <xs:attribute name="error" type="xs:string"/>
+        <xs:attribute name="name" type="xs:string"/>
+        <xs:attribute name="signed" type="xs:dateTime"/>
+        <xs:attribute name="signerId" type="xs:string" use="required"/>
+        <xs:attribute name="title" type="xs:string"/>
+        <xs:attribute name="type" type="signatureType" use="required"/>
+        <xs:attribute name="valid" type="xs:boolean" use="required"/>
+        <xs:attribute name="validOnSigning" type="xs:boolean" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="certificateInfo">
+        <xs:sequence/>
+        <xs:attribute name="issuer" type="xs:string"/>
+        <xs:attribute name="validNotBefore" type="xs:dateTime"/>
+        <xs:attribute name="validNotAfter" type="xs:dateTime"/>
+        <xs:attribute name="bicryptIdentifier" type="xs:string"/>
+        <xs:attribute name="serialNumber" type="xs:base64Binary"/>
+        <xs:attribute name="publicKey" type="xs:base64Binary"/>
+        <xs:attribute name="snils" type="xs:string"/>
+        <xs:attribute name="inn" type="xs:string"/>
+        <xs:attribute name="ogrn" type="xs:string"/>
+        <xs:attribute name="ogrnip" type="xs:string"/>
+        <xs:attribute name="title" type="xs:string"/>
+        <xs:attribute name="sureName" type="xs:string"/>
+        <xs:attribute name="givenName" type="xs:string"/>
+        <xs:attribute name="email" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:complexType name="copyObjects">
+        <xs:sequence>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="folder"/>
+                <xs:element ref="document"/>
+            </xs:choice>
+        </xs:sequence>
+        <xs:attribute name="client" type="xs:string" use="required"/>
+        <xs:attribute name="user" type="xs:string" use="required"/>
+        <xs:attribute name="id" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="convertObjects">
+        <xs:sequence>
+            <xs:element name="conversion" type="conversion" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="client" type="xs:string" use="required"/>
+        <xs:attribute name="user" type="xs:string" use="required"/>
+        <xs:attribute name="id" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="conversion">
+        <xs:sequence>
+            <xs:element name="options" type="attrs" minOccurs="0"/>
+            <xs:element ref="document" maxOccurs="unbounded"/>
+            <xs:element ref="attrs" minOccurs="0"/>
+        </xs:sequence>
+        <xs:attribute name="format" type="xs:string" use="required"/>
+        <xs:attribute name="resultTarget" type="xs:string" use="required"/>
+        <xs:attribute name="class" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:complexType name="convertedObjects">
+        <xs:sequence>
+            <xs:element ref="document" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="client" type="xs:string" use="required"/>
+        <xs:attribute name="user" type="xs:string" use="required"/>
+        <xs:attribute name="id" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="createArchiveRq">
+        <xs:sequence>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element name="documents" type="documentSpecArch"/>
+                <xs:element name="folder" type="folderSpecArch"/>
+            </xs:choice>
+        </xs:sequence>
+        <xs:attribute name="client" type="xs:string" use="required"/>
+        <xs:attribute name="user" type="xs:string" use="required"/>
+        <xs:attribute name="rqTm" type="xs:dateTime" use="required"/>
+        <xs:attribute name="rqUID" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="createArchiveRs">
+        <xs:sequence>
+            <xs:element name="archId" type="xs:string" minOccurs="0"/>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element name="documents" type="documentSpecArch"/>
+                <xs:element name="folder" type="folderSpecArch"/>
+            </xs:choice>
+        </xs:sequence>
+        <xs:attribute name="client" type="xs:string" use="required"/>
+        <xs:attribute name="user" type="xs:string" use="required"/>
+        <xs:attribute name="rqTm" type="xs:dateTime" use="required"/>
+        <xs:attribute name="rqUID" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="crossMoveObjects">
+        <xs:sequence>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element name="folder" type="folderSpecWithFailureError"/>
+                <xs:element name="document" type="documentSpecWithFailureError"/>
+            </xs:choice>
+        </xs:sequence>
+        <xs:attribute name="client" type="xs:string" use="required"/>
+        <xs:attribute name="user" type="xs:string" use="required"/>
+        <xs:attribute name="id" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="crossMovedObjects">
+        <xs:sequence>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element name="folder" type="folderSpecWithFailureError"/>
+                <xs:element name="document" type="documentSpecWithFailureError"/>
+            </xs:choice>
+        </xs:sequence>
+        <xs:attribute name="client" type="xs:string" use="required"/>
+        <xs:attribute name="user" type="xs:string" use="required"/>
+        <xs:attribute name="id" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:simpleType name="multifieldAction">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="add"/>
+            <xs:enumeration value="remove"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="withContent">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="false"/>
+            <xs:enumeration value="true"/>
+            <xs:enumeration value="base64"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="signatureType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="PKB"/>
+            <xs:enumeration value="PKI"/>
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>
