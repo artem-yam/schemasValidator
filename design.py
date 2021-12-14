@@ -25,29 +25,32 @@ class CheckableComboBox(QtWidgets.QComboBox):
         # model.appendRow(firstItem)
 
         # self.setModel(model)
-        self.addItem(firstItem)
-        self.model().item(0, 0).setCheckState(QtCore.Qt.CheckState.Unchecked)
-        self.model().item(0, 0).setBackground(QtGui.QBrush(QtGui.QColor(200, 200, 200)))
+
+        # self.addItem(firstItem)
+        # self.model().item(0, 0).setCheckState(QtCore.Qt.CheckState.Unchecked)
+        # self.model().item(0, 0).setBackground(QtGui.QBrush(QtGui.QColor(200, 200, 200)))
 
     def rowsInserted(self, parent, first, last):
         for index in range(first, last + 1):
             item = self.model().item(index, 0)
             if item.isSelectable:
-                #TODO включить по умолчанию
-                #item.setCheckState(QtCore.Qt.CheckState.Checked)
+                # TODO включить по умолчанию
+                # item.setCheckState(QtCore.Qt.CheckState.Checked)
+                item.setCheckState(QtCore.Qt.CheckState.Unchecked)
                 item.setSelectable(False)
 
     def handleItemPressed(self, index):
-        if index.row() != 0:
-            item = self.model().itemFromIndex(index)
-            if item.checkState() == QtCore.Qt.CheckState.Checked:
-                item.setCheckState(QtCore.Qt.CheckState.Unchecked)
-            else:
-                item.setCheckState(QtCore.Qt.CheckState.Checked)
-        # self.view().reset()
-        # self.super.setCurrentIndex(-1)
-        # self.setCurrentText("---- Select area(s) ----")
-        # self.showPopup()
+        # if index.row() != 0:
+        item = self.model().itemFromIndex(index)
+        if item.checkState() == QtCore.Qt.CheckState.Checked:
+            item.setCheckState(QtCore.Qt.CheckState.Unchecked)
+        else:
+            item.setCheckState(QtCore.Qt.CheckState.Checked)
+
+    # self.view().reset()
+    # self.super.setCurrentIndex(-1)
+    # self.setCurrentText("---- Select area(s) ----")
+    # self.showPopup()
 
 
 class Ui_Form(object):

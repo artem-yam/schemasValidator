@@ -30,6 +30,7 @@ class XsdController:
     def __init__(self, form):
         super().__init__()
         self.form = form
+        self.xsdObjects = None
 
     def keyPressEvent(self, event):
         if event.matches(QKeySequence.StandardKey.Copy):
@@ -72,12 +73,13 @@ class XsdController:
 
         # print('directory = ' + directory)
         self.getXsdFromFile(directory)
-        self.parseTextToObjects()
+
 
     def getXsdFromFile(self, fileUrl):
         if fileUrl:
-            self.xsdObjects = None
             self.form.textEditTextXsd.clear()
+            self.xsdObjects = None
+            self.form.comboBoxChooseElementsXsd.clear()
 
             if isinstance(fileUrl, QUrl):
                 fileUrl = fileUrl.url()
@@ -92,6 +94,7 @@ class XsdController:
                 xsdString = self.form.xsdParser.parseFileToText(fileUrl)
                 self.form.textEditTextXsd.append(xsdString)
 
+                self.parseTextToObjects()
             else:
                 self.form.textEditTextXsd.append(
                     'Файл в формате ' + fileUrl[fileUrl.rindex('.'):] + ' не может быть загружен')
@@ -117,15 +120,18 @@ class XsdController:
 
         objectsToValidate = {}
 
-        for objectPath in self.xsdObjects:
-            isChosen = False
-            # while isChosen == False:
-            for elem in chosenElements:
-                isChosen = objectPath.startswith('/' + elem)
+        if hasattr(self, 'xsdObjects') and isinstance(self.xsdObjects, dict):
+            for objectPath in self.xsdObjects:
+                isChosen = False
+                # while isChosen == False:
+                for elem in chosenElements:
+                    isChosen = objectPath.startswith('/' + elem)
+                    if isChosen:
+                        break
                 if isChosen:
-                    break
-            if isChosen:
-                objectsToValidate[objectPath] = self.xsdObjects.get(objectPath)
+                    objectsToValidate[objectPath] = self.xsdObjects.get(objectPath)
+        else:
+            objectsToValidate = None
 
         # objectsToValidate.update(
         #     self.form.comboBoxChooseElementsXsd.model().item(i).text() for i in self.xsdObjects
@@ -172,6 +178,11 @@ class XsdController:
                 self.form.textEditResultXsd.item(
                     self.form.textEditResultXsd.count() - 1).setForeground(
                     Qt.GlobalColor.red)
+        else:
+            self.form.textEditResultXsd.addItem('Сначала загрузите схему!')
+            self.form.textEditResultXsd.item(
+                self.form.textEditResultXsd.count() - 1).setForeground(
+                Qt.GlobalColor.red)
 
     def printOutputMessage(self, message):
         self.form.textEditResultXsd.addItem(str(message))
