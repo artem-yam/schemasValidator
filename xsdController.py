@@ -72,9 +72,11 @@ class XsdController:
 
         # print('directory = ' + directory)
         self.getXsdFromFile(directory)
+        self.parseTextToObjects()
 
     def getXsdFromFile(self, fileUrl):
         if fileUrl:
+            self.xsdObjects = None
             self.form.textEditTextXsd.clear()
 
             if isinstance(fileUrl, QUrl):
@@ -94,49 +96,82 @@ class XsdController:
                 self.form.textEditTextXsd.append(
                     'Файл в формате ' + fileUrl[fileUrl.rindex('.'):] + ' не может быть загружен')
 
+    def parseTextToObjects(self):
+        self.xsdObjects = self.form.xsdParser.parseTextToObjects(
+            self.form.textEditTextXsd.toPlainText())
+
+        rootTagsNames = list(xsdObject.name for xsdObject in self.xsdObjects.values()
+                             if hasattr(xsdObject, 'fullPath')
+                             and hasattr(xsdObject, 'name')
+                             and xsdObject.fullPath == '/' + xsdObject.name)
+
+        self.form.comboBoxChooseElementsXsd.addItems(rootTagsNames)
+
     def validateXsd(self):
         self.form.textEditResultXsd.clear()
-        xsdString = self.form.textEditTextXsd.toPlainText()
 
-        xsdObjects = self.form.xsdParser.parseTextToObjects(xsdString)
+        chosenElements = list(self.form.comboBoxChooseElementsXsd.model().item(i).text() for i in
+                              range(self.form.comboBoxChooseElementsXsd.count())
+                              if self.form.comboBoxChooseElementsXsd.model().item(
+            i).checkState() == Qt.CheckState.Checked)
 
-        if isinstance(xsdObjects, dict):
-            fullValidationResult = []
-            stringPatternValidationResult = []
+        objectsToValidate = {}
 
-            cardNumberCheck = self.form.jsonValidator.checkCardNumber(xsdObjects)
-            if cardNumberCheck:
-                self.printOutputMessage(cardNumberCheck)
+        for objectPath in self.xsdObjects:
+            isChosen = False
+            # while isChosen == False:
+            for elem in chosenElements:
+                isChosen = objectPath.startswith('/' + elem)
+                if isChosen:
+                    break
+            if isChosen:
+                objectsToValidate[objectPath] = self.xsdObjects.get(objectPath)
 
-            for xsdObject in xsdObjects.values():
-                fullValidationResult.extend(self.form.xsdValidator.validate(xsdObject))
-                stringPatternValidationResult.extend(
-                    self.form.xsdValidator.checkStringPattern(xsdObject))
+        # objectsToValidate.update(
+        #     self.form.comboBoxChooseElementsXsd.model().item(i).text() for i in self.xsdObjects
+        #     if i in chosenElements)
+        # self.xsdObjects
 
-            if fullValidationResult:
-                for msg in fullValidationResult:
-                    # self.form.textEditResultXsd.append(str(msg))
-                    self.printOutputMessage(msg)
+        if objectsToValidate is not None:
+            if isinstance(objectsToValidate, dict):
+                fullValidationResult = []
+                stringPatternValidationResult = []
+
+                cardNumberCheck = self.form.jsonValidator.checkCardNumber(objectsToValidate)
+                if cardNumberCheck:
+                    self.printOutputMessage(cardNumberCheck)
+
+                for xsdObject in objectsToValidate.values():
+                    fullValidationResult.extend(self.form.xsdValidator.validate(xsdObject))
+                    stringPatternValidationResult.extend(
+                        self.form.xsdValidator.checkStringPattern(xsdObject))
+
+                if fullValidationResult:
+                    for msg in fullValidationResult:
+                        # self.form.textEditResultXsd.append(str(msg))
+                        self.printOutputMessage(msg)
+                else:
+                    self.form.textEditResultXsd.addItem('Схема валидна!')
+                    self.form.textEditResultXsd.item(
+                        self.form.textEditResultXsd.count() - 1).setForeground(
+                        Qt.GlobalColor.green)
+
+                if stringPatternValidationResult:
+                    self.form.textEditResultXsd.addItem(
+                        'Также отсутствуют паттерны в строковых тегах:')
+                    self.form.textEditResultXsd.item(
+                        self.form.textEditResultXsd.count() - 1).setForeground(
+                        Qt.GlobalColor.white)
+                    # self.form.textEditResultXsd.item(self.form.textEditResultXsd.count() - 1).setBackground(Qt.GlobalColor.white)
+
+                    for msg in stringPatternValidationResult:
+                        self.printOutputMessage(msg)
+
             else:
-                self.form.textEditResultXsd.addItem('Схема валидна!')
+                self.form.textEditResultXsd.addItem(str(objectsToValidate))
                 self.form.textEditResultXsd.item(
                     self.form.textEditResultXsd.count() - 1).setForeground(
-                    Qt.GlobalColor.green)
-
-            if stringPatternValidationResult:
-                self.form.textEditResultXsd.addItem('Также отсутствуют паттерны в строковых тегах:')
-                self.form.textEditResultXsd.item(
-                    self.form.textEditResultXsd.count() - 1).setForeground(
-                    Qt.GlobalColor.white)
-                # self.form.textEditResultXsd.item(self.form.textEditResultXsd.count() - 1).setBackground(Qt.GlobalColor.white)
-
-                for msg in stringPatternValidationResult:
-                    self.printOutputMessage(msg)
-
-        else:
-            self.form.textEditResultXsd.addItem(str(xsdObjects))
-            self.form.textEditResultXsd.item(self.form.textEditResultXsd.count() - 1).setForeground(
-                Qt.GlobalColor.red)
+                    Qt.GlobalColor.red)
 
     def printOutputMessage(self, message):
         self.form.textEditResultXsd.addItem(str(message))

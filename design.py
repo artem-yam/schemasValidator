@@ -33,11 +33,9 @@ class CheckableComboBox(QtWidgets.QComboBox):
         for index in range(first, last + 1):
             item = self.model().item(index, 0)
             if item.isSelectable:
+                #TODO включить по умолчанию
+                #item.setCheckState(QtCore.Qt.CheckState.Checked)
                 item.setSelectable(False)
-
-    def itemChanged(self, item):
-        if item.isSelectable:
-            item.setSelectable(False)
 
     def handleItemPressed(self, index):
         if index.row() != 0:
@@ -97,8 +95,6 @@ class Ui_Form(object):
 
         self.comboBoxChooseElementsJson = CheckableComboBox(self.jsonTab)
         self.comboBoxChooseElementsJson.setPlaceholderText("Выберите элементы")
-        self.comboBoxChooseElementsJson.addItem("1 test")
-        self.comboBoxChooseElementsJson.addItem("2 test")
 
         self.pushButtonValidateJson = QtWidgets.QPushButton(self.jsonTab)
         self.pushButtonCopySelectedResultJson = QtWidgets.QPushButton(self.jsonTab)
@@ -121,8 +117,6 @@ class Ui_Form(object):
 
         self.comboBoxChooseElementsXsd = CheckableComboBox(self.xsdTab)
         self.comboBoxChooseElementsXsd.setPlaceholderText("Выберите элементы")
-        self.comboBoxChooseElementsXsd.addItem("1 test")
-        self.comboBoxChooseElementsXsd.addItem("2 test")
 
         self.pushButtonValidateXsd = QtWidgets.QPushButton(self.xsdTab)
         self.pushButtonCopySelectedResultXsd = QtWidgets.QPushButton(self.xsdTab)
