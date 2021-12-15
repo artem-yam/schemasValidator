@@ -74,7 +74,6 @@ class XsdController:
         # print('directory = ' + directory)
         self.getXsdFromFile(directory)
 
-
     def getXsdFromFile(self, fileUrl):
         if fileUrl:
             self.form.textEditTextXsd.clear()

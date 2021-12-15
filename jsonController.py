@@ -30,6 +30,7 @@ class JsonController:
     def __init__(self, form):
         super().__init__()
         self.form = form
+        self.jsonObjects = None
 
     def keyPressEvent(self, event):
         if event.matches(QKeySequence.StandardKey.Copy):
@@ -75,6 +76,8 @@ class JsonController:
     def getJsonFromFile(self, fileUrl):
         if fileUrl:
             self.form.textEditTextJson.clear()
+            self.jsonObjects = None
+            self.form.comboBoxChooseElementsJson.clear()
 
             if isinstance(fileUrl, QUrl):
                 fileUrl = fileUrl.url()
@@ -88,55 +91,97 @@ class JsonController:
                 # JsonParser(self.form).parseJson(directory)
                 jsonString = self.form.jsonParser.parseFileToText(fileUrl)
                 self.form.textEditTextJson.append(jsonString)
+
+                self.parseTextToObjects()
             else:
                 self.form.textEditTextJson.append(
                     'Файл в формате ' + fileUrl[fileUrl.rindex('.'):] + ' не может быть загружен')
 
+    def parseTextToObjects(self):
+        self.jsonObjects = self.form.jsonParser.parseTextToObjects(
+            self.form.textEditTextJson.toPlainText())
+
+        rootTagsNames = list(jsonObject.name for jsonObject in self.jsonObjects.values()
+                             if hasattr(jsonObject, 'fullPath')
+                             and hasattr(jsonObject, 'name')
+                             and jsonObject.fullPath == '/' + jsonObject.name)
+
+        self.form.comboBoxChooseElementsJson.addItems(rootTagsNames)
+
     def validateJson(self):
         self.form.textEditResultJson.clear()
-        jsonString = self.form.textEditTextJson.toPlainText()
 
-        self.printDraftVersion(jsonString)
+        chosenElements = list(self.form.comboBoxChooseElementsJson.model().item(i).text() for i in
+                              range(self.form.comboBoxChooseElementsJson.count())
+                              if self.form.comboBoxChooseElementsJson.model().item(
+            i).checkState() == Qt.CheckState.Checked)
 
-        jsonObjects = self.form.jsonParser.parseTextToObjects(jsonString)
+        objectsToValidate = {}
 
-        if isinstance(jsonObjects, dict):
-            fullValidationResult = []
-            stringPatternValidationResult = []
-
-            cardNumberCheck = self.form.jsonValidator.checkCardNumber(jsonObjects)
-            for message in cardNumberCheck:
-                self.printOutputMessage(message)
-
-            for jsonObject in jsonObjects.values():
-                fullValidationResult.extend(
-                    self.form.jsonValidator.validate(jsonObject, jsonObjects))
-                stringPatternValidationResult.extend(
-                    self.form.jsonValidator.checkStringPattern(jsonObject))
-
-            if fullValidationResult:
-                for msg in fullValidationResult:
-                    # self.form.textEditResultJson.append(str(msg))
-                    self.printOutputMessage(msg)
-            else:
-                self.form.textEditResultJson.addItem('Схема валидна!')
-                self.form.textEditResultJson.item(
-                    self.form.textEditResultJson.count() - 1).setForeground(Qt.GlobalColor.green)
-
-            if stringPatternValidationResult:
-                self.form.textEditResultJson.addItem(
-                    'Также отсутствуют паттерны в строковых тегах:')
-                self.form.textEditResultJson.item(
-                    self.form.textEditResultJson.count() - 1).setForeground(Qt.GlobalColor.white)
-                # self.form.textEditResultJson.item(self.form.textEditResultJson.count() - 1).setBackground(Qt.GlobalColor.white)
-
-                for msg in stringPatternValidationResult:
-                    self.printOutputMessage(msg)
-
+        if hasattr(self, 'jsonObjects') and isinstance(self.jsonObjects, dict):
+            for objectPath in self.jsonObjects:
+                isChosen = False
+                # while isChosen == False:
+                for elem in chosenElements:
+                    isChosen = objectPath.startswith('/' + elem)
+                    if isChosen:
+                        break
+                if isChosen:
+                    objectsToValidate[objectPath] = self.jsonObjects.get(objectPath)
         else:
-            self.form.textEditResultJson.addItem(str(jsonObjects))
+            objectsToValidate = None
+
+        # jsonString = self.form.textEditTextJson.toPlainText()
+        # jsonObjects = self.form.jsonParser.parseTextToObjects(jsonString)
+        # self.printDraftVersion(jsonString)
+
+        self.printDraftVersion(self.form.textEditTextJson.toPlainText())
+
+        if objectsToValidate is not None:
+            if isinstance(objectsToValidate, dict):
+                fullValidationResult = []
+                stringPatternValidationResult = []
+
+                cardNumberCheck = self.form.jsonValidator.checkCardNumber(objectsToValidate)
+                for message in cardNumberCheck:
+                    self.printOutputMessage(message)
+
+                for jsonObject in objectsToValidate.values():
+                    fullValidationResult.extend(
+                        self.form.jsonValidator.validate(jsonObject, objectsToValidate))
+                    stringPatternValidationResult.extend(
+                        self.form.jsonValidator.checkStringPattern(jsonObject))
+
+                if fullValidationResult:
+                    for msg in fullValidationResult:
+                        # self.form.textEditResultJson.append(str(msg))
+                        self.printOutputMessage(msg)
+                else:
+                    self.form.textEditResultJson.addItem('Схема валидна!')
+                    self.form.textEditResultJson.item(
+                        self.form.textEditResultJson.count() - 1).setForeground(
+                        Qt.GlobalColor.green)
+
+                if stringPatternValidationResult:
+                    self.form.textEditResultJson.addItem(
+                        'Также отсутствуют паттерны в строковых тегах:')
+                    self.form.textEditResultJson.item(
+                        self.form.textEditResultJson.count() - 1).setForeground(
+                        Qt.GlobalColor.white)
+                    # self.form.textEditResultJson.item(self.form.textEditResultJson.count() - 1).setBackground(Qt.GlobalColor.white)
+
+                    for msg in stringPatternValidationResult:
+                        self.printOutputMessage(msg)
+
+            else:
+                self.form.textEditResultJson.addItem(str(objectsToValidate))
+                self.form.textEditResultJson.item(
+                    self.form.textEditResultJson.count() - 1).setForeground(Qt.GlobalColor.red)
+        else:
+            self.form.textEditResultJson.addItem('Сначала загрузите схему!')
             self.form.textEditResultJson.item(
-                self.form.textEditResultJson.count() - 1).setForeground(Qt.GlobalColor.red)
+                self.form.textEditResultJson.count() - 1).setForeground(
+                Qt.GlobalColor.red)
 
     def printOutputMessage(self, message):
         self.form.textEditResultJson.addItem(str(message))
