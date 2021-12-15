@@ -13,7 +13,7 @@ TODO xsd:
     (пример: /GetStatementCVDataRqType/Any в тестовой схеме 3)
 -   парсинг:
     -   объединять элементы и типы
-        -   ref
+        -   ref +++
     -   choice  и т.п. на уровне с element
         (пример: контейнер GetDebtInfoForClassificationRsType 
         в GetDebtInfoForClassification_151121.xsd)

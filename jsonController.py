@@ -105,7 +105,8 @@ class JsonController:
         rootTagsNames = list(jsonObject.name for jsonObject in self.jsonObjects.values()
                              if hasattr(jsonObject, 'fullPath')
                              and hasattr(jsonObject, 'name')
-                             and jsonObject.fullPath == '/' + jsonObject.name)
+                             and (jsonObject.fullPath == '/' + jsonObject.name
+                                  or jsonObject.fullPath == '#/definitions/' + jsonObject.name))
 
         self.form.comboBoxChooseElementsJson.addItems(rootTagsNames)
 
@@ -120,15 +121,17 @@ class JsonController:
         objectsToValidate = {}
 
         if hasattr(self, 'jsonObjects') and isinstance(self.jsonObjects, dict):
-            for objectPath in self.jsonObjects:
+            for objectKey in self.jsonObjects:
+                object = self.jsonObjects[objectKey]
                 isChosen = False
                 # while isChosen == False:
                 for elem in chosenElements:
-                    isChosen = objectPath.startswith('/' + elem)
+                    isChosen = object.fullPath.startswith('/' + elem) \
+                               or object.fullPath.startswith('#/definitions/' + elem)
                     if isChosen:
                         break
                 if isChosen:
-                    objectsToValidate[objectPath] = self.jsonObjects.get(objectPath)
+                    objectsToValidate[objectKey] = object
         else:
             objectsToValidate = None
 
@@ -149,7 +152,8 @@ class JsonController:
 
                 for jsonObject in objectsToValidate.values():
                     fullValidationResult.extend(
-                        self.form.jsonValidator.validate(jsonObject, objectsToValidate))
+                        #self.form.jsonValidator.validate(jsonObject, objectsToValidate))
+                        self.form.jsonValidator.validate(jsonObject, self.jsonObjects))
                     stringPatternValidationResult.extend(
                         self.form.jsonValidator.checkStringPattern(jsonObject))
 
