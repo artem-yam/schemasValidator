@@ -201,7 +201,9 @@ class JsonObjectValidator(object):
 
         if hasattr(jsonObject, 'type') \
                 and jsonObject.type == 'string' \
-                and not hasattr(jsonObject, 'pattern'):
+                and not hasattr(jsonObject, 'pattern') \
+                and not hasattr(jsonObject, 'format') \
+                and not hasattr(jsonObject, 'enum'):
             validatorMsg = OutputMessage(jsonObject, MessageType.INFO_TYPE,
                                          JsonObjectValidator.STRING_NO_PATTERN_MESSAGE)
             validationResult.append(validatorMsg)
