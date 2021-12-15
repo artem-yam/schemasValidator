@@ -48,16 +48,17 @@ class XsdObjectValidator(object):
 
         return validationResult
 
-    def checkCardNumber(self, objectsDict) -> OutputMessage:
-        validatorMsg = None
+    def checkCardNumber(self, objectsDict) -> list:
+        validationResult = []
 
         for xsdObject in objectsDict.values():
             if hasattr(xsdObject, 'name') and re.search('cardnum|number|cardnumber',
                                                         xsdObject.name, re.IGNORECASE):
                 validatorMsg = OutputMessage(xsdObject, MessageType.INFO_TYPE,
                                              XsdObjectValidator.POSSIBLE_CARD_NUMBER_MESSAGE)
+                validationResult.append(validatorMsg)
 
-        return validatorMsg
+        return validationResult
 
     def checkBaseRestrictions(self, xsdObject) -> list:
         validationResult = []

@@ -51,16 +51,17 @@ class JsonObjectValidator(object):
 
         return validationResult
 
-    def checkCardNumber(self, objectsDict) -> OutputMessage:
-        validatorMsg = None
+    def checkCardNumber(self, objectsDict) -> list:
+        validationResult = []
 
         for jsonObject in objectsDict.values():
             if hasattr(jsonObject, 'name') and re.search('cardnum|number|cardnumber',
                                                          jsonObject.name, re.IGNORECASE):
                 validatorMsg = OutputMessage(jsonObject, MessageType.INFO_TYPE,
                                              JsonObjectValidator.POSSIBLE_CARD_NUMBER_MESSAGE)
+                validationResult.append(validatorMsg)
 
-        return validatorMsg
+        return validationResult
 
     def checkBaseRestrictions(self, jsonObject, objectsDict) -> list:
         validationResult = []

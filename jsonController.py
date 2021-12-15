@@ -105,8 +105,8 @@ class JsonController:
             stringPatternValidationResult = []
 
             cardNumberCheck = self.form.jsonValidator.checkCardNumber(jsonObjects)
-            if cardNumberCheck:
-                self.printOutputMessage(cardNumberCheck)
+            for message in cardNumberCheck:
+                self.printOutputMessage(message)
 
             for jsonObject in jsonObjects.values():
                 fullValidationResult.extend(

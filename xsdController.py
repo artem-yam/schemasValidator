@@ -144,8 +144,8 @@ class XsdController:
                 stringPatternValidationResult = []
 
                 cardNumberCheck = self.form.jsonValidator.checkCardNumber(objectsToValidate)
-                if cardNumberCheck:
-                    self.printOutputMessage(cardNumberCheck)
+                for message in cardNumberCheck:
+                    self.printOutputMessage(message)
 
                 for xsdObject in objectsToValidate.values():
                     fullValidationResult.extend(self.form.xsdValidator.validate(xsdObject))
