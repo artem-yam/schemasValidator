@@ -11,6 +11,9 @@ class XsdObjectValidator(object):
     POSSIBLE_KEY_VALUE_MESSAGE = 'Возможная структура key-value'
     POSSIBLE_CARD_NUMBER_MESSAGE = 'Возможный элемент с номером карты'
 
+    ARRAY_NO_MAX_ITEMS_MESSAGE = 'Для массива не указано максимальное количество элементов'
+    ARRAY_EXCESS_MAX_ITEMS_MESSAGE = 'Указанное максимальное количество элементов превышает допустимое'
+
     STRING_NO_MAX_LENGTH_MESSAGE = 'Отсутствует ограничение по длине строки'
     STRING_WRONG_LENGTH_MESSAGE = 'Не верно указана длина строки'
     STRING_NO_PATTERN_MESSAGE = 'Отсутствует паттерн для строки'
@@ -40,15 +43,18 @@ class XsdObjectValidator(object):
                                     'nonPositiveInteger', 'positiveInteger']:
                 validationResult.extend(self.checkNumericTypeRestrictions(xsdObject))
 
+        if hasattr(xsdObject, 'maxOccurs'):
+            validationResult.extend(self.checkArrayRestrictions(xsdObject))
+
         return validationResult
 
     def checkCardNumber(self, objectsDict) -> OutputMessage:
         validatorMsg = None
 
-        for jsonObject in objectsDict.values():
-            if hasattr(jsonObject, 'name') and re.search('cardnum|number|cardnumber',
-                                                         jsonObject.name, re.IGNORECASE):
-                validatorMsg = OutputMessage(jsonObject, MessageType.INFO_TYPE,
+        for xsdObject in objectsDict.values():
+            if hasattr(xsdObject, 'name') and re.search('cardnum|number|cardnumber',
+                                                        xsdObject.name, re.IGNORECASE):
+                validatorMsg = OutputMessage(xsdObject, MessageType.INFO_TYPE,
                                              XsdObjectValidator.POSSIBLE_CARD_NUMBER_MESSAGE)
 
         return validatorMsg
@@ -166,6 +172,24 @@ class XsdObjectValidator(object):
                     validatorMsg = OutputMessage(xsdObject, MessageType.ERROR_TYPE,
                                                  XsdObjectValidator.NUMERIC_EXCESS_TOTAL_DIGITS_MAX_VALUE_MESSAGE)
                     validationResult.append(validatorMsg)
+
+        return validationResult
+
+    def checkArrayRestrictions(self, xsdObject) -> list:
+        validationResult = []
+
+        if self.configElements.get('xsdConfArrayLengthLabel').isChecked():
+            if xsdObject.maxOccurs == 'unbounded':
+                validatorMsg = OutputMessage(xsdObject, MessageType.ERROR_TYPE,
+                                             XsdObjectValidator.ARRAY_NO_MAX_ITEMS_MESSAGE)
+                validationResult.append(validatorMsg)
+            elif self.configElements.get('xsdConfArrayLengthText').toPlainText().isdigit() \
+                    and xsdObject.maxOccurs.isdigit() \
+                    and int(self.configElements.get(
+                'xsdConfArrayLengthText').toPlainText()) < int(xsdObject.maxOccurs):
+                validatorMsg = OutputMessage(xsdObject, MessageType.ERROR_TYPE,
+                                             XsdObjectValidator.ARRAY_EXCESS_MAX_ITEMS_MESSAGE)
+                validationResult.append(validatorMsg)
 
         return validationResult
 
