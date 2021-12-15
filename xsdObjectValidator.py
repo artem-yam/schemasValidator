@@ -23,6 +23,8 @@ class XsdObjectValidator(object):
     NUMERIC_NO_MAX_VALUE_MESSAGE = 'Не указано максимальное значение для числа'
     NUMERIC_EXCESS_MIN_VALUE_MESSAGE = 'Указанное минимальное значение для числа меньше допустимого'
     NUMERIC_EXCESS_MAX_VALUE_MESSAGE = 'Указанное максимальное значение для числа больше допустимого'
+    NUMERIC_WRONG_TOTAL_DIGITS_MESSAGE = 'Не корректно указано totalDigits при наличии ' \
+                                         'ограничения минимального/максимального значения'
 
     NUMERIC_EXCESS_TOTAL_DIGITS_MIN_VALUE_MESSAGE = 'Количество цифр для числа не ' \
                                                     'соответствует минимальному допустимому значению'
@@ -94,12 +96,15 @@ class XsdObjectValidator(object):
             if not ((hasattr(xsdObject, 'minExclusive') and
                      xsdObject.minExclusive.lstrip('-').isdigit())
                     or (hasattr(xsdObject, 'minInclusive') and
-                        xsdObject.minInclusive.lstrip('-').isdigit())):
+                        xsdObject.minInclusive.lstrip('-').isdigit())
+                    or (hasattr(xsdObject, 'totalDigits') and
+                        xsdObject.totalDigits.lstrip('-').isdigit())):
                 validatorMsg = OutputMessage(xsdObject, MessageType.ERROR_TYPE,
                                              XsdObjectValidator.NUMERIC_NO_MIN_VALUE_MESSAGE)
                 validationResult.append(validatorMsg)
             elif self.configElements.get('xsdConfNumericMinText').toPlainText().lstrip(
                     '-').isdigit():
+                validatorMsg = None
                 expectedMinNumber = int(
                     self.configElements.get('xsdConfNumericMinText').toPlainText())
 
@@ -109,39 +114,46 @@ class XsdObjectValidator(object):
                 if hasattr(xsdObject, 'minInclusive'):
                     minValues.append(int(xsdObject.minInclusive))
 
-                actualMinNumber = min(minValues)
+                actualMinNumber = max(minValues) if minValues else False
+                actualMinNumberTotalDigits = len(str(actualMinNumber)) if actualMinNumber else 0
 
                 expectedMinNumberTotalDigits = len(str(expectedMinNumber))
-                actualMinNumberTotalDigits = len(str(actualMinNumber))
 
                 if hasattr(xsdObject, 'totalDigits') and xsdObject.totalDigits.isdigit():
-                    actualMinNumberTotalDigits = int(xsdObject.totalDigits) \
-                        if actualMinNumberTotalDigits < int(xsdObject.totalDigits) \
-                        else actualMinNumberTotalDigits
+                    if actualMinNumberTotalDigits > int(xsdObject.totalDigits):
+                        validatorMsg = OutputMessage(xsdObject, MessageType.ERROR_TYPE,
+                                                     XsdObjectValidator.NUMERIC_WRONG_TOTAL_DIGITS_MESSAGE)
+                        validationResult.append(validatorMsg)
+                    else:
+                        actualMinNumberTotalDigits = int(xsdObject.totalDigits)
 
-                if minValues and expectedMinNumber > actualMinNumber:
-                    validatorMsg = OutputMessage(xsdObject, MessageType.ERROR_TYPE,
-                                                 XsdObjectValidator.NUMERIC_EXCESS_MIN_VALUE_MESSAGE)
-                    validationResult.append(validatorMsg)
+                if validatorMsg is not None:
+                    if minValues and actualMinNumber and expectedMinNumber > actualMinNumber:
+                        validatorMsg = OutputMessage(xsdObject, MessageType.ERROR_TYPE,
+                                                     XsdObjectValidator.NUMERIC_EXCESS_MIN_VALUE_MESSAGE)
+                        validationResult.append(validatorMsg)
 
-                elif (expectedMinNumber < 0
-                      and expectedMinNumberTotalDigits < actualMinNumberTotalDigits) or \
-                        (expectedMinNumber >= 0
-                         and expectedMinNumberTotalDigits > actualMinNumberTotalDigits):
-                    validatorMsg = OutputMessage(xsdObject, MessageType.ERROR_TYPE,
-                                                 XsdObjectValidator.NUMERIC_EXCESS_TOTAL_DIGITS_MIN_VALUE_MESSAGE)
-                    validationResult.append(validatorMsg)
+                    elif (expectedMinNumberTotalDigits < actualMinNumberTotalDigits
+                          and expectedMinNumber < 0) or \
+                            (expectedMinNumberTotalDigits > actualMinNumberTotalDigits
+                             and expectedMinNumber >= 0):
+                        validatorMsg = OutputMessage(xsdObject, MessageType.ERROR_TYPE,
+                                                     XsdObjectValidator.NUMERIC_EXCESS_TOTAL_DIGITS_MIN_VALUE_MESSAGE)
+                        validationResult.append(validatorMsg)
 
         if self.configElements.get('xsdConfNumericMaxLabel').isChecked():
             if not ((hasattr(xsdObject, 'maxExclusive') and
                      xsdObject.maxExclusive.lstrip('-').isdigit())
                     or (hasattr(xsdObject, 'maxInclusive') and
-                        xsdObject.maxInclusive.lstrip('-').isdigit())):
+                        xsdObject.maxInclusive.lstrip('-').isdigit())
+                    or (hasattr(xsdObject, 'totalDigits') and
+                        xsdObject.totalDigits.lstrip('-').isdigit())):
                 validatorMsg = OutputMessage(xsdObject, MessageType.ERROR_TYPE,
                                              XsdObjectValidator.NUMERIC_NO_MAX_VALUE_MESSAGE)
                 validationResult.append(validatorMsg)
             elif self.configElements.get('xsdConfNumericMaxText').toPlainText().lstrip(
                     '-').isdigit():
+                validatorMsg = None
                 expectedMaxNumber = int(
                     self.configElements.get('xsdConfNumericMaxText').toPlainText())
 
@@ -151,28 +163,32 @@ class XsdObjectValidator(object):
                 if hasattr(xsdObject, 'maxInclusive'):
                     maxValues.append(int(xsdObject.maxInclusive))
 
-                actualMaxNumber = min(maxValues)
+                actualMaxNumber = min(maxValues) if maxValues else False
+                actualMaxNumberTotalDigits = len(str(actualMaxNumber)) if actualMaxNumber else 0
 
                 expectedMaxNumberTotalDigits = len(str(expectedMaxNumber))
-                actualMaxNumberTotalDigits = len(str(actualMaxNumber))
 
                 if hasattr(xsdObject, 'totalDigits') and xsdObject.totalDigits.isdigit():
-                    actualMaxNumberTotalDigits = int(xsdObject.totalDigits) \
-                        if actualMaxNumberTotalDigits < int(xsdObject.totalDigits) \
-                        else actualMaxNumberTotalDigits
+                    if actualMaxNumberTotalDigits < int(xsdObject.totalDigits):
+                        validatorMsg = OutputMessage(xsdObject, MessageType.ERROR_TYPE,
+                                                     XsdObjectValidator.NUMERIC_WRONG_TOTAL_DIGITS_MESSAGE)
+                        validationResult.append(validatorMsg)
+                    else:
+                        actualMaxNumberTotalDigits = int(xsdObject.totalDigits)
 
-                if maxValues and expectedMaxNumber < actualMaxNumber:
-                    validatorMsg = OutputMessage(xsdObject, MessageType.ERROR_TYPE,
-                                                 XsdObjectValidator.NUMERIC_EXCESS_MAX_VALUE_MESSAGE)
-                    validationResult.append(validatorMsg)
+                if validatorMsg is not None:
+                    if maxValues and actualMaxNumber and expectedMaxNumber < actualMaxNumber:
+                        validatorMsg = OutputMessage(xsdObject, MessageType.ERROR_TYPE,
+                                                     XsdObjectValidator.NUMERIC_EXCESS_MAX_VALUE_MESSAGE)
+                        validationResult.append(validatorMsg)
 
-                elif (expectedMaxNumber < 0
-                      and expectedMaxNumberTotalDigits > actualMaxNumberTotalDigits) or \
-                        (expectedMaxNumber >= 0
-                         and expectedMaxNumberTotalDigits < actualMaxNumberTotalDigits):
-                    validatorMsg = OutputMessage(xsdObject, MessageType.ERROR_TYPE,
-                                                 XsdObjectValidator.NUMERIC_EXCESS_TOTAL_DIGITS_MAX_VALUE_MESSAGE)
-                    validationResult.append(validatorMsg)
+                    elif (expectedMaxNumberTotalDigits > actualMaxNumberTotalDigits
+                          and expectedMaxNumber < 0) or \
+                            (expectedMaxNumberTotalDigits < actualMaxNumberTotalDigits
+                             and expectedMaxNumber >= 0):
+                        validatorMsg = OutputMessage(xsdObject, MessageType.ERROR_TYPE,
+                                                     XsdObjectValidator.NUMERIC_EXCESS_TOTAL_DIGITS_MAX_VALUE_MESSAGE)
+                        validationResult.append(validatorMsg)
 
         return validationResult
 
