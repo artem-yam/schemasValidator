@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2020 rel. 2 sp1 (x64) (http://www.altova.com) by Ivchenko-ed (JSC SBERBANK - TECHNOLOGIES) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:element name="GetStatementCVDataRq" type="GetStatementCVDataRqType">
+		<xs:annotation>
+			<xs:documentation>Запрос на получение данных по кредиьным картам для формирования справки по госслужащих</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="GetStatementCVDataRs" type="GetStatementCVDataRsType">
+		<xs:annotation>
+			<xs:documentation>Ответ на запрос на получение данных по кредиьным картам для формирования справки по госслужащих</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="GetStatementCVDataRqType">
+		<xs:annotation>
+			<xs:documentation>Комплексный тип для запроса</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="RqUID" type="UUID">
+				<xs:annotation>
+					<xs:documentation>Уникальный идентификатор запроса</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="RqTm" type="DateTime">
+				<xs:annotation>
+					<xs:documentation>Дата и время передачи сообщения</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="SPName" type="C50_Type">
+				<xs:annotation>
+					<xs:documentation>Идентификатор вызывающей системы</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="key" type="C50_Type">
+				<xs:annotation>
+					<xs:documentation>Идентификатор вызываемой системы</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="PersonInfo" type="PersonInfoType">
+				<xs:annotation>
+					<xs:documentation>Идентификаторы клиента</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="AccountNumber" type="C50_Type" minOccurs="0"/>
+			<xs:element name="ContractNumber" type="C50_Type" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Идентифкатор контракта</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Period" type="PeriodType"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="GetStatementCVDataRsType">
+		<xs:annotation>
+			<xs:documentation>Комплексный тип для ответа</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="RqUID" type="UUID">
+				<xs:annotation>
+					<xs:documentation>Уникальный идентификатор запроса</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="RqTm" type="DateTime">
+				<xs:annotation>
+					<xs:documentation>Дата и время передачи сообщения</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="SPName" type="C50_Type">
+				<xs:annotation>
+					<xs:documentation>Идентификатор отвечающей системы</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="SystemId" type="C50_Type">
+				<xs:annotation>
+					<xs:documentation>Идентификатор отвечаемой системы</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CardsInfo" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Card" type="CardType" maxOccurs="unbounded"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="Status" type="StatusType"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="PersonInfoType">
+		<xs:annotation>
+			<xs:documentation>Комплексный тип с данными клиента для поиска</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Name" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Дата рождения</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:length value="7"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="Text" type="C50_Type" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>EPK_Id клиента</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="PeriodType">
+		<xs:annotation>
+			<xs:documentation>Комплексный тип с периодом и отчетной датой</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="StartDate" type="xs:date">
+				<xs:annotation>
+					<xs:documentation>Начало периода</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="EndDate" type="xs:date">
+				<xs:annotation>
+					<xs:documentation>Конец периода</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ReportDate" type="PeriodType">
+				<xs:annotation>
+					<xs:documentation>Отчетная дата</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CardType">
+		<xs:annotation>
+			<xs:documentation>Комплексный тип с данными по карте</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="CardParams">
+				<xs:annotation>
+					<xs:documentation>Параметры карты</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="TypeCard" type="C50_Type">
+							<xs:annotation>
+								<xs:documentation>Вид карты например: MasterCard Gold</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="ClassCard" type="C50_Type" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Тип карты: дебетовая, кредитная</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="CardNum" type="C50_Type" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Маскированный номер карты (PAN)</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="ContractNumber" type="C50_Type">
+							<xs:annotation>
+								<xs:documentation>Номер контракта карты</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="AccountNumber" type="C50_Type">
+							<xs:annotation>
+								<xs:documentation>Номер счета карты</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="AccountCurrency" type="C50_Type">
+							<xs:annotation>
+								<xs:documentation>Валюта счета</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="OpenDate" type="xs:date">
+							<xs:annotation>
+								<xs:documentation>Дата открытия контракта (используем, как дату открытия счета, т.к. отдельной даты открытия счета нет)</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="CloseDate" type="xs:date" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Дата закрытия контракта (используем, как дату закрытия счета, т.к. отдельной даты закрытия счета нет)</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="LoanLimit" type="xs:decimal">
+							<xs:annotation>
+								<xs:documentation>Кредитный лимит</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="PercentRate" type="xs:decimal">
+							<xs:annotation>
+								<xs:documentation>Процентная ставка</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="LoanAmountAll" type="xs:decimal" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Общая задолженность на отчетную дату в валюте счета (вся задолженность по карте с учетом начисленных процентов, штрафов, пеней и т.д.)</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="LoanAmount" type="xs:decimal" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Размер обязательства и начисленных процентов (без учета пеней, штрафов) в валюте счета</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="AmountInc" type="xs:decimal" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Сумма поступивших денежных средств за отчетный период в валюте счета</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="EndRemainder" type="xs:decimal" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Остаток средств на отчетную дату в валюте счета</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="AcctBalOnDate" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Список задолженностей  на отчетную дату</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="BalType" type="C50_Type">
+							<xs:annotation>
+								<xs:documentation>Тип задолженности</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="CurAmt" type="xs:decimal">
+							<xs:annotation>
+								<xs:documentation>Значение задолженности</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="StatusType">
+		<xs:annotation>
+			<xs:documentation>Комплексный тип со статусом ответа</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Status" type="C50_Type">
+				<xs:annotation>
+					<xs:documentation>Код статуса: 0 - выполнено без ошибок. Иначе любой другой код - ошибка</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ErrorCode" type="C50_Type" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Код ошибки: system-error, timeout-error, unexpected error</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ErrorDescription" type="C3000_Type" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Описание ошибки</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="C50_Type">
+		<xs:annotation>
+			<xs:documentation>Базовый символьный тип, с ограничением количества символов до 50</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="50"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="C255_Type">
+		<xs:annotation>
+			<xs:documentation>Базовый символьный тип, с ограничением количества символов до 255</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="255"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="C3000_Type">
+		<xs:annotation>
+			<xs:documentation>Базовый символьный тип, с ограничением количества символов до 3000</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="3000"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="DateTime">
+		<xs:annotation>
+			<xs:documentation>Тип данных для представления дат</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:dateTime">
+			<xs:pattern value="\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d(.[\d]{1,6})?(([+\-]\d\d:\d\d)|Z)?"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="UUID">
+		<xs:annotation>
+			<xs:documentation>Уникальный 16 байтовый идентификатор. Для обмена в рамках интеграционных проектов Сбербанка представляется набором из 32 символов без разделителей в шестнадцатиричной системе.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[0-9a-zA-Z]{32}"/>
+		</xs:restriction>
+	</xs:simpleType>
+</xs:schema>

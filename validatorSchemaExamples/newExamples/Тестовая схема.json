@@ -1,0 +1,404 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"description": "Схема сообщения об обновлении профиля клиента",
+	"type": "object",
+	"properties": {
+		"header": {
+			"$id": "#/properties/epkClientInfoRq/properties/header",
+			"title": "Заголовок сообщения",
+			"description": "Заголовок сообщения",
+			"type": "object",
+			"properties": {
+				"rqUID": {
+					"$id": "#/properties/epkClientInfoRq/properties/header/properties/rqUID",
+					"title": "ID запроса",
+					"description": "ID запроса",
+					"type": "string",
+					"minLength": 32,
+					"maxLength": 32
+				},
+				"rqTm": {
+					"$id": "#/properties/epkClientInfoRq/properties/header/properties/rqTm",
+					"title": "Дата и время запроса",
+					"description": "Дата и время запроса",
+					"type": "string",
+					"maxLength": 32,
+					"format": "date-time"
+				},
+				"method": {
+					"$id": "#/properties/epkClientInfoRq/properties/header/properties/method",
+					"title": "Тип сообщения",
+					"description": "Тип сообщения",
+					"type": "string",
+					"minLength": 1,
+					"maxLength": 21,
+					"enum": [
+						"merge",
+						"unmerge",
+						"client",
+						"manual"
+					]
+				}
+			},
+			"required": [
+				"rqUID",
+				"rqTm",
+				"method"
+			],
+			"additionalProperties": false
+		},
+		"epkClientInfoRq": {
+			"$id": "#/properties/epkClientInfoRq",
+			"title": "Ответ на сообщение от ЕПК",
+			"description": "Ответ на сообщение от ЕПК",
+			"type": "object",
+			"properties": {
+				"epkClientInfo": {
+					"$id": "#/properties/epkClientInfoRq/properties/epkClientInfo",
+					"title": "Информация по клиентам",
+					"description": "Информация по клиентам",
+					"type": "array",
+					"minItems": 1,
+					"maxItems": 3,
+					"uniqueItems": true,
+					"items": {
+						"$id": "#/properties/epkClientInfoRq/properties/epkClientInfo/items",
+						"title": "Информация по клиенту",
+						"description": "Информация по клиенту",
+						"type": "object",
+						"properties": {
+							"contactGroup": {
+								"$id": "#/properties/epkClientInfoRq/properties/epkClientInfo/items/properties//items/properties/contactGroup",
+								"title": "Принадлежность контакта группе контактов",
+								"description": "Принадлежность контакта группе контактов",
+								"type": "array",
+								"maxItems": 2,
+								"uniqueItems": true,
+								"additionalItems": false,
+								"items": {
+									"$id": "#/properties/epkClientInfoRq/properties/epkClientInfo/items/properties//items/properties/contactGroup/items",
+									"title": "Принадлежность контакта группе контактов",
+									"description": "Принадлежность контакта группе контактов",
+									"type": "object",
+									"properties": {
+										"key": {
+											"$id": "#/properties/epkClientInfoRq/properties/epkClientInfo/items/properties//items/properties/contactGroup/items/properties/name",
+											"title": "Ключ",
+											"description": "Имя ключа (параметра)",
+											"type": "string",
+											"minLength": 1,
+											"maxLength": 64
+										},
+										"value": {
+											"$id": "#/properties/epkClientInfoRq/properties/epkClientInfo/items/properties//items/properties/contactGroup/items/properties/code",
+											"title": "Значение",
+											"description": "Строкове значение ключа (параметра)",
+											"type": "string",
+											"maxLength": 50
+										}
+									},
+									"required": [
+										"key"
+									],
+									"additionalProperties": false
+								},
+								"additionalProperties": false
+							},
+							"mergeClient": {
+								"$id": "#/properties/epkClientInfoRq/properties/epkClientInfo/items/properties/mergeClient",
+								"type": "object",
+								"properties": {
+									"newClientVersion": {
+										"$id": "#/properties/epkClientInfoRq/properties/epkClientInfo/items/properties/mergeClient/properties/newClientVersion",
+										"type": "integer"
+									},
+									"newClientId": {
+										"$id": "#/properties/epkClientInfoRq/properties/epkClientInfo/items/properties/mergeClient/properties/newClientId",
+										"title": "Идентификатор победившего клиента. Заполняется у клиента с @eventClientInfo = loser",
+										"description": "Идентификатор победившего клиента. Заполняется у клиента с @eventClientInfo = loser",
+										"type": "string",
+										"minLength": 1,
+										"maxLength": 21
+									}
+								},
+								"additionalProperties": false
+							},
+							"addresses": {
+								"$id": "#/properties/epkClientInfoRq/properties/epkClientInfo/items/properties/",
+								"type": "array",
+								"uniqueItems": true,
+								"items": {
+									"$id": "#/properties/epkClientInfoRq/properties/epkClientInfo/items/properties//items",
+									"title": "Города клиента",
+									"description": "Города клиента",
+									"type": "object",
+									"properties": {
+										"city": {
+											"$id": "#/properties/epkClientInfoRq/properties/epkClientInfo/items/properties//items/properties/city",
+											"title": "Город клиента",
+											"description": "Город клиента",
+											"type": "string",
+											"minLength": 1,
+											"maxLength": 100
+										},
+										"cityQualityCode": {
+											"$id": "/properties/epkClientInfoRq/properties/epkClientInfo/items/properties//items/properties/cityQualityCode",
+											"title": "Код качества адреса до города",
+											"description": "Код качества адреса до города",
+											"type": "number"
+										},
+										"updateDateTime": {
+											"$id": "#/properties/epkClientInfoRq/properties/epkClientInfo/items/properties//items/properties/updateDateTime",
+											"title": "Дата обновления записи",
+											"description": "Дата обновления записи",
+											"type": "string",
+											"maxLength": 32,
+											"format": "date-time"
+										},
+										"flagType": {
+											"$id": "#/properties/epkClientInfoRq/properties/epkClientInfo/items/properties//items/properties/flagType",
+											"title": "Флаги контакта",
+											"description": "Флаги контакта",
+											"type": "array",
+											"uniqueItems": true,
+											"additionalItems": false,
+											"items": {
+												"$id": "/properties/epkClientInfoRq/properties/epkClientInfo/items/properties//items/properties/flagType/items",
+												"title": "Флаги контакта",
+												"description": "Флаги контакта",
+												"type": "object",
+												"properties": {
+													"name": {
+														"$id": "#/properties/epkClientInfoRq/properties/epkClientInfo/items/properties//items/properties/flagType/items/properties/name",
+														"title": "Наименование флага",
+														"description": "Наименование флага",
+														"type": "string",
+														"minLength": 1,
+														"maxLength": 64
+													},
+													"code": {
+														"$id": "#/properties/epkClientInfoRq/properties/epkClientInfo/items/properties//items/properties/flagType/items/properties/code",
+														"title": "Код флага",
+														"description": "Код флага",
+														"type": "integer"
+													}
+												},
+												"required": [
+													"name",
+													"code"
+												],
+												"additionalProperties": false
+											},
+											"additionalProperties": false
+										}
+									},
+									"additionalProperties": false
+								},
+								"additionalProperties": false
+							},
+							"clientEventInfo": {
+								"$id": "#/properties/epkClientInfoRq/properties/epkClientInfo/items/properties/clientEventInfo",
+								"title": "Информация по событию распространения. Заполняется для @method = merge, unmerge",
+								"description": "Информация по событию распространения. Заполняется для @method = merge, unmerge",
+								"type": "object",
+								"properties": {
+									"folders": {
+										"description": "Подпапки, не содержат template и result",
+										"$ref": "file:///C:/Users/Gudkova1-AA/Desktop/%D1%81%D1%85%D0%B5%D0%BC%D1%8B%20%D0%B4%D0%BB%D1%8F%20%D1%82%D0%B5%D1%81%D1%82%D0%B0%20%D0%B2%D0%B0%D0%BB%D0%B8%D0%B4%D0%B0%D1%82%D0%BE%D1%80%D0%B0/JSON/recreateStructureECMAdptRs%20(004).json#/definitions/folders"
+									}
+								},
+								"additionalProperties": false
+							},
+							"CardNum": {
+								"$id": "#/properties/epkClientInfoRq/properties/epkClientInfo/items/properties/lastName",
+								"title": "Фамилия",
+								"description": "Номер карты",
+								"type": "string",
+								"minLength": 1,
+								"maxLength": 100
+							},
+							"phoneNumber": {
+								"$id": "#/properties/epkClientInfoRq/properties/epkClientInfo/items/properties/phoneNumbers",
+								"title": "Номера телефонов клиента",
+								"description": "Номера телефонов клиента",
+								"type": "array",
+								"uniqueItems": true,
+								"additionalItems": false,
+								"items": {
+									"$id": "#/properties/epkClientInfoRq/properties/epkClientInfo/items/properties/phoneNumbers/items",
+									"title": "Номера телефонов клиента",
+									"description": "Номера телефонов клиента",
+									"type": "object",
+									"properties": {
+										"phoneNumber": {
+											"$id": "#/properties/epkClientInfoRq/properties/epkClientInfo/items/properties/phoneNumbers/items/properties/phoneNumber",
+											"title": "Номер телефона",
+											"description": "Номер телефона",
+											"type": "string",
+											"minLength": 1,
+											"maxLength": 11
+										},
+										"updateDateTime": {
+											"$id": "#/properties/epkClientInfoRq/properties/epkClientInfo/items/properties/phoneNumbers/items/properties/updateDateTime",
+											"title": "Дата обновления записи",
+											"description": "Дата обновления записи",
+											"type": "string",
+											"maxLength": 32,
+											"format": "date-time"
+										}
+									},
+									"required": [
+										"phoneNumber"
+									],
+									"additionalProperties": false
+								},
+								"additionalProperties": false
+							},
+							"CardNumber": {
+								"$id": "#/properties/epkClientInfoRq/properties/epkClientInfo/items/properties/unmergeClient",
+								"title": "Номер карты",
+								"description": "Номер карты",
+								"type": "array",
+								"additionalItems": false, 
+								"minItems": 1,
+								"maxItems": 4,
+								"items": {
+									"$id": "#/properties/epkClientInfoRq/properties/epkClientInfo/items/properties/phoneNumbers/items",
+									"title": "Идентификаторы",
+									"description": "Номера телефонов клиента",
+									"type": "object",
+									"properties": {
+										"Card": {
+											"$id": "#/properties/epkClientInfoRq/properties/epkClientInfo/items/properties/unmergeClient/properties/errorClientVersion",
+											"title": "Номер",
+											"description": "Номер",
+											"type": "integer"
+										},
+										"errorClientId": {
+											"$id": "#/properties/epkClientInfoRq/properties/epkClientInfo/items/properties/unmergeClient/properties/errorClientId",
+											"title": "Идентификатор ошибочного клиента. Заполняется у @eventClientInfo = winer, loser, new",
+											"description": "Идентификатор ошибочного клиента. Заполняется у @eventClientInfo = winer, loser, new",
+											"type": "string",
+											"minLength": 1,
+											"maxLength": 21
+										}
+									},
+									"additionalProperties": false
+								},
+								"additionalProperties": false
+							},
+							"clientId": {
+								"$id": "#/properties/epkClientInfoRq/properties/epkClientInfo/items/properties/clientId",
+								"title": "ID клиента в ЕПК",
+								"description": "ID клиента в ЕПК",
+								"type": "string",
+								"minLength": 1
+							},
+							"startDate": {
+								"$id": "#/properties/epkClientInfoRq/properties/epkClientInfo/items/properties/startDate",
+								"title": "Дата начала действия записи",
+								"description": "Дата начала действия записи"
+							},
+							"user": {
+								"$id": "#/properties/epkClientInfoRq/properties/epkClientInfo/items/properties/email",
+								"description": "Наименование служебной учетн",
+								"type": "array",
+								"uniqueItems": true,
+								"additionalProperties": false
+							},
+							"mail": {
+								"$id": "#/properties/epkClientInfoRq/properties/epkClientInfo/items/properties/email",
+								"title": "Адреса электронной почты",
+								"description": "Адреса электронной почты",
+								"type": "array",
+								"items": {
+									"$id": "#/properties/epkClientInfoRq/properties/epkClientInfo/items/properties/email/items",
+									"title": "Адреса электронной почты",
+									"description": "Адреса электронной почты",
+									"type": "object",
+									"properties": {
+										"domainName": {
+											"$id": "#/properties/epkClientInfoRq/properties/epkClientInfo/items/properties/email/items/properties/domainName",
+											"title": "Доменное имя",
+											"description": "Доменное имя",
+											"type": "string",
+											"minLength": 1,
+											"maxLength": 255
+										},
+										"electronicAddressSubTypeName": {
+											"$id": "#/properties/epkClientInfoRq/properties/epkClientInfo/items/properties/email/items/properties/electronicAddressSubTypeName",
+											"title": "Наименование подтипа электронного адреса",
+											"description": "Наименование подтипа электронного адреса",
+											"type": "string",
+											"minLength": 1,
+											"maxLength": 32
+										},
+										"electronicAddressSubTypeCode": {
+											"$id": "#/properties/epkClientInfoRq/properties/epkClientInfo/items/properties/email/items/properties/electronicAddressSubTypeCode",
+											"title": "Код подтипа электронного адреса",
+											"description": "Код подтипа электронного адреса",
+											"type": "integer"
+										},
+										"flagType": {
+											"$id": "#/properties/epkClientInfoRq/properties/epkClientInfo/items/properties/email/items/properties/flagType",
+											"title": "Флаги контакта",
+											"description": "Флаги контакта",
+											"type": "array",
+											"uniqueItems": true,
+											"items": {
+												"$id": "#/properties/epkClientInfoRq/properties/epkClientInfo/items/properties/email/items/properties/flagType/items",
+												"title": "Флаги контакта",
+												"description": "Флаги контакта",
+												"type": "object",
+												"properties": {
+													"name": {
+														"$id": "#/properties/epkClientInfoRq/properties/epkClientInfo/items/properties/email/items/properties/flagType/items/properties/name",
+														"title": "Наименование флага",
+														"description": "Наименование флага",
+														"type": "string",
+														"minLength": 1,
+														"maxLength": 64
+													},
+													"code": {
+														"$id": "#/properties/epkClientInfoRq/properties/epkClientInfo/items/properties/email/items/properties/flagType/items/properties/code",
+														"title": "Код флага",
+														"description": "Код флага",
+														"type": "integer"
+													}
+												},
+												"required": [
+													"name",
+													"code"
+												]
+											}
+										}
+									},
+									"required": [
+										"electronicAddressSubTypeName",
+										"electronicAddressSubTypeCode"
+									]
+								}
+							}
+						},
+						"required": [
+							"CardNum",
+							"clientId",
+							"startDate"
+						],
+						"additionalProperties": false
+					},
+					"additionalProperties": false
+				}
+			},
+			"required": [
+				"epkClientInfo"
+			],
+			"additionalProperties": false
+		}
+	},
+	"required": [
+		"header",
+		"epkClientInfoRq"
+	],
+	"additionalProperties": false
+}

@@ -77,6 +77,7 @@ class XsdController:
     def getXsdFromFile(self, fileUrl):
         if fileUrl:
             self.form.textEditTextXsd.clear()
+            self.form.textEditResultXsd.clear()
             self.xsdObjects = None
             self.form.comboBoxChooseElementsXsd.clear()
 

@@ -76,6 +76,7 @@ class JsonController:
     def getJsonFromFile(self, fileUrl):
         if fileUrl:
             self.form.textEditTextJson.clear()
+            self.form.textEditResultJson.clear()
             self.jsonObjects = None
             self.form.comboBoxChooseElementsJson.clear()
 
