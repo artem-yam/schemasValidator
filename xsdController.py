@@ -103,12 +103,18 @@ class XsdController:
         self.xsdObjects = self.form.xsdParser.parseTextToObjects(
             self.form.textEditTextXsd.toPlainText())
 
-        rootTagsNames = list(xsdObject.name for xsdObject in self.xsdObjects.values()
-                             if hasattr(xsdObject, 'fullPath')
-                             and hasattr(xsdObject, 'name')
-                             and xsdObject.fullPath == '/' + xsdObject.name)
+        if isinstance(self.xsdObjects, dict):
+            rootTagsNames = list(xsdObject.name for xsdObject in self.xsdObjects.values()
+                                 if hasattr(xsdObject, 'fullPath')
+                                 and hasattr(xsdObject, 'name')
+                                 and xsdObject.fullPath == '/' + xsdObject.name)
 
-        self.form.comboBoxChooseElementsXsd.addItems(rootTagsNames)
+            self.form.comboBoxChooseElementsXsd.addItems(rootTagsNames)
+        else:
+            self.form.textEditResultXsd.addItem(str(self.xsdObjects))
+            self.form.textEditResultXsd.item(
+                self.form.textEditResultXsd.count() - 1).setForeground(
+                Qt.GlobalColor.red)
 
     def validateXsd(self):
         self.form.textEditResultXsd.clear()

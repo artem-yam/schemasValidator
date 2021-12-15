@@ -1,7 +1,7 @@
 import sys
 import traceback
+from copy import *
 from xml.dom.minidom import parseString
-from yattag import indent
 
 from lxml import objectify
 
@@ -43,11 +43,22 @@ class XsdParser(object):
         xsdObjects = {}
         try:
             # xsdString = xsd.loads(xsdString)
-            xsdStringEecode = xsdString.encode()
+            # xsdStringEncode = xsdString.encode()
             rootSchemaTag = objectify.fromstring(xsdString.encode())
             # rootSchemaTag2 = untangle.parse(xsdString)
 
             xsdObjects.update(self.parseElements(rootSchemaTag, ''))
+
+            # xsdObjectsCopy = xsdObjects.copy()
+
+            for objectKey in xsdObjects:
+                xsdObject = xsdObjects[objectKey]
+                if hasattr(xsdObject, 'ref'):
+                    referedElement = deepcopy(xsdObjects[f'element /{xsdObject.ref}'])
+                    xsdObjects[objectKey] = referedElement
+                    for fieldName in xsdObject.__dict__:
+                        if fieldName not in ['tag', 'type', 'ref']:
+                            referedElement.__dict__[fieldName] = xsdObject.__dict__[fieldName]
 
             print('---------------------------------------------------')
             print(';\n'.join(map(str, xsdObjects.values())))
@@ -70,12 +81,13 @@ class XsdParser(object):
             else:
                 xsdObject = XsdPropertyObject(tag)
 
-                if hasattr(xsdObject, 'name'):
-                    xsdObject.fullPath = parentPath + '/' + xsdObject.name
-                    xsdObjects[xsdObject.fullPath] = xsdObject
-                else:
-                    xsdObjects[
-                        'elem№' + str(xsdObjects.__len__() + 1)] = xsdObject
+                if not hasattr(xsdObject, 'name'):
+                    xsdObject.name = 'elem№' + str(xsdObjects.__len__() + 1)
+
+                xsdObject.fullPath = parentPath + '/' + xsdObject.name
+
+                # xsdObjects[xsdObject.fullPath] = xsdObject
+                xsdObjects[f'{xsdObject.tag} {xsdObject.fullPath}'] = xsdObject
 
                 tempTag = tag
 
@@ -134,7 +146,8 @@ class XsdParser(object):
 
         propObject.name = propName
         propObject.fullPath = pathPrefix + '/' + propName
-        xsdObjects[propObject.fullPath] = propObject
+        # xsdObjects[propObject.fullPath] = propObject
+        xsdObjects[f'{propObject.tag} {propObject.fullPath}'] = propObject
 
         xsdObjects.update(self.checkInnerProperties(propObject))
 
@@ -178,7 +191,8 @@ class XsdParser(object):
                                    (innerObject.name if hasattr(innerObject,
                                                                 'name')
                                     else keyword + '#' + str(propIndex + 1))
-            xsdObjects[innerObject.fullPath] = innerObject
+            # xsdObjects[innerObject.fullPath] = innerObject
+            xsdObjects[f'{innerObject.tag} {innerObject.fullPath}'] = innerObject
 
             xsdObjects.update(self.checkInnerProperties(innerObject))
 
@@ -196,7 +210,8 @@ class XsdParser(object):
             if isinstance(innerObject, XsdPropertyObject):
                 innerObject.name = prop
                 innerObject.fullPath = propObject.fullPath + '/' + prop
-                xsdObjects[innerObject.fullPath] = innerObject
+                # xsdObjects[innerObject.fullPath] = innerObject
+                xsdObjects[f'{innerObject.tag} {innerObject.fullPath}'] = innerObject
 
                 xsdObjects.update(self.checkInnerProperties(innerObject))
 
@@ -222,7 +237,8 @@ class XsdParser(object):
                         if isinstance(innerObject, XsdPropertyObject):
                             innerObject.name = prop
                             innerObject.fullPath = propArrayObject.fullPath + '/' + prop
-                            xsdObjects[innerObject.fullPath] = innerObject
+                            # xsdObjects[innerObject.fullPath] = innerObject
+                            xsdObjects[f'{innerObject.tag} {innerObject.fullPath}'] = innerObject
 
                             xsdObjects.update(
                                 self.checkInnerProperties(innerObject))
@@ -232,7 +248,8 @@ class XsdParser(object):
                                            (itemsObject.name if hasattr(
                                                itemsObject,
                                                'name') else 'items')
-                    xsdObjects[itemsObject.fullPath] = itemsObject
+                    # xsdObjects[itemsObject.fullPath] = itemsObject
+                    xsdObjects[f'{itemsObject.tag} {itemsObject.fullPath}'] = itemsObject
 
                     xsdObjects.update(self.checkInnerProperties(itemsObject))
 

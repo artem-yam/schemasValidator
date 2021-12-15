@@ -1,6 +1,11 @@
 class XsdPropertyObject(object):
     def __init__(self, xsdTag):
 
+        if hasattr(xsdTag, 'prefix') and xsdTag.prefix:
+            self.tag = xsdTag.tag.split('}')[1]
+        else:
+            self.tag = xsdTag.tag
+
         for attribKey in xsdTag.attrib:
             if attribKey == 'type':
                 self.type = self.getStringWithoutNamespaceNamespace(xsdTag.attrib['type'])
@@ -39,6 +44,9 @@ class XsdPropertyObject(object):
                     self.__dict__[propKey] = xsdTag.__dict__[propKey]
             # elif not hasattr(self, 'type'):
             #    self.type = 'object'
+
+        if not hasattr(self, 'name') and hasattr(self, 'ref'):
+            self.name = self.ref
 
         self.reset()
 
