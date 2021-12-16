@@ -217,8 +217,9 @@ class XsdObjectValidator(object):
             if not (hasattr(xsdObject, 'maxLength') and xsdObject.maxLength.isdigit()
                     or hasattr(xsdObject, 'length') and xsdObject.length.isdigit()):
 
-                if not hasattr(xsdObject, 'pattern') \
-                        or re.search('([^\\[]+\\+)|\\*', xsdObject.pattern):
+                if (not hasattr(xsdObject, 'pattern')
+                    or re.search('([^\\[]+\\+)|\\*', xsdObject.pattern)) \
+                        and not hasattr(xsdObject, 'enumeration'):
                     validatorMsg = OutputMessage(xsdObject, MessageType.ERROR_TYPE,
                                                  XsdObjectValidator.STRING_NO_MAX_LENGTH_MESSAGE)
                     validationResult.append(validatorMsg)
@@ -242,7 +243,8 @@ class XsdObjectValidator(object):
         # TODO фикс проверок + учитывать расширения базовой строки
         if hasattr(xsdObject, 'type') \
                 and xsdObject.type == 'string' \
-                and not hasattr(xsdObject, 'pattern'):
+                and not hasattr(xsdObject, 'pattern') \
+                and not hasattr(xsdObject, 'enumeration'):
             validatorMsg = OutputMessage(xsdObject, MessageType.INFO_TYPE,
                                          XsdObjectValidator.STRING_NO_PATTERN_MESSAGE)
             validationResult.append(validatorMsg)

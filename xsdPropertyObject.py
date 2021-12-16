@@ -39,6 +39,11 @@ class XsdPropertyObject(object):
                         self.parseRestrictions(xsdTag.__dict__[propKey], 'restriction')
                 elif propKey == 'restriction' or propKey == 'extension':
                     self.parseRestrictions(xsdTag, propKey)
+                elif propKey == 'enumeration':
+                    if hasattr(self, 'enumeration'):
+                        self.enumeration += xsdTag.__dict__[propKey]
+                    else:
+                        self.enumeration = xsdTag.__dict__[propKey]
 
                 else:
                     self.__dict__[propKey] = xsdTag.__dict__[propKey]
@@ -62,9 +67,14 @@ class XsdPropertyObject(object):
         # if 'pattern' in xsdTag.__dict__[propKey].__dict__.keys():
         for restrictionName in restrictionsMainTag.__dict__.keys():
             restrictionTag = restrictionsMainTag.__dict__[restrictionName]
-            if hasattr(restrictionTag, 'attrib'):
-                for attrib in restrictionTag.attrib:
-                    self.__dict__[restrictionName] = restrictionTag.attrib[attrib]
+            for i in range(len(restrictionTag)):
+                if hasattr(restrictionTag[i], 'attrib'):
+                    for attrib in restrictionTag[i].attrib:
+                        if restrictionName in self.__dict__:
+                            self.__dict__[
+                                restrictionName] += f', {restrictionTag[i].attrib[attrib]}'
+                        else:
+                            self.__dict__[restrictionName] = restrictionTag[i].attrib[attrib]
 
     def reset(self):
         self.tabsCount = 1

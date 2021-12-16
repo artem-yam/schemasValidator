@@ -131,7 +131,7 @@ class XsdController:
                 isChosen = False
                 # while isChosen == False:
                 for elem in chosenElements:
-                    isChosen = objectPath.startswith('/' + elem)
+                    isChosen = self.xsdObjects[objectPath].fullPath.startswith('/' + elem)
                     if isChosen:
                         break
                 if isChosen:

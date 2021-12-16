@@ -176,8 +176,9 @@ class JsonObjectValidator(object):
         if self.configElements.get('jsonConfStringLengthLabel').isChecked():
             if not hasattr(jsonObject, 'maxLength'):
 
-                if not hasattr(jsonObject, 'pattern') \
-                        or re.search('([^\\[]+\\+)|\\*', jsonObject.pattern):
+                if (not hasattr(jsonObject, 'pattern')
+                    or re.search('([^\\[]+\\+)|\\*', jsonObject.pattern)) \
+                        and not hasattr(jsonObject, 'enum'):
                     validatorMsg = OutputMessage(jsonObject, MessageType.ERROR_TYPE,
                                                  JsonObjectValidator.STRING_NO_MAX_LENGTH_MESSAGE)
                     validationResult.append(validatorMsg)
