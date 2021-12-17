@@ -35,8 +35,8 @@ class CheckableComboBox(QtWidgets.QComboBox):
             item = self.model().item(index, 0)
             if item.isSelectable:
                 # TODO включить по умолчанию
-                # item.setCheckState(QtCore.Qt.CheckState.Checked)
-                item.setCheckState(QtCore.Qt.CheckState.Unchecked)
+                item.setCheckState(QtCore.Qt.CheckState.Checked)
+                # item.setCheckState(QtCore.Qt.CheckState.Unchecked)
                 item.setSelectable(False)
 
     def handleItemPressed(self, index):
