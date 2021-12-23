@@ -54,12 +54,23 @@ class XsdParser(object):
             for objectKey in xsdObjects:
                 xsdObject = xsdObjects[objectKey]
                 if hasattr(xsdObject, 'ref'):
-                    referedElement = deepcopy(xsdObjects[f'element /{xsdObject.ref}'])
+                    # referedElement = deepcopy(xsdObjects[f'element /{xsdObject.ref}'])
+                    referedElement = copy(xsdObjects[f'element /{xsdObject.ref}'])
                     xsdObjects[objectKey] = referedElement
                     for fieldName in xsdObject.__dict__:
                         if fieldName not in ['tag', 'type', 'ref']:
                             referedElement.__dict__[fieldName] = xsdObject.__dict__[fieldName]
 
+            print('---------------------------------------------------')
+            print('Мапа ДО объединения')
+            print('---------------------------------------------------')
+            print(';\n'.join(map(str, xsdObjects.values())))
+
+            xsdObjects = self.processSimplyTypesChain(xsdObjects)
+            xsdObjects = self.combineTypesWithElement(xsdObjects)
+
+            print('---------------------------------------------------')
+            print('Мапа ПОСЛЕ объединения')
             print('---------------------------------------------------')
             print(';\n'.join(map(str, xsdObjects.values())))
 
@@ -71,6 +82,197 @@ class XsdParser(object):
             xsdObjects = 'Ошибка преобразования xsd в объект, проверьте корректность загруженного текста'
 
         return xsdObjects
+
+    # TODO фикс на случай циклических ссылок
+    def processSimplyTypesChain(self, xsdObjects) -> dict:
+        modifiedXsdObjects = copy(xsdObjects)
+
+        # for typeObjectKey, typeObject in modifiedXsdObjects.items():
+        while True:
+            typeObjectKey = next(
+                (typeObjectKey for typeObjectKey, typeObject in modifiedXsdObjects.items() if
+                 typeObject.tag == 'simpleType' and not next(
+                     (objectKey for objectKey, object in modifiedXsdObjects.items() if
+                      object.tag == 'simpleType' and typeObject.type == object.name),
+                     False)),
+                False)
+
+            if not typeObjectKey:
+                break
+
+            typeObject = modifiedXsdObjects[typeObjectKey]
+            modifiedXsdObjects.pop(typeObjectKey)
+
+            while True:
+                elemObjectKey = next(
+                    (objectKey for objectKey, object in modifiedXsdObjects.items() if
+                     typeObject.name == object.type), False)
+
+                if not elemObjectKey:
+                    break
+
+                elemObject = modifiedXsdObjects[elemObjectKey]
+                modifiedXsdObjects.pop(elemObjectKey)
+
+                copiedTypeObject = copy(typeObject)
+
+                for fieldName in elemObject.__dict__:
+                    if fieldName not in ['type']:
+                        copiedTypeObject.__dict__[fieldName] = elemObject.__dict__[fieldName]
+
+                modifiedXsdObjects[elemObjectKey] = copiedTypeObject
+                xsdObjects[elemObjectKey] = copiedTypeObject
+
+        # return modifiedXsdObjects
+        return xsdObjects
+
+    # TODO фикс на случай циклических ссылок
+    def combineTypesWithElement(self, xsdObjects) -> dict:
+        # TODO
+
+        # modifiedXsdObjects = deepcopy(xsdObjects)
+        modifiedXsdObjects = copy(xsdObjects)
+
+        typeObjectKey = self.getNextCustomTypeRefKey(modifiedXsdObjects)
+
+        # while self.hasCustomTypeRef(modifiedXsdObjects):
+        while typeObjectKey is not None:
+
+            typeObject = modifiedXsdObjects[typeObjectKey]
+
+            elemObjectKey = next(
+                (elemObjectKey for elemObjectKey, elemObject
+                 in modifiedXsdObjects.items() if
+                 # elemObject.tag == 'element' and
+                 typeObject.name == elemObject.type), None)
+
+            if elemObjectKey is None:
+                modifiedXsdObjects.pop(typeObjectKey)
+                typeObjectKey = self.getNextCustomTypeRefKey(modifiedXsdObjects)
+            else:
+                elemObject = modifiedXsdObjects[elemObjectKey]
+
+                print(f'По типу: {typeObject.fullPath} смотрим элемент: {elemObject.fullPath}')
+
+                # itemsToRemove = []
+                itemsToAdd = {}
+                # typeObject = False
+
+                # copiedTypeObject = deepcopy(typeObject)
+                copiedTypeObject = copy(typeObject)
+
+                # modifiedXsdObjects[elemObjectKey] = copiedTypeObject
+
+                # TODO перенос полей
+
+                # typeName = copiedTypeObject.name
+                typePath = copiedTypeObject.fullPath
+
+                for fieldName in elemObject.__dict__:
+                    if fieldName in ['name', 'fullPath', 'tag']:
+                        copiedTypeObject.__dict__[fieldName] = elemObject.__dict__[fieldName]
+
+                xsdObjects[elemObjectKey] = copiedTypeObject
+                # itemsToAdd[elemObjectKey] = copiedTypeObject
+                modifiedXsdObjects[elemObjectKey] = copiedTypeObject
+
+                # modifiedXsdObjects.pop(elemObjectKey)
+                # itemsToRemove.append(elemObjectKey)
+
+                # modifiedXsdObjects.pop(elemObjectKey)
+
+                # TODO копирование внутренних типов
+                for innerTypeObjectKey, innerTypeObject in modifiedXsdObjects.items():
+                    if innerTypeObject.fullPath.startswith(typePath) and \
+                            innerTypeObject.fullPath != typePath:
+                        # copiedInnerTypeObject = deepcopy(innerTypeObject)
+                        copiedInnerTypeObject = copy(innerTypeObject)
+
+                        copiedInnerTypeObject.fullPath = copiedTypeObject.fullPath + \
+                                                         innerTypeObject.fullPath.split(
+                                                             typePath)[1]
+
+                        xsdObjects[
+                            f'element {copiedInnerTypeObject.fullPath}'] = copiedInnerTypeObject
+                        itemsToAdd[
+                            f'element {copiedInnerTypeObject.fullPath}'] = copiedInnerTypeObject
+
+                        print('Смотрим внутренний тип: ' + copiedInnerTypeObject.fullPath)
+
+                modifiedXsdObjects.pop(elemObjectKey)
+                modifiedXsdObjects.update(itemsToAdd)
+
+        # modifiedXsdObjects = deepcopy(xsdObjects)
+        # modifiedXsdObjects = copy(xsdObjects)
+
+        # modifiedXsdObjects.update(itemsToAdd)
+        # for itemToRemove in itemsToRemove:
+        #     modifiedXsdObjects.pop(itemToRemove)
+
+        return xsdObjects
+
+    def getNextCustomTypeRefKey(self, xsdObjects):
+        # TODO вроде корректная проверка ссылки на тип, но надо проверить!!!
+        for object in xsdObjects.values():
+            typeObjectKey = next(
+                (typeObjectKey for typeObjectKey, typeObject in xsdObjects.items() if
+                 typeObject.name == object.type and typeObject.tag != 'element'),
+                False)
+            if typeObjectKey:
+                return typeObjectKey
+
+        return None
+
+    # TODO это другой алгоритм объединения элементов со связанными типами
+    # def combineTypesWithElement(self, xsdObjects) -> dict:
+    #     modifiedXsdObjects = copy(xsdObjects)
+    #
+    #     itemsToRemove = []
+    #
+    #     while self.hasCustomTypeRef(modifiedXsdObjects):
+    #
+    #         for elemObjectKey, elemObject in modifiedXsdObjects.items():
+    #
+    #             typeObject = next((typeObject for typeObject in modifiedXsdObjects.values() if
+    #                                typeObject.name == elemObject.type), False)
+    #             if typeObject:
+    #                 copiedTypeObject = copy(typeObject)
+    #
+    #                 typePath = copiedTypeObject.fullPath
+    #
+    #                 for fieldName in elemObject.__dict__:
+    #                     if fieldName in ['name', 'fullPath', 'tag']:
+    #                         copiedTypeObject.__dict__[fieldName] = elemObject.__dict__[fieldName]
+    #
+    #                 xsdObjects[elemObjectKey] = copiedTypeObject
+    #
+    #                 itemsToRemove.append(elemObjectKey)
+    #
+    #                 for innerTypeObjectKey, innerTypeObject in modifiedXsdObjects.items():
+    #                     if innerTypeObject.fullPath.startswith(typePath) and \
+    #                             innerTypeObject.fullPath != typePath:
+    #                         copiedInnerTypeObject = copy(innerTypeObject)
+    #
+    #                         copiedInnerTypeObject.fullPath = copiedTypeObject.fullPath + \
+    #                                                          innerTypeObject.fullPath.split(
+    #                                                              typePath)[1]
+    #
+    #                         xsdObjects[
+    #                             f'element {copiedInnerTypeObject.fullPath}'] = copiedInnerTypeObject
+    #
+    #         modifiedXsdObjects = copy(xsdObjects)
+    #         for itemToRemove in itemsToRemove:
+    #             modifiedXsdObjects.pop(itemToRemove)
+    #
+    #     return xsdObjects
+    #
+    # def hasCustomTypeRef(self, xsdObjects) -> bool:
+    #     for object in xsdObjects.values():
+    #         if hasattr(object, 'type') and \
+    #                 next((typeObject for typeObject in xsdObjects.values() if
+    #                       typeObject.name == object.type), False):
+    #             return True
+    #     return False
 
     def parseElements(self, schemaTag, parentPath) -> dict:
         xsdObjects = {}

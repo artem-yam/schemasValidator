@@ -105,8 +105,8 @@ class XsdController:
 
         if isinstance(self.xsdObjects, dict):
             rootTagsNames = list(xsdObject.name for xsdObject in self.xsdObjects.values()
-                                 if hasattr(xsdObject, 'fullPath')
-                                 and hasattr(xsdObject, 'name')
+                                 if hasattr(xsdObject, 'fullPath') and hasattr(xsdObject, 'name')
+                                 and hasattr(xsdObject, 'tag') and xsdObject.tag == 'element'
                                  and xsdObject.fullPath == '/' + xsdObject.name)
 
             self.form.comboBoxChooseElementsXsd.addItems(rootTagsNames)
@@ -127,15 +127,15 @@ class XsdController:
         objectsToValidate = {}
 
         if hasattr(self, 'xsdObjects') and isinstance(self.xsdObjects, dict):
-            for objectPath in self.xsdObjects:
+            for objectKey, object in self.xsdObjects.items():
                 isChosen = False
                 # while isChosen == False:
                 for elem in chosenElements:
-                    isChosen = self.xsdObjects[objectPath].fullPath.startswith('/' + elem)
+                    isChosen = object.fullPath.startswith(f'/{elem}/')
                     if isChosen:
                         break
                 if isChosen:
-                    objectsToValidate[objectPath] = self.xsdObjects.get(objectPath)
+                    objectsToValidate[objectKey] = object
         else:
             objectsToValidate = None
 

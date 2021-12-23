@@ -19,8 +19,9 @@ TODO xsd:
 -   полное отсутствие типа у элемента
     (пример: /GetStatementCVDataRqType/Any в тестовой схеме 3)
 -   парсинг:
-    -   объединять элементы и типы
+    -   объединять элементы и типы ??? нужно проверить !!!
         -   ref +++
+        -   парсить всю цепочку из simpleType +++
     -   choice  и т.п. на уровне с element
         (пример: контейнер GetDebtInfoForClassificationRsType 
         в GetDebtInfoForClassification_151121.xsd)
