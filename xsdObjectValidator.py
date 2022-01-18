@@ -17,7 +17,7 @@ class XsdObjectValidator(object):
     STRING_NO_MAX_LENGTH_MESSAGE = 'Отсутствует ограничение по длине строки'
     STRING_WRONG_LENGTH_MESSAGE = 'Не верно указана длина строки'
     STRING_NO_PATTERN_MESSAGE = 'Отсутствует паттерн для строки'
-    STRING_EXCESS_MAX_LENGTH_MESSAGE = 'Указаная максимальная длина строки выше допустимой'
+    STRING_EXCESS_MAX_LENGTH_MESSAGE = 'Указанная максимальная длина строки выше допустимой'
 
     NUMERIC_NO_MIN_VALUE_MESSAGE = 'Не указано минимальное значение для числа'
     NUMERIC_NO_MAX_VALUE_MESSAGE = 'Не указано максимальное значение для числа'
@@ -81,8 +81,9 @@ class XsdObjectValidator(object):
                                          XsdObjectValidator.ANY_TYPE_MESSAGE)
             validationResult.append(validatorMsg)
 
-        if hasattr(xsdObject, 'name') and re.search('key|param|value', xsdObject.name,
-                                                    re.IGNORECASE):
+        if xsdObject.tag != 'attribute' \
+                and hasattr(xsdObject, 'name') \
+                and re.search('key|param|value', xsdObject.name, re.IGNORECASE):
             validatorMsg = OutputMessage(xsdObject, MessageType.INFO_TYPE,
                                          XsdObjectValidator.POSSIBLE_KEY_VALUE_MESSAGE)
             validationResult.append(validatorMsg)

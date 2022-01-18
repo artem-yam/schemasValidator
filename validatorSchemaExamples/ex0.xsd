@@ -2,26 +2,18 @@
 <!-- edited with XMLSpy v2020 rel. 2 sp1 (x64) (http://www.altova.com) by Ivchenko-ed (JSC SBERBANK - TECHNOLOGIES) -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
            attributeFormDefault="unqualified">
-    <xs:element name="test_Elem" type="test_Type">
-        <xs:annotation>
-            <xs:documentation>Уникальный идентификатор запроса</xs:documentation>
-        </xs:annotation>
-    </xs:element>
-
-    <xs:complexType name="test_Type">
+    <xs:element name="TestElem" type="TestType"/>
+    <xs:complexType name="TestType">
         <xs:sequence>
-            <xs:element name="innerTest_Elem" type="innerTest_Type">
+            <xs:element name="PayDate" type="val_date">
                 <xs:annotation>
-                    <xs:documentation>Уникальный идентификатор запроса</xs:documentation>
+                    <xs:documentation>Дата платежа</xs:documentation>
                 </xs:annotation>
             </xs:element>
         </xs:sequence>
     </xs:complexType>
-
-    <xs:simpleType name="innerTest_Type">
-        <xs:restriction base="xs:string">
-            <xs:maxLength value="50"/>
-            <xs:pattern value="[0-9a-zA-Z]{32}+"/>
-        </xs:restriction>
-    </xs:simpleType>
+    <xs:complexType name="val_date">
+        <xs:attribute name="Value" type="xs:date" use="required"/>
+        <xs:attribute name="Value2" type="xs:string" use="required"/>
+    </xs:complexType>
 </xs:schema>

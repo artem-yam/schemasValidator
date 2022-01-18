@@ -17,9 +17,12 @@ class XsdPropertyObject(object):
         # if 'type' in xsdTag.attrib:
         #     self.type = self.getStringWithoutNamespaceNamespace(xsdTag.attrib['type'])
 
-        if not hasattr(self, 'type') and (
-                (True for innerTagName in xsdTag.__dict__ if
-                 innerTagName in ['complexType', 'group', 'all', 'choice', 'sequence']), False):
+        if not hasattr(self, 'type'):
+            self.type = ''
+
+        if next((True for innerTagName in xsdTag.__dict__ if
+                 innerTagName in ['complexType', 'group', 'all', 'choice', 'sequence']),
+                False):
             self.type = 'object'
             # innerTagName in ['group', 'all', 'choice', 'sequence']),
 

@@ -1,5 +1,6 @@
 import sys
 import traceback
+import re
 from copy import *
 from xml.dom.minidom import parseString
 
@@ -61,10 +62,10 @@ class XsdParser(object):
                         if fieldName not in ['tag', 'type', 'ref']:
                             referedElement.__dict__[fieldName] = xsdObject.__dict__[fieldName]
 
-            print('---------------------------------------------------')
-            print('Мапа ДО объединения')
-            print('---------------------------------------------------')
-            print(';\n'.join(map(str, xsdObjects.values())))
+            # print('---------------------------------------------------')
+            # print('Мапа ДО объединения')
+            # print('---------------------------------------------------')
+            # print(';\n'.join(map(str, xsdObjects.values())))
 
             xsdObjects = self.processSimplyTypesChain(xsdObjects)
             xsdObjects = self.combineTypesWithElement(xsdObjects)
@@ -274,11 +275,48 @@ class XsdParser(object):
     #             return True
     #     return False
 
+    def parseAttributeAsElement(self, schemaTag, parentPath, attributeIndex) -> dict:
+        xsdObjects = {}
+
+        xsdObject = XsdPropertyObject(schemaTag)
+
+        if not hasattr(xsdObject, 'name'):
+            xsdObject.name = 'attribute№' + str(attributeIndex + 1)
+
+        xsdObject.fullPath = parentPath + '/' + xsdObject.name
+
+        xsdObjects[f'{xsdObject.tag} {xsdObject.fullPath}'] = xsdObject
+
+        return xsdObjects
+
     def parseElements(self, schemaTag, parentPath) -> dict:
         xsdObjects = {}
 
         for tag in schemaTag.iterchildren():
-            if hasattr(tag, 'element'):
+
+            # TODO парсинг аттрибутов в отдельные элементы
+            if hasattr(tag, 'attribute'):
+                for i in range(len(tag.attribute)):
+                    attribute = tag.attribute[i]
+
+                    if hasattr(tag, 'attrib') \
+                            and 'name' in tag.attrib:
+                        tagPath = parentPath + '/' + tag.attrib['name']
+                    else:
+                        tagPath = parentPath + '/someElem'
+
+                    # if hasattr(attribute, 'attrib') \
+                    #         and 'name' in attribute.attrib:
+                    #     attributePath = tagPath + '/' + attribute.attrib['name']
+                    # else:
+                    #     attributePath = tagPath + '/attribute№' + str(i + 1)
+
+                    xsdObjects.update(self.parseAttributeAsElement(attribute, tagPath, i))
+
+            if re.search('(group|all|choice|sequence)$', tag.tag, re.IGNORECASE):
+                for innerTag in schemaTag.iterchildren():
+                    xsdObjects.update(self.parseElements(innerTag, parentPath))
+            elif hasattr(tag, 'element'):
                 xsdObjects.update(self.parseElements(tag.element, parentPath))
             else:
                 xsdObject = XsdPropertyObject(tag)

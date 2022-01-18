@@ -15,6 +15,7 @@
 	</xs:annotation>
 	<xs:complexType name="val_date">
 		<xs:attribute name="Value" type="xs:date" use="required"/>
+		<xs:attribute name="Value2" type="xs:string" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="val_decimal">
 		<xs:attribute name="Value" type="xs:decimal" use="required"/>
