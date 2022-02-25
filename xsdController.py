@@ -89,6 +89,8 @@ class XsdController:
                 fileUrl = fileUrl.split(splitPattern)[1]
                 # fileUrl = 'file:' + fileUrl
 
+            self.form.textEditSchemaNameXsd.setText(fileUrl)
+
             if fileUrl.endswith('.xsd'):
                 # XsdParser(self.form).parseXsd(directory)
                 xsdString = self.form.xsdParser.parseFileToText(fileUrl)

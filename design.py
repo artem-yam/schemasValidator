@@ -53,6 +53,21 @@ class CheckableComboBox(QtWidgets.QComboBox):
     # self.showPopup()
 
 
+class LimitedQTextEdit(QtWidgets.QTextEdit):
+    MAX_LIMIT = 4096
+
+    def __init__(self, parent):
+        super(LimitedQTextEdit, self).__init__(parent)
+
+        self.setText(str(self.MAX_LIMIT))
+        self.textChanged.connect(self.limitedValuesTextEdited)
+        # self.jsonConfArrayLengthText.focusOutEvent = self.limitedValuesTextEdited
+
+    def limitedValuesTextEdited(self):
+        if not self.toPlainText().isdigit() or int(self.toPlainText()) > self.MAX_LIMIT:
+            self.setText(str(self.MAX_LIMIT))
+
+
 class Ui_Form(object):
     TEXT_WIDGET_MIN_HEIGHT = 430
     BUTTON_WIDTH = 180
@@ -84,6 +99,10 @@ class Ui_Form(object):
         QtCore.QMetaObject.connectSlotsByName(form)
 
     def setupJsonTab(self):
+        self.textEditSchemaNameJson = QtWidgets.QTextEdit(self.jsonTab)
+        self.textEditSchemaNameJson.setReadOnly(True)
+        self.textEditSchemaNameJson.setStyleSheet('QTextEdit {background-color: black; color: white;}')
+
         self.textEditTextJson = QtWidgets.QTextEdit(self.jsonTab)
         self.textEditTextJson.setStyleSheet('QTextEdit {background-color: black; color: white;}')
         self.textEditTextJson.setMinimumHeight(Ui_Form.TEXT_WIDGET_MIN_HEIGHT)
@@ -106,6 +125,10 @@ class Ui_Form(object):
         self.setupJsonConfElements()
 
     def setupXsdTab(self):
+        self.textEditSchemaNameXsd = QtWidgets.QTextEdit(self.xsdTab)
+        self.textEditSchemaNameXsd.setReadOnly(True)
+        self.textEditSchemaNameXsd.setStyleSheet('QTextEdit {background-color: black; color: white;}')
+
         self.textEditTextXsd = QtWidgets.QTextEdit(self.xsdTab)
         self.textEditTextXsd.setStyleSheet('QTextEdit {background-color: black; color: white;}')
         self.textEditTextXsd.setMinimumHeight(Ui_Form.TEXT_WIDGET_MIN_HEIGHT)
@@ -139,9 +162,11 @@ class Ui_Form(object):
         self.jsonConfArrayLengthLabel.setText("Максимальное число элементов массива:")
         self.jsonConfArrayLengthLabel.setGeometry(QtCore.QRect(20, 40, 300, 30))
 
-        self.jsonConfArrayLengthText = QtWidgets.QTextEdit(self.jsonParams)
+        # self.jsonConfArrayLengthText = QtWidgets.QTextEdit(self.jsonParams)
+        self.jsonConfArrayLengthText = LimitedQTextEdit(self.jsonParams)
         self.jsonConfArrayLengthText.setObjectName('jsonConfArrayLengthText')
-        self.jsonConfArrayLengthText.setPlaceholderText("∞")
+        self.jsonConfArrayLengthText.setPlaceholderText("4096")
+        self.jsonConfArrayLengthText.setToolTip("Введите число меньше 4096")
         self.jsonConfArrayLengthText.setLineWrapMode(QtWidgets.QTextEdit.LineWrapMode.NoWrap)
         self.jsonConfArrayLengthText.setHorizontalScrollBarPolicy(
             QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
@@ -196,9 +221,11 @@ class Ui_Form(object):
         self.jsonConfStringLengthLabel.setGeometry(
             QtCore.QRect(20, self.jsonConfNumericMinLabel.geometry().bottom() + 20, 300, 30))
 
-        self.jsonConfStringLengthText = QtWidgets.QTextEdit(self.jsonParams)
+        # self.jsonConfStringLengthText = QtWidgets.QTextEdit(self.jsonParams)
+        self.jsonConfStringLengthText = LimitedQTextEdit(self.jsonParams)
         self.jsonConfStringLengthText.setObjectName('jsonConfStringLengthText')
-        self.jsonConfStringLengthText.setPlaceholderText("∞")
+        self.jsonConfStringLengthText.setPlaceholderText("4096")
+        self.jsonConfStringLengthText.setToolTip("Введите число меньше 4096")
         self.jsonConfStringLengthText.setLineWrapMode(QtWidgets.QTextEdit.LineWrapMode.NoWrap)
         self.jsonConfStringLengthText.setHorizontalScrollBarPolicy(
             QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
@@ -231,9 +258,11 @@ class Ui_Form(object):
         self.xsdConfArrayLengthLabel.setText("Максимальное число элементов массива:")
         self.xsdConfArrayLengthLabel.setGeometry(QtCore.QRect(20, 40, 300, 30))
 
-        self.xsdConfArrayLengthText = QtWidgets.QTextEdit(self.xsdParams)
+        # self.xsdConfArrayLengthText = QtWidgets.QTextEdit(self.xsdParams)
+        self.xsdConfArrayLengthText = LimitedQTextEdit(self.xsdParams)
         self.xsdConfArrayLengthText.setObjectName('xsdConfArrayLengthText')
-        self.xsdConfArrayLengthText.setPlaceholderText("∞")
+        self.xsdConfArrayLengthText.setPlaceholderText("4096")
+        self.xsdConfArrayLengthText.setToolTip("Введите число меньше 4096")
         self.xsdConfArrayLengthText.setLineWrapMode(QtWidgets.QTextEdit.LineWrapMode.NoWrap)
         self.xsdConfArrayLengthText.setHorizontalScrollBarPolicy(
             QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
@@ -288,9 +317,11 @@ class Ui_Form(object):
         self.xsdConfStringLengthLabel.setGeometry(
             QtCore.QRect(20, self.xsdConfNumericMinLabel.geometry().bottom() + 20, 300, 30))
 
-        self.xsdConfStringLengthText = QtWidgets.QTextEdit(self.xsdParams)
+        # self.xsdConfStringLengthText = QtWidgets.QTextEdit(self.xsdParams)
+        self.xsdConfStringLengthText = LimitedQTextEdit(self.xsdParams)
         self.xsdConfStringLengthText.setObjectName('xsdConfStringLengthText')
-        self.xsdConfStringLengthText.setPlaceholderText("∞")
+        self.xsdConfStringLengthText.setPlaceholderText("4096")
+        self.xsdConfStringLengthText.setToolTip("Введите число меньше 4096")
         self.xsdConfStringLengthText.setLineWrapMode(QtWidgets.QTextEdit.LineWrapMode.NoWrap)
         self.xsdConfStringLengthText.setHorizontalScrollBarPolicy(
             QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
@@ -317,14 +348,20 @@ class Ui_Form(object):
         self.resizeXsdFormObjects()
 
     def resizeJsonFormObjects(self):
+
+        self.textEditSchemaNameJson.setGeometry(
+            QtCore.QRect(Ui_Form.STANDARD_MARGIN, 30,
+                         self.tabWidget.width() // 2 - 130, 50))
+
         self.textEditTextJson.setGeometry(
-            QtCore.QRect(Ui_Form.STANDARD_MARGIN, 30, self.tabWidget.width() // 2 - 130,
+            QtCore.QRect(Ui_Form.STANDARD_MARGIN, 30 + 3 * Ui_Form.STANDARD_MARGIN,
+                         self.tabWidget.width() // 2 - 130,
                          self.tabWidget.height() // 2))
 
         self.textEditResultJson.setGeometry(
             QtCore.QRect(self.textEditTextJson.geometry().right() + 221, 30,
                          self.textEditTextJson.geometry().width(),
-                         self.textEditTextJson.geometry().height()))
+                         self.textEditTextJson.geometry().height() + 3 * Ui_Form.STANDARD_MARGIN))
 
         self.pushButtonLoadJson.setGeometry(
             QtCore.QRect(self.textEditTextJson.geometry().right() + Ui_Form.STANDARD_MARGIN,
@@ -358,14 +395,20 @@ class Ui_Form(object):
                          self.tabWidget.geometry().width() - 40, 400))
 
     def resizeXsdFormObjects(self):
+
+        self.textEditSchemaNameXsd.setGeometry(
+            QtCore.QRect(Ui_Form.STANDARD_MARGIN, 30,
+                         self.tabWidget.width() // 2 - 130, 50))
+
         self.textEditTextXsd.setGeometry(
-            QtCore.QRect(Ui_Form.STANDARD_MARGIN, 30, self.tabWidget.width() // 2 - 130,
+            QtCore.QRect(Ui_Form.STANDARD_MARGIN, 30 + 3 * Ui_Form.STANDARD_MARGIN,
+                         self.tabWidget.width() // 2 - 130,
                          self.tabWidget.height() // 2))
 
         self.textEditResultXsd.setGeometry(
             QtCore.QRect(self.textEditTextXsd.geometry().right() + 221, 30,
                          self.textEditTextXsd.geometry().width(),
-                         self.textEditTextXsd.geometry().height()))
+                         self.textEditTextXsd.geometry().height() + 3 * Ui_Form.STANDARD_MARGIN))
 
         self.pushButtonLoadXsd.setGeometry(
             QtCore.QRect(self.textEditTextXsd.geometry().right() + Ui_Form.STANDARD_MARGIN,

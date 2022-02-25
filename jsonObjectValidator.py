@@ -9,8 +9,10 @@ class JsonObjectValidator(object):
     NO_TYPE_MESSAGE = 'Не указан тип элемента'
     POSSIBLE_KEY_VALUE_MESSAGE = 'Возможная структура key-value'
     POSSIBLE_CARD_NUMBER_MESSAGE = 'Возможный элемент с номером карты'
-    COMPLEX_TYPE_ADDITIONAL_PROPERTIES_MESSAGE = 'Для элементов комплексного типа ' \
-                                                 'должно быть указано "additionalProperties": false'
+    NO_ADDITIONAL_PROPERTIES_MESSAGE = 'Для элементов с типом "object" ' \
+                                       'должно быть указано "additionalProperties"'
+    NO_MAX_PROPERTIES_MESSAGE = 'При наличии "additionalProperties" или "patternProperties" ' \
+                                'также должно быть указано "maxProperties"'
 
     STRING_NO_MAX_LENGTH_MESSAGE = 'Отсутствует ограничение по длине строки'
     STRING_NO_PATTERN_MESSAGE = 'Отсутствует паттерн для строки'
@@ -18,7 +20,7 @@ class JsonObjectValidator(object):
 
     ARRAY_NO_ITEMS_MESSAGE = 'Для массива не определен блок items'
     ARRAY_NO_MAX_ITEMS_MESSAGE = 'Для массива не указано максимальное количество элементов'
-    ARRAY_EXCESS_MAX_ITEMS_MESSAGE = 'Указанное максимальное количество элементов превышает допустимое'
+    ARRAY_EXCESS_MAX_ITEMS_MESSAGE = 'Указанное максимальное количество элементов массива превышает допустимое'
     ARRAY_ADDITIONAL_ITEMS_MESSAGE = 'Для массива не указано "additionalItems": false'
     ARRAY_UNIQUE_ITEMS_MESSAGE = 'Для массива не указано "uniqueItems": true'
 
@@ -55,7 +57,7 @@ class JsonObjectValidator(object):
         validationResult = []
 
         for jsonObject in objectsDict.values():
-            if hasattr(jsonObject, 'name') and re.search('cardnum|number|cardnumber',
+            if hasattr(jsonObject, 'name') and re.search('card|cardnum|number|cardnumber',
                                                          jsonObject.name, re.IGNORECASE):
                 validatorMsg = OutputMessage(jsonObject, MessageType.INFO_TYPE,
                                              JsonObjectValidator.POSSIBLE_CARD_NUMBER_MESSAGE)
@@ -82,12 +84,22 @@ class JsonObjectValidator(object):
                                          JsonObjectValidator.NO_TYPE_MESSAGE)
             validationResult.append(validatorMsg)
 
-        if self.isComplexType(jsonObject) \
-                and not (hasattr(jsonObject,
-                                 'additionalProperties') and not jsonObject.additionalProperties):
-            validatorMsg = OutputMessage(jsonObject, MessageType.ERROR_TYPE,
-                                         JsonObjectValidator.COMPLEX_TYPE_ADDITIONAL_PROPERTIES_MESSAGE)
-            validationResult.append(validatorMsg)
+        if self.isComplexType(jsonObject):
+            if not hasattr(jsonObject, 'additionalProperties'):
+                validatorMsg = OutputMessage(jsonObject, MessageType.ERROR_TYPE,
+                                             JsonObjectValidator.NO_ADDITIONAL_PROPERTIES_MESSAGE)
+                validationResult.append(validatorMsg)
+            elif jsonObject.additionalProperties:
+                if not (hasattr(jsonObject, 'maxProperties') and jsonObject.maxProperties):
+                    validatorMsg = OutputMessage(jsonObject, MessageType.ERROR_TYPE,
+                                                 JsonObjectValidator.NO_MAX_PROPERTIES_MESSAGE)
+                    validationResult.append(validatorMsg)
+
+            if hasattr(jsonObject, 'patternProperties'):
+                if not (hasattr(jsonObject, 'maxProperties') and jsonObject.maxProperties):
+                    validatorMsg = OutputMessage(jsonObject, MessageType.ERROR_TYPE,
+                                                 JsonObjectValidator.NO_MAX_PROPERTIES_MESSAGE)
+                    validationResult.append(validatorMsg)
 
         if hasattr(jsonObject, 'name') and re.search('key|param|value', jsonObject.name,
                                                      re.IGNORECASE):
@@ -146,27 +158,29 @@ class JsonObjectValidator(object):
                                          JsonObjectValidator.ARRAY_NO_ITEMS_MESSAGE)
             validationResult.append(validatorMsg)
 
-        if self.configElements.get('jsonConfArrayLengthLabel').isChecked():
-            if not (hasattr(jsonObject, 'maxItems') and jsonObject.maxItems):
+        else:
+
+            if self.configElements.get('jsonConfArrayLengthLabel').isChecked():
+                if not (hasattr(jsonObject, 'maxItems') and jsonObject.maxItems):
+                    validatorMsg = OutputMessage(jsonObject, MessageType.ERROR_TYPE,
+                                                 JsonObjectValidator.ARRAY_NO_MAX_ITEMS_MESSAGE)
+                    validationResult.append(validatorMsg)
+                elif self.configElements.get('jsonConfArrayLengthText').toPlainText().isdigit() \
+                        and int(self.configElements.get(
+                    'jsonConfArrayLengthText').toPlainText()) < jsonObject.maxItems:
+                    validatorMsg = OutputMessage(jsonObject, MessageType.ERROR_TYPE,
+                                                 JsonObjectValidator.ARRAY_EXCESS_MAX_ITEMS_MESSAGE)
+                    validationResult.append(validatorMsg)
+
+            if not (hasattr(jsonObject, 'additionalItems') and not jsonObject.additionalItems):
                 validatorMsg = OutputMessage(jsonObject, MessageType.ERROR_TYPE,
-                                             JsonObjectValidator.ARRAY_NO_MAX_ITEMS_MESSAGE)
-                validationResult.append(validatorMsg)
-            elif self.configElements.get('jsonConfArrayLengthText').toPlainText().isdigit() \
-                    and int(self.configElements.get(
-                'jsonConfArrayLengthText').toPlainText()) < jsonObject.maxItems:
-                validatorMsg = OutputMessage(jsonObject, MessageType.ERROR_TYPE,
-                                             JsonObjectValidator.ARRAY_EXCESS_MAX_ITEMS_MESSAGE)
+                                             JsonObjectValidator.ARRAY_ADDITIONAL_ITEMS_MESSAGE)
                 validationResult.append(validatorMsg)
 
-        if not (hasattr(jsonObject, 'additionalItems') and not jsonObject.additionalItems):
-            validatorMsg = OutputMessage(jsonObject, MessageType.ERROR_TYPE,
-                                         JsonObjectValidator.ARRAY_ADDITIONAL_ITEMS_MESSAGE)
-            validationResult.append(validatorMsg)
-
-        if not (hasattr(jsonObject, 'uniqueItems') and jsonObject.uniqueItems):
-            validatorMsg = OutputMessage(jsonObject, MessageType.ERROR_TYPE,
-                                         JsonObjectValidator.ARRAY_UNIQUE_ITEMS_MESSAGE)
-            validationResult.append(validatorMsg)
+            if not (hasattr(jsonObject, 'uniqueItems') and jsonObject.uniqueItems):
+                validatorMsg = OutputMessage(jsonObject, MessageType.ERROR_TYPE,
+                                             JsonObjectValidator.ARRAY_UNIQUE_ITEMS_MESSAGE)
+                validationResult.append(validatorMsg)
 
         return validationResult
 
@@ -231,8 +245,9 @@ class JsonObjectValidator(object):
         if hasattr(jsonObject, 'type'):
             objectType = jsonObject.type
 
-            if not (objectType == 'string' or objectType == 'number' or objectType == 'integer'
-                    or objectType == 'boolean' or objectType == 'null'):
+            # if not (objectType == 'string' or objectType == 'number' or objectType == 'integer'
+            #         or objectType == 'boolean' or objectType == 'null'):
+            if objectType == 'object':
                 result = True
 
         return result

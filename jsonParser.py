@@ -54,7 +54,7 @@ class JsonParser(object):
             print('---------------------------------------------------')
             print(';\n'.join(map(str, jsonObjects.values())))
 
-        except Exception as err:
+        except BaseException as err:
             print('Ошибки получения объектов из json:\n', traceback.format_exc())
             jsonObjects = 'Ошибка преобразования json в объект, проверьте корректность загруженного текста'
 
@@ -157,32 +157,43 @@ class JsonParser(object):
 
         if hasattr(propArrayObject, 'items'):
 
-            itemsObject = propArrayObject.items
+            # itemsObject = propArrayObject.items
+            itemsList = propArrayObject.items \
+                if isinstance(propArrayObject.items, list) \
+                else [propArrayObject.items]
 
-            if itemsObject:
+            itemsParsed = False
 
-                if hasattr(itemsObject, 'properties'):
-                    arrayItems = itemsObject.properties.__dict__
+            for itemsObject in itemsList:
 
-                    for prop in arrayItems:
-                        innerObject = arrayItems[prop]
+                if itemsObject \
+                        and isinstance(itemsObject, JsonPropertyObject) \
+                        and not itemsObject.isEmpty():
+                    if not itemsParsed:
+                        itemsParsed = True
 
-                        if isinstance(innerObject, JsonPropertyObject):
-                            innerObject.name = prop
-                            innerObject.fullPath = propArrayObject.fullPath + '/' + prop
-                            jsonObjects[innerObject.fullPath] = innerObject
+                    if hasattr(itemsObject, 'properties'):
+                        arrayItems = itemsObject.properties.__dict__
 
-                            jsonObjects.update(self.checkInnerProperties(innerObject))
+                        for prop in arrayItems:
+                            innerObject = arrayItems[prop]
 
-                else:
-                    itemsObject.fullPath = propArrayObject.fullPath + '/' + \
-                                           (itemsObject.name if hasattr(itemsObject, 'name') else 'items')
-                    jsonObjects[itemsObject.fullPath] = itemsObject
+                            if isinstance(innerObject, JsonPropertyObject):
+                                innerObject.name = prop
+                                innerObject.fullPath = propArrayObject.fullPath + '/' + prop
+                                jsonObjects[innerObject.fullPath] = innerObject
 
-                    jsonObjects.update(self.checkInnerProperties(itemsObject))
+                                jsonObjects.update(self.checkInnerProperties(innerObject))
 
+                    else:
+                        itemsObject.fullPath = propArrayObject.fullPath + '/' + \
+                                               (itemsObject.name if hasattr(itemsObject, 'name') else 'items')
+                        jsonObjects[itemsObject.fullPath] = itemsObject
+
+                        jsonObjects.update(self.checkInnerProperties(itemsObject))
+
+            if itemsParsed:
                 propArrayObject.items = 'Все элементы массива запаршены'
-
             else:
                 propArrayObject.__dict__.pop('items')
 

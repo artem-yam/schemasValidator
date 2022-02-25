@@ -74,6 +74,8 @@ class JsonController:
         self.getJsonFromFile(directory)
 
     def getJsonFromFile(self, fileUrl):
+        self.form.textEditTextJson.clear()
+
         if fileUrl:
             self.form.textEditTextJson.clear()
             self.form.textEditResultJson.clear()
@@ -87,6 +89,8 @@ class JsonController:
                 splitPattern = 'file:' + (3 * os.path.altsep if os.path.altsep else '')
                 fileUrl = fileUrl.split(splitPattern)[1]
                 # fileUrl = 'file:' + fileUrl
+
+            self.form.textEditSchemaNameJson.setText(fileUrl)
 
             if fileUrl.endswith('.json'):
                 # JsonParser(self.form).parseJson(directory)
@@ -102,13 +106,14 @@ class JsonController:
         self.jsonObjects = self.form.jsonParser.parseTextToObjects(
             self.form.textEditTextJson.toPlainText())
 
-        rootTagsNames = list(jsonObject.name for jsonObject in self.jsonObjects.values()
-                             if hasattr(jsonObject, 'fullPath')
-                             and hasattr(jsonObject, 'name')
-                             and (jsonObject.fullPath == '/' + jsonObject.name
-                                  or jsonObject.fullPath == '#/definitions/' + jsonObject.name))
+        if isinstance(self.jsonObjects, dict):
+            rootTagsNames = list(jsonObject.name for jsonObject in self.jsonObjects.values()
+                                 if hasattr(jsonObject, 'fullPath')
+                                 and hasattr(jsonObject, 'name')
+                                 and (jsonObject.fullPath == '/' + jsonObject.name
+                                      or jsonObject.fullPath == '#/definitions/' + jsonObject.name))
 
-        self.form.comboBoxChooseElementsJson.addItems(rootTagsNames)
+            self.form.comboBoxChooseElementsJson.addItems(rootTagsNames)
 
     def validateJson(self):
         self.form.textEditResultJson.clear()
@@ -152,7 +157,7 @@ class JsonController:
 
                 for jsonObject in objectsToValidate.values():
                     fullValidationResult.extend(
-                        #self.form.jsonValidator.validate(jsonObject, objectsToValidate))
+                        # self.form.jsonValidator.validate(jsonObject, objectsToValidate))
                         self.form.jsonValidator.validate(jsonObject, self.jsonObjects))
                     stringPatternValidationResult.extend(
                         self.form.jsonValidator.checkStringPattern(jsonObject))

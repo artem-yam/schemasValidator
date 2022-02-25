@@ -12,7 +12,7 @@ class XsdObjectValidator(object):
     POSSIBLE_CARD_NUMBER_MESSAGE = 'Возможный элемент с номером карты'
 
     ARRAY_NO_MAX_ITEMS_MESSAGE = 'Для массива не указано максимальное количество элементов'
-    ARRAY_EXCESS_MAX_ITEMS_MESSAGE = 'Указанное максимальное количество элементов превышает допустимое'
+    ARRAY_EXCESS_MAX_ITEMS_MESSAGE = 'Указанное максимальное количество элементов массива превышает допустимое'
 
     STRING_NO_MAX_LENGTH_MESSAGE = 'Отсутствует ограничение по длине строки'
     STRING_WRONG_LENGTH_MESSAGE = 'Не верно указана длина строки'
@@ -54,7 +54,7 @@ class XsdObjectValidator(object):
         validationResult = []
 
         for xsdObject in objectsDict.values():
-            if hasattr(xsdObject, 'name') and re.search('cardnum|number|cardnumber',
+            if hasattr(xsdObject, 'name') and re.search('card|cardnum|number|cardnumber',
                                                         xsdObject.name, re.IGNORECASE):
                 validatorMsg = OutputMessage(xsdObject, MessageType.INFO_TYPE,
                                              XsdObjectValidator.POSSIBLE_CARD_NUMBER_MESSAGE)

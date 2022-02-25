@@ -30,3 +30,10 @@ class JsonPropertyObject(object):
 
         self.reset()
         return returnString
+
+    def isEmpty(self) -> bool:
+        result = True
+        if len(self.__dict__) > 1:
+            result = False
+
+        return result
