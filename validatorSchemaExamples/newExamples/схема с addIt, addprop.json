@@ -1,0 +1,112 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"$id": "CreditPotentialStoringRq.json",
+	"title": "Запрос на сохранение данных кредитного потенциала",
+	"description": "Запрос на сохранение данных кредитного потенциала в хранилище фабрики ЕКП.Кредитный потенциал",
+	"type": "object",
+	"properties": {
+		"recordType": {
+			"description": "Тип записи КП",
+			"type": "array",
+			"items": {}
+		},
+		"recordType2": {
+			"description": "Тип записи КП",
+			"type": "string",
+			"enum": [
+				"PPRB_KBT",
+				"PPRB_SPR"
+			]
+		},
+		"creditPotential": {
+			"$ref": "#/definitions/CreditPotential",
+			"description": "Данные кредитного потенциала клиента"
+		}
+	},
+	"required": [
+		"recordType",
+		"creditPotential"
+	],
+	"additionalProperties": false,
+	"definitions": {
+		"CreditPotential": {
+			"description": "Данные кредитного потенциала",
+			"type": "object",
+			"properties": {
+				"groupId": {
+					"description": "Идентификатор сделки в ОКР",
+					"type": "object",
+					"minProperties": 1,
+					"maxProperties": 3,
+					"patternProperties": {
+						"^[a-z0-9]+$": {
+							"type": "object",
+							"properties": {
+								"model": {
+									"type": "string",
+									"maxLength": 3
+								},
+								"make": {
+									"type": "string",
+									"maxLength": 3
+								},
+								"year": {
+									"type": "string",
+									"maxLength": 3
+								}
+							},
+							"required": [
+								"model",
+								"make",
+								"year"
+							],
+							"additionalProperties": false
+						}
+					},
+					"additionalProperties": false
+				},
+				"participantResults": {
+					"description": "Результат по участникам сделки",
+					"type": "object",
+					"minProperties": 1,
+					"maxProperties": 3,
+					"properties": {
+						"participantResults": {
+							"type": "array",
+							"uniqueItems": true,
+							"items": [
+								{
+									"description": "Данные по участнику сделки",
+									"type": "object",
+									"properties": {
+										"epkId": {
+											"description": "Иднтификатор клиента в ППРБ ЕПК",
+											"type": "integer",
+											"minimum": 1,
+											"maximum": 2,
+											"javaType": "java.lang.Long"
+										},
+										"participantIndex": {
+											"description": "Уникальный индекс участника в сделке",
+											"type": "number",
+											"minimum": 2,
+											"maximum": 5,
+											"javaType": "java.math.BigInteger"
+										}
+									},
+									"required": [
+										"participantIndex"
+									],
+									"additionalProperties": false
+								}
+							],
+							"additionalItems": false
+						}
+					},
+					"additionalProperties": false
+				}
+			},
+			"additionalProperties": false
+		}
+	}
+}
