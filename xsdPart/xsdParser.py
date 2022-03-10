@@ -234,12 +234,13 @@ class XsdParser(object):
     def proccessObjectRef(self, xsdObjects, originalObjectKey,
                           destinationObjectKey) -> dict:
         itemsToAdd = {}
+        xsdObjectsTempCopy = copy(xsdObjects)
         originalObject = xsdObjects[originalObjectKey]
         destinationObject = xsdObjects[destinationObjectKey]
 
         copiedDestinationObject = copy(destinationObject)
 
-        typePath = copiedDestinationObject.fullPath
+        destinationObjectPath = copiedDestinationObject.fullPath
 
         for fieldName in originalObject.__dict__:
             if fieldName in ['name', 'fullPath', 'tag']:
@@ -248,15 +249,17 @@ class XsdParser(object):
 
         itemsToAdd[originalObjectKey] = copiedDestinationObject
 
+        xsdObjectsTempCopy[originalObjectKey] = copiedDestinationObject
+
         # TODO копирование внутренних типов
-        for innerTypeObjectKey, innerTypeObject in xsdObjects.items():
-            if innerTypeObject.fullPath.startswith(typePath + '/') and \
-                    innerTypeObject.fullPath != typePath:
+        for innerTypeObjectKey, innerTypeObject in xsdObjectsTempCopy.items():
+            if innerTypeObject.fullPath.startswith(destinationObjectPath + '/') and \
+                    innerTypeObject.fullPath != destinationObjectPath:
                 copiedInnerTypeObject = copy(innerTypeObject)
 
                 copiedInnerTypeObject.fullPath = copiedDestinationObject.fullPath + '/' + \
                                                  innerTypeObject.fullPath.split(
-                                                     typePath + '/')[1]
+                                                     destinationObjectPath + '/')[1]
 
                 itemsToAdd[
                     f'element {copiedInnerTypeObject.fullPath}'] = copiedInnerTypeObject
@@ -277,6 +280,7 @@ class XsdParser(object):
                  and typeObject.type.lower() not in XSD_SIMPLE_TYPES
                  # and typeObject.tag not in ['element', 'attribute']),
                  and typeObject.tag not in ['element']),
+                # and typeObject.tag != 'element'),
                 False)
             if typeObjectKey:
                 return typeObjectKey
