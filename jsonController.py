@@ -71,7 +71,8 @@ class JsonController:
                                                    filter=filters)
 
         # print('directory = ' + directory)
-        self.getJsonFromFile(directory)
+        if directory:
+            self.getJsonFromFile(directory)
 
     def getJsonFromFile(self, fileUrl):
         self.form.textEditTextJson.clear()
@@ -111,7 +112,8 @@ class JsonController:
                                  if hasattr(jsonObject, 'fullPath')
                                  and hasattr(jsonObject, 'name')
                                  and (jsonObject.fullPath == '/' + jsonObject.name
-                                      or jsonObject.fullPath == '#/definitions/' + jsonObject.name))
+                                      # or jsonObject.fullPath == '#/definitions/' + jsonObject.name
+                                      ))
 
             self.form.comboBoxChooseElementsJson.addItems(rootTagsNames)
 
@@ -127,16 +129,16 @@ class JsonController:
 
         if hasattr(self, 'jsonObjects') and isinstance(self.jsonObjects, dict):
             for objectKey in self.jsonObjects:
-                object = self.jsonObjects[objectKey]
+                jsonObject = self.jsonObjects[objectKey]
                 isChosen = False
                 # while isChosen == False:
                 for elem in chosenElements:
-                    isChosen = object.fullPath.startswith('/' + elem) \
-                               or object.fullPath.startswith('#/definitions/' + elem)
+                    isChosen = jsonObject.fullPath.startswith(f'/{elem}') \
+                               # or jsonObject.fullPath.startswith(f'#/definitions/{elem}')
                     if isChosen:
                         break
                 if isChosen:
-                    objectsToValidate[objectKey] = object
+                    objectsToValidate[objectKey] = jsonObject
         else:
             objectsToValidate = None
 
@@ -186,7 +188,8 @@ class JsonController:
             else:
                 self.form.textEditResultJson.addItem(str(objectsToValidate))
                 self.form.textEditResultJson.item(
-                    self.form.textEditResultJson.count() - 1).setForeground(Qt.GlobalColor.red)
+                    self.form.textEditResultJson.count() - 1).setForeground(
+                    Qt.GlobalColor.red)
         else:
             self.form.textEditResultJson.addItem('Сначала загрузите схему!')
             self.form.textEditResultJson.item(

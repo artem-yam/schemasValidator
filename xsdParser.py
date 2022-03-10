@@ -23,7 +23,7 @@ class XsdParser(object):
                       encoding=sys.getfilesystemencoding()) as xsdFile:
                 xml = xsdFile.read()
                 xsdFile.close()
-        except Exception as err:
+        except BaseException as err:
             print('Ошибки открытия файла:\n', traceback.format_exc())
 
         if 'xml' in locals():
@@ -35,7 +35,7 @@ class XsdParser(object):
                 xsdString = '\n'.join(
                     [line for line in parseString(xml).toprettyxml(indent=4 * ' ').split('\n') if
                      line.strip()])
-            except Exception as err:
+            except BaseException as err:
                 print('Ошибки загрузки файла:\n', traceback.format_exc())
 
         return xsdString
@@ -67,7 +67,7 @@ class XsdParser(object):
             # print('---------------------------------------------------')
             # print(';\n'.join(map(str, xsdObjects.values())))
 
-            xsdObjects = self.processSimplyTypesChain(xsdObjects)
+            xsdObjects = self.processSimpleTypesChain(xsdObjects)
 
             print('---------------------------------------------------')
             print('Мапа ДО объединения')
@@ -84,14 +84,14 @@ class XsdParser(object):
             if not xsdObjects:
                 raise Exception("Объекты в xsd не обнаружены")
 
-        except Exception as err:
+        except BaseException as err:
             print('Ошибки получения объектов из xsd:\n', traceback.format_exc())
             xsdObjects = 'Ошибка преобразования xsd в объект, проверьте корректность загруженного текста'
 
         return xsdObjects
 
     # TODO фикс на случай циклических ссылок
-    def processSimplyTypesChain(self, xsdObjects) -> dict:
+    def processSimpleTypesChain(self, xsdObjects) -> dict:
         modifiedXsdObjects = copy(xsdObjects)
 
         # for typeObjectKey, typeObject in modifiedXsdObjects.items():
@@ -99,8 +99,8 @@ class XsdParser(object):
             typeObjectKey = next(
                 (typeObjectKey for typeObjectKey, typeObject in modifiedXsdObjects.items() if
                  typeObject.tag == 'simpleType' and not next(
-                     (objectKey for objectKey, object in modifiedXsdObjects.items() if
-                      object.tag == 'simpleType' and typeObject.type == object.name),
+                     (objectKey for objectKey, xsdObject in modifiedXsdObjects.items() if
+                      xsdObject.tag == 'simpleType' and typeObject.type == xsdObject.name),
                      False)),
                 False)
 
@@ -112,8 +112,8 @@ class XsdParser(object):
 
             while True:
                 elemObjectKey = next(
-                    (objectKey for objectKey, object in modifiedXsdObjects.items() if
-                     typeObject.name == object.type), False)
+                    (objectKey for objectKey, xsdObject in modifiedXsdObjects.items() if
+                     typeObject.name == xsdObject.type), False)
 
                 if not elemObjectKey:
                     break
@@ -220,10 +220,10 @@ class XsdParser(object):
 
     def getNextCustomTypeRefKey(self, xsdObjects):
         # TODO вроде корректная проверка ссылки на тип, но надо проверить!!!
-        for object in xsdObjects.values():
+        for xsdObject in xsdObjects.values():
             typeObjectKey = next(
                 (typeObjectKey for typeObjectKey, typeObject in xsdObjects.items() if
-                 typeObject.name == object.type and typeObject.tag != 'element'),
+                 typeObject.name == xsdObject.type and typeObject.tag != 'element'),
                 False)
             if typeObjectKey:
                 return typeObjectKey
@@ -274,10 +274,10 @@ class XsdParser(object):
     #     return xsdObjects
     #
     # def hasCustomTypeRef(self, xsdObjects) -> bool:
-    #     for object in xsdObjects.values():
-    #         if hasattr(object, 'type') and \
+    #     for xsdObject in xsdObjects.values():
+    #         if hasattr(xsdObject, 'type') and \
     #                 next((typeObject for typeObject in xsdObjects.values() if
-    #                       typeObject.name == object.type), False):
+    #                       typeObject.name == xsdObject.type), False):
     #             return True
     #     return False
 

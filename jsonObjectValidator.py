@@ -16,7 +16,7 @@ class JsonObjectValidator(object):
 
     STRING_NO_MAX_LENGTH_MESSAGE = 'Отсутствует ограничение по длине строки'
     STRING_NO_PATTERN_MESSAGE = 'Отсутствует паттерн для строки'
-    STRING_EXCESS_MAX_LENGTH_MESSAGE = 'Указаная максимальная длина строки выше допустимой'
+    STRING_EXCESS_MAX_LENGTH_MESSAGE = 'Указанная максимальная длина строки выше допустимой'
 
     ARRAY_NO_ITEMS_MESSAGE = 'Для массива не определен блок items'
     ARRAY_NO_MAX_ITEMS_MESSAGE = 'Для массива не указано максимальное количество элементов'

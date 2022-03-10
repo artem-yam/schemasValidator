@@ -72,7 +72,8 @@ class XsdController:
                                                    filter=filters)
 
         # print('directory = ' + directory)
-        self.getXsdFromFile(directory)
+        if directory:
+            self.getXsdFromFile(directory)
 
     def getXsdFromFile(self, fileUrl):
         if fileUrl:
@@ -129,15 +130,15 @@ class XsdController:
         objectsToValidate = {}
 
         if hasattr(self, 'xsdObjects') and isinstance(self.xsdObjects, dict):
-            for objectKey, object in self.xsdObjects.items():
+            for objectKey, xsdObject in self.xsdObjects.items():
                 isChosen = False
                 # while isChosen == False:
                 for elem in chosenElements:
-                    isChosen = object.fullPath.startswith(f'/{elem}/')
+                    isChosen = xsdObject.fullPath.startswith(f'/{elem}/')
                     if isChosen:
                         break
                 if isChosen:
-                    objectsToValidate[objectKey] = object
+                    objectsToValidate[objectKey] = xsdObject
         else:
             objectsToValidate = None
 

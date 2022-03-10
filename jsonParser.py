@@ -1,6 +1,7 @@
 import json
 import sys
 import traceback
+from copy import *
 
 from jsonPropertyObject import JsonPropertyObject
 
@@ -19,7 +20,7 @@ class JsonParser(object):
                 jsonString = json.load(jsonFile)
                 jsonPrettyString = json.dumps(jsonString, indent=4, ensure_ascii=False)
                 jsonFile.close()
-        except Exception as err:
+        except BaseException as err:
             print('Ошибки открытия файла:\n', traceback.format_exc())
 
         if 'jsonPrettyString' in locals() and jsonPrettyString:
@@ -38,7 +39,7 @@ class JsonParser(object):
             schemaDraft = jsonString['$schema']
             jsonString = schemaDraft
 
-        except Exception as err:
+        except BaseException as err:
             print('Ошибки получения версии драфта:\n', traceback.format_exc())
             jsonString = 'Ошибка получения версии драфта'
 
@@ -52,13 +53,102 @@ class JsonParser(object):
             jsonObjects.update(self.parseProperties(jsonString))
 
             print('---------------------------------------------------')
+            print('Мапа ДО объединения')
+            print('---------------------------------------------------')
             print(';\n'.join(map(str, jsonObjects.values())))
+
+            jsonObjects = self.combineTypesWithElement(jsonObjects)
+
+            print('---------------------------------------------------')
+            print('Мапа ПОСЛЕ объединения')
+            print('---------------------------------------------------')
+            print(';\n'.join(map(str, jsonObjects.values())))
+
+            if not jsonObjects:
+                raise Exception("Объекты в json не обнаружены")
 
         except BaseException as err:
             print('Ошибки получения объектов из json:\n', traceback.format_exc())
             jsonObjects = 'Ошибка преобразования json в объект, проверьте корректность загруженного текста'
 
         return jsonObjects
+
+    # TODO фикс на случай циклических ссылок
+    def combineTypesWithElement(self, jsonObjects) -> dict:
+        # TODO
+
+        modifiedJsonObjects = copy(jsonObjects)
+
+        typeObjectKey = self.getNextCustomTypeRefKey(modifiedJsonObjects)
+
+        while typeObjectKey is not None:
+
+            typeObject = modifiedJsonObjects[typeObjectKey]
+
+            elemObjectKey = next(
+                (elemObjectKey for elemObjectKey, elemObject
+                 in modifiedJsonObjects.items() if
+                 hasattr(elemObject, '$ref')
+                 and typeObject.fullPath == elemObject.__dict__['$ref']),
+                None)
+
+            if elemObjectKey is None:
+                modifiedJsonObjects.pop(typeObjectKey)
+                typeObjectKey = self.getNextCustomTypeRefKey(modifiedJsonObjects)
+            else:
+                elemObject = modifiedJsonObjects[elemObjectKey]
+
+                print(f'По типу: {typeObject.fullPath} смотрим элемент: {elemObject.fullPath}')
+
+                itemsToAdd = {}
+
+                copiedTypeObject = copy(typeObject)
+
+                # TODO перенос полей
+
+                typePath = copiedTypeObject.fullPath
+
+                for fieldName in elemObject.__dict__:
+                    if fieldName in ['name', 'fullPath']:
+                        copiedTypeObject.__dict__[fieldName] = elemObject.__dict__[fieldName]
+
+                jsonObjects[elemObjectKey] = copiedTypeObject
+                modifiedJsonObjects[elemObjectKey] = copiedTypeObject
+
+                # TODO копирование внутренних типов
+                for innerTypeObjectKey, innerTypeObject in modifiedJsonObjects.items():
+                    if innerTypeObject.fullPath.startswith(typePath + '/') and \
+                            innerTypeObject.fullPath != typePath:
+                        copiedInnerTypeObject = copy(innerTypeObject)
+
+                        copiedInnerTypeObject.fullPath = copiedTypeObject.fullPath + '/' + \
+                                                         innerTypeObject.fullPath.split(
+                                                             typePath + '/')[1]
+
+                        jsonObjects[
+                            f'element {copiedInnerTypeObject.fullPath}'] = copiedInnerTypeObject
+                        itemsToAdd[
+                            f'element {copiedInnerTypeObject.fullPath}'] = copiedInnerTypeObject
+
+                        print('Смотрим внутренний тип: ' + copiedInnerTypeObject.fullPath)
+
+                modifiedJsonObjects.pop(elemObjectKey)
+                modifiedJsonObjects.update(itemsToAdd)
+
+        return jsonObjects
+
+    def getNextCustomTypeRefKey(self, jsonObjects):
+        # TODO вроде корректная проверка ссылки на тип, но надо проверить!!!
+        for jsonObject in jsonObjects.values():
+            if hasattr(jsonObject, '$ref'):
+                typeObjectKey = next(
+                    (typeObjectKey for typeObjectKey, typeObject in jsonObjects.items() if
+                     typeObject.fullPath == jsonObject.__dict__['$ref']),
+                    False)
+                if typeObjectKey:
+                    return typeObjectKey
+
+        return None
 
     def parseProperties(self, jsonString) -> dict:
         jsonObjects = {}
