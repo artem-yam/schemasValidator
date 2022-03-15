@@ -16,6 +16,8 @@ def setup(form):
     jsonController = JsonController(form)
 
     form.pushButtonLoadJson.clicked.connect(jsonController.loadJson)
+    form.pushButtonRefreshJson.clicked.connect(
+        jsonController.refreshObjectsFromText)
     form.pushButtonValidateJson.clicked.connect(jsonController.validateJson)
     form.textEditTextJson.dropEvent = jsonController.jsonFileDropEvent
 
@@ -85,9 +87,6 @@ class JsonController:
 
         if fileUrl:
             self.form.textEditTextJson.clear()
-            self.form.textEditResultJson.clear()
-            self.jsonObjects = None
-            self.form.comboBoxChooseElementsJson.clear()
 
             if isinstance(fileUrl, QUrl):
                 fileUrl = fileUrl.url()
@@ -104,20 +103,23 @@ class JsonController:
                 jsonString = self.form.jsonParser.parseFileToText(fileUrl)
                 self.form.textEditTextJson.append(jsonString)
 
-                for string in constants.FILE_PROCESS_START_TEXT:
-                    self.printOutputMessage(string)
-                # self.printOutputMessage(
-                #     'Выполняется обработка файла, ожидайте!')
-                # self.printOutputMessage('По окончании вы сможете '
-                #                         'запустить валидацию')
-
-                t1 = threading.Thread(target=self.parseTextToObjects,
-                                      args=(jsonString,))
-                t1.start()
+                self.refreshObjectsFromText()
             else:
                 self.form.textEditTextJson.append(
                     'Файл в формате ' + fileUrl[fileUrl.rindex(
                         '.'):] + ' не может быть загружен')
+
+    def refreshObjectsFromText(self):
+        self.form.textEditResultJson.clear()
+        self.jsonObjects = None
+        self.form.comboBoxChooseElementsJson.clear()
+
+        for string in constants.FILE_PROCESS_START_TEXT:
+            self.printOutputMessage(string)
+
+        t1 = threading.Thread(target=self.parseTextToObjects,
+                              args=(self.form.textEditTextJson.toPlainText(),))
+        t1.start()
 
     def parseTextToObjects(self, text):
         self.jsonObjects = self.form.jsonParser.parseTextToObjects(text)
