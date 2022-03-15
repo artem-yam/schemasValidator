@@ -1,13 +1,14 @@
 import os
-
+import threading
 import pyperclip
 from PyQt6.QtCore import *
 from PyQt6.QtGui import *
 from PyQt6.QtWidgets import *
 
 import outputMessage
-from xsdObjectValidator import XsdObjectValidator
-from xsdParser import XsdParser
+import constants
+from xsdPart.xsdObjectValidator import XsdObjectValidator
+from xsdPart.xsdParser import XsdParser
 
 
 def setup(form):
@@ -17,8 +18,10 @@ def setup(form):
     form.pushButtonValidateXsd.clicked.connect(xsdController.validateXsd)
     form.textEditTextXsd.dropEvent = xsdController.xsdFileDropEvent
 
-    form.pushButtonCopySelectedResultXsd.clicked.connect(xsdController.copySelectedResult)
-    form.pushButtonCopyFullResultXsd.clicked.connect(xsdController.copyFullResult)
+    form.pushButtonCopySelectedResultXsd.clicked.connect(
+        xsdController.copySelectedResult)
+    form.pushButtonCopyFullResultXsd.clicked.connect(
+        xsdController.copyFullResult)
 
     form.textEditResultXsd.keyPressEvent = xsdController.keyPressEvent
 
@@ -68,7 +71,8 @@ class XsdController:
 
     def loadXsd(self):
         filters = 'Файлы схем xsd (*.xsd)'
-        directory, _ = QFileDialog.getOpenFileName(QFileDialog(), caption='Выберите схему',
+        directory, _ = QFileDialog.getOpenFileName(QFileDialog(),
+                                                   caption='Выберите схему',
                                                    filter=filters)
 
         # print('directory = ' + directory)
@@ -86,7 +90,8 @@ class XsdController:
                 fileUrl = fileUrl.url()
 
             if fileUrl.startswith('file:'):
-                splitPattern = 'file:' + (3 * os.path.altsep if os.path.altsep else '')
+                splitPattern = 'file:' + (
+                    3 * os.path.altsep if os.path.altsep else '')
                 fileUrl = fileUrl.split(splitPattern)[1]
                 # fileUrl = 'file:' + fileUrl
 
@@ -97,22 +102,41 @@ class XsdController:
                 xsdString = self.form.xsdParser.parseFileToText(fileUrl)
                 self.form.textEditTextXsd.append(xsdString)
 
-                self.parseTextToObjects()
+                for string in constants.FILE_PROCESS_START_TEXT:
+                    self.printOutputMessage(string)
+                # self.printOutputMessage(
+                #     'Выполняется обработка файла, ожидайте!')
+                # self.printOutputMessage('По окончании вы сможете '
+                #                         'запустить валидацию!')
+
+                t1 = threading.Thread(target=self.parseTextToObjects,
+                                      args=(xsdString,))
+                t1.start()
             else:
                 self.form.textEditTextXsd.append(
-                    'Файл в формате ' + fileUrl[fileUrl.rindex('.'):] + ' не может быть загружен')
+                    'Файл в формате ' + fileUrl[fileUrl.rindex(
+                        '.'):] + ' не может быть загружен')
 
-    def parseTextToObjects(self):
-        self.xsdObjects = self.form.xsdParser.parseTextToObjects(
-            self.form.textEditTextXsd.toPlainText())
+    def parseTextToObjects(self, text):
+        self.xsdObjects = self.form.xsdParser.parseTextToObjects(text)
+        # self.xsdObjects = self.form.xsdParser.parseTextToObjects(
+        #     self.form.textEditTextXsd.toPlainText())
 
+        self.form.textEditResultXsd.clear()
         if isinstance(self.xsdObjects, dict):
-            rootTagsNames = list(xsdObject.name for xsdObject in self.xsdObjects.values()
-                                 if hasattr(xsdObject, 'fullPath') and hasattr(xsdObject, 'name')
-                                 and hasattr(xsdObject, 'tag') and xsdObject.tag == 'element'
-                                 and xsdObject.fullPath == '/' + xsdObject.name)
+            rootTagsNames = list(
+                xsdObject.name for xsdObject in self.xsdObjects.values()
+                if hasattr(xsdObject, 'fullPath') and hasattr(xsdObject, 'name')
+                and hasattr(xsdObject, 'tag') and xsdObject.tag == 'element'
+                and xsdObject.fullPath == '/' + xsdObject.name)
 
             self.form.comboBoxChooseElementsXsd.addItems(rootTagsNames)
+
+            for string in constants.FILE_PROCESS_FINISH_TEXT:
+                self.printOutputMessage(string)
+            # self.printOutputMessage('Обработка файла закончена!')
+            # self.printOutputMessage('Выберите элементы из выпадающего списка')
+            # self.printOutputMessage('Затем нажмите кнопку "Валидировать схему"')
         else:
             self.form.textEditResultXsd.addItem(str(self.xsdObjects))
             self.form.textEditResultXsd.item(
@@ -122,10 +146,11 @@ class XsdController:
     def validateXsd(self):
         self.form.textEditResultXsd.clear()
 
-        chosenElements = list(self.form.comboBoxChooseElementsXsd.model().item(i).text() for i in
-                              range(self.form.comboBoxChooseElementsXsd.count())
-                              if self.form.comboBoxChooseElementsXsd.model().item(
-            i).checkState() == Qt.CheckState.Checked)
+        chosenElements = list(
+            self.form.comboBoxChooseElementsXsd.model().item(i).text() for i in
+            range(self.form.comboBoxChooseElementsXsd.count())
+            if self.form.comboBoxChooseElementsXsd.model().item(
+                i).checkState() == Qt.CheckState.Checked)
 
         objectsToValidate = {}
 
@@ -152,12 +177,14 @@ class XsdController:
                 fullValidationResult = []
                 stringPatternValidationResult = []
 
-                cardNumberCheck = self.form.jsonValidator.checkCardNumber(objectsToValidate)
-                for message in cardNumberCheck:
-                    self.printOutputMessage(message)
+                # cardNumberCheck = self.form.xsdValidator.checkCardNumber(
+                #     objectsToValidate)
+                # for message in cardNumberCheck:
+                #     self.printOutputMessage(message)
 
                 for xsdObject in objectsToValidate.values():
-                    fullValidationResult.extend(self.form.xsdValidator.validate(xsdObject))
+                    fullValidationResult.extend(
+                        self.form.xsdValidator.validate(xsdObject))
                     stringPatternValidationResult.extend(
                         self.form.xsdValidator.checkStringPattern(xsdObject))
 
@@ -196,10 +223,13 @@ class XsdController:
     def printOutputMessage(self, message):
         self.form.textEditResultXsd.addItem(str(message))
 
-        if message.msgType == outputMessage.MessageType.INFO_TYPE:
+        if not hasattr(message, 'msgType'):
+            itemColor = Qt.GlobalColor.white
+        elif message.msgType == outputMessage.MessageType.INFO_TYPE:
             itemColor = Qt.GlobalColor.yellow
         else:
             itemColor = Qt.GlobalColor.red
 
-        self.form.textEditResultXsd.item(self.form.textEditResultXsd.count() - 1).setForeground(
+        self.form.textEditResultXsd.item(
+            self.form.textEditResultXsd.count() - 1).setForeground(
             itemColor)

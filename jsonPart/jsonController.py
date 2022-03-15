@@ -1,4 +1,5 @@
 import os
+import threading
 
 import pyperclip
 from PyQt6.QtCore import *
@@ -6,8 +7,9 @@ from PyQt6.QtGui import *
 from PyQt6.QtWidgets import *
 
 import outputMessage
-from jsonObjectValidator import JsonObjectValidator
-from jsonParser import JsonParser
+import constants
+from jsonPart.jsonObjectValidator import JsonObjectValidator
+from jsonPart.jsonParser import JsonParser
 
 
 def setup(form):
@@ -17,8 +19,10 @@ def setup(form):
     form.pushButtonValidateJson.clicked.connect(jsonController.validateJson)
     form.textEditTextJson.dropEvent = jsonController.jsonFileDropEvent
 
-    form.pushButtonCopySelectedResultJson.clicked.connect(jsonController.copySelectedResult)
-    form.pushButtonCopyFullResultJson.clicked.connect(jsonController.copyFullResult)
+    form.pushButtonCopySelectedResultJson.clicked.connect(
+        jsonController.copySelectedResult)
+    form.pushButtonCopyFullResultJson.clicked.connect(
+        jsonController.copyFullResult)
 
     form.textEditResultJson.keyPressEvent = jsonController.keyPressEvent
 
@@ -37,7 +41,8 @@ class JsonController:
             # event.accept()
             self.copySelectedResult()
         else:
-            return QListWidget.keyPressEvent(self.form.textEditResultJson, event)
+            return QListWidget.keyPressEvent(self.form.textEditResultJson,
+                                             event)
 
     def copySelectedResult(self):
         # itemsTextList = [str(self.form.textEditResultXsd.item(i).text()) for i in
@@ -67,7 +72,8 @@ class JsonController:
 
     def loadJson(self):
         filters = 'Файлы схем json (*.json)'
-        directory, _ = QFileDialog.getOpenFileName(QFileDialog(), caption='Выберите схему',
+        directory, _ = QFileDialog.getOpenFileName(QFileDialog(),
+                                                   caption='Выберите схему',
                                                    filter=filters)
 
         # print('directory = ' + directory)
@@ -87,43 +93,68 @@ class JsonController:
                 fileUrl = fileUrl.url()
 
             if fileUrl.startswith('file:'):
-                splitPattern = 'file:' + (3 * os.path.altsep if os.path.altsep else '')
+                splitPattern = 'file:' + (
+                    3 * os.path.altsep if os.path.altsep else '')
                 fileUrl = fileUrl.split(splitPattern)[1]
                 # fileUrl = 'file:' + fileUrl
 
             self.form.textEditSchemaNameJson.setText(fileUrl)
 
             if fileUrl.endswith('.json'):
-                # JsonParser(self.form).parseJson(directory)
                 jsonString = self.form.jsonParser.parseFileToText(fileUrl)
                 self.form.textEditTextJson.append(jsonString)
 
-                self.parseTextToObjects()
+                for string in constants.FILE_PROCESS_START_TEXT:
+                    self.printOutputMessage(string)
+                # self.printOutputMessage(
+                #     'Выполняется обработка файла, ожидайте!')
+                # self.printOutputMessage('По окончании вы сможете '
+                #                         'запустить валидацию')
+
+                t1 = threading.Thread(target=self.parseTextToObjects,
+                                      args=(jsonString,))
+                t1.start()
             else:
                 self.form.textEditTextJson.append(
-                    'Файл в формате ' + fileUrl[fileUrl.rindex('.'):] + ' не может быть загружен')
+                    'Файл в формате ' + fileUrl[fileUrl.rindex(
+                        '.'):] + ' не может быть загружен')
 
-    def parseTextToObjects(self):
-        self.jsonObjects = self.form.jsonParser.parseTextToObjects(
-            self.form.textEditTextJson.toPlainText())
+    def parseTextToObjects(self, text):
+        self.jsonObjects = self.form.jsonParser.parseTextToObjects(text)
+        # self.jsonObjects = self.form.jsonParser.parseTextToObjects(
+        #     self.form.textEditTextJson.toPlainText())
 
+        self.form.textEditResultJson.clear()
         if isinstance(self.jsonObjects, dict):
-            rootTagsNames = list(jsonObject.name for jsonObject in self.jsonObjects.values()
-                                 if hasattr(jsonObject, 'fullPath')
-                                 and hasattr(jsonObject, 'name')
-                                 and (jsonObject.fullPath == '/' + jsonObject.name
-                                      # or jsonObject.fullPath == '#/definitions/' + jsonObject.name
-                                      ))
+            rootTagsNames = list(
+                jsonObject.name for jsonObject in self.jsonObjects.values()
+                if hasattr(jsonObject, 'fullPath')
+                and hasattr(jsonObject, 'name')
+                and (jsonObject.fullPath == '/' + jsonObject.name
+                     # or jsonObject.fullPath == '#/definitions/' + jsonObject.name
+                     ))
 
             self.form.comboBoxChooseElementsJson.addItems(rootTagsNames)
+
+            for string in constants.FILE_PROCESS_FINISH_TEXT:
+                self.printOutputMessage(string)
+            # self.printOutputMessage('Обработка файла закончена!')
+            # self.printOutputMessage('Выберите элементы из выпадающего списка')
+            # self.printOutputMessage('Затем нажмите кнопку "Валидировать схему"')
+        else:
+            self.form.textEditResultJson.addItem(str(self.jsonObjects))
+            self.form.textEditResultJson.item(
+                self.form.textEditResultJson.count() - 1).setForeground(
+                Qt.GlobalColor.red)
 
     def validateJson(self):
         self.form.textEditResultJson.clear()
 
-        chosenElements = list(self.form.comboBoxChooseElementsJson.model().item(i).text() for i in
-                              range(self.form.comboBoxChooseElementsJson.count())
-                              if self.form.comboBoxChooseElementsJson.model().item(
-            i).checkState() == Qt.CheckState.Checked)
+        chosenElements = list(
+            self.form.comboBoxChooseElementsJson.model().item(i).text() for i in
+            range(self.form.comboBoxChooseElementsJson.count())
+            if self.form.comboBoxChooseElementsJson.model().item(
+                i).checkState() == Qt.CheckState.Checked)
 
         objectsToValidate = {}
 
@@ -134,7 +165,7 @@ class JsonController:
                 # while isChosen == False:
                 for elem in chosenElements:
                     isChosen = jsonObject.fullPath.startswith(f'/{elem}') \
-                               # or jsonObject.fullPath.startswith(f'#/definitions/{elem}')
+                        # or jsonObject.fullPath.startswith(f'#/definitions/{elem}')
                     if isChosen:
                         break
                 if isChosen:
@@ -153,14 +184,16 @@ class JsonController:
                 fullValidationResult = []
                 stringPatternValidationResult = []
 
-                cardNumberCheck = self.form.jsonValidator.checkCardNumber(objectsToValidate)
-                for message in cardNumberCheck:
-                    self.printOutputMessage(message)
+                # cardNumberCheck = self.form.jsonValidator.checkCardNumber(
+                #     objectsToValidate)
+                # for message in cardNumberCheck:
+                #     self.printOutputMessage(message)
 
                 for jsonObject in objectsToValidate.values():
                     fullValidationResult.extend(
                         # self.form.jsonValidator.validate(jsonObject, objectsToValidate))
-                        self.form.jsonValidator.validate(jsonObject, self.jsonObjects))
+                        self.form.jsonValidator.validate(jsonObject,
+                                                         self.jsonObjects))
                     stringPatternValidationResult.extend(
                         self.form.jsonValidator.checkStringPattern(jsonObject))
 
@@ -199,15 +232,19 @@ class JsonController:
     def printOutputMessage(self, message):
         self.form.textEditResultJson.addItem(str(message))
 
-        if message.msgType == outputMessage.MessageType.INFO_TYPE:
+        if not hasattr(message, 'msgType'):
+            itemColor = Qt.GlobalColor.white
+        elif message.msgType == outputMessage.MessageType.INFO_TYPE:
             itemColor = Qt.GlobalColor.yellow
         else:
             itemColor = Qt.GlobalColor.red
 
-        self.form.textEditResultJson.item(self.form.textEditResultJson.count() - 1).setForeground(
+        self.form.textEditResultJson.item(
+            self.form.textEditResultJson.count() - 1).setForeground(
             itemColor)
 
     def printDraftVersion(self, jsonString):
         draft = self.form.jsonParser.getJsonDraftVersion(jsonString)
-        validationResultMessage = self.form.jsonValidator.checkDraftVersion(draft)
+        validationResultMessage = self.form.jsonValidator.checkDraftVersion(
+            draft)
         self.printOutputMessage(validationResultMessage)

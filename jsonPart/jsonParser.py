@@ -3,7 +3,7 @@ import sys
 import traceback
 from copy import *
 
-from jsonPropertyObject import JsonPropertyObject
+from jsonPart.jsonPropertyObject import JsonPropertyObject
 
 
 class JsonParser(object):

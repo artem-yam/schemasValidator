@@ -1,6 +1,3 @@
-import copy
-
-
 class JsonPropertyObject(object):
     def __init__(self, jsonMap):
         if isinstance(jsonMap, dict):

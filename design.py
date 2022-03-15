@@ -54,7 +54,7 @@ class CheckableComboBox(QtWidgets.QComboBox):
 
 
 class LimitedQTextEdit(QtWidgets.QTextEdit):
-    MAX_LIMIT = 4096
+    MAX_LIMIT = 255
 
     def __init__(self, parent):
         super(LimitedQTextEdit, self).__init__(parent)
@@ -165,8 +165,8 @@ class Ui_Form(object):
         # self.jsonConfArrayLengthText = QtWidgets.QTextEdit(self.jsonParams)
         self.jsonConfArrayLengthText = LimitedQTextEdit(self.jsonParams)
         self.jsonConfArrayLengthText.setObjectName('jsonConfArrayLengthText')
-        self.jsonConfArrayLengthText.setPlaceholderText("4096")
-        self.jsonConfArrayLengthText.setToolTip("Введите число меньше 4096")
+        self.jsonConfArrayLengthText.setPlaceholderText(str(LimitedQTextEdit.MAX_LIMIT))
+        self.jsonConfArrayLengthText.setToolTip(f"Введите число меньше {LimitedQTextEdit.MAX_LIMIT}")
         self.jsonConfArrayLengthText.setLineWrapMode(QtWidgets.QTextEdit.LineWrapMode.NoWrap)
         self.jsonConfArrayLengthText.setHorizontalScrollBarPolicy(
             QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
@@ -224,8 +224,8 @@ class Ui_Form(object):
         # self.jsonConfStringLengthText = QtWidgets.QTextEdit(self.jsonParams)
         self.jsonConfStringLengthText = LimitedQTextEdit(self.jsonParams)
         self.jsonConfStringLengthText.setObjectName('jsonConfStringLengthText')
-        self.jsonConfStringLengthText.setPlaceholderText("4096")
-        self.jsonConfStringLengthText.setToolTip("Введите число меньше 4096")
+        self.jsonConfStringLengthText.setPlaceholderText(str(LimitedQTextEdit.MAX_LIMIT))
+        self.jsonConfStringLengthText.setToolTip(f"Введите число меньше {LimitedQTextEdit.MAX_LIMIT}")
         self.jsonConfStringLengthText.setLineWrapMode(QtWidgets.QTextEdit.LineWrapMode.NoWrap)
         self.jsonConfStringLengthText.setHorizontalScrollBarPolicy(
             QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
@@ -261,8 +261,8 @@ class Ui_Form(object):
         # self.xsdConfArrayLengthText = QtWidgets.QTextEdit(self.xsdParams)
         self.xsdConfArrayLengthText = LimitedQTextEdit(self.xsdParams)
         self.xsdConfArrayLengthText.setObjectName('xsdConfArrayLengthText')
-        self.xsdConfArrayLengthText.setPlaceholderText("4096")
-        self.xsdConfArrayLengthText.setToolTip("Введите число меньше 4096")
+        self.xsdConfArrayLengthText.setPlaceholderText(str(LimitedQTextEdit.MAX_LIMIT))
+        self.xsdConfArrayLengthText.setToolTip(f"Введите число меньше {LimitedQTextEdit.MAX_LIMIT}")
         self.xsdConfArrayLengthText.setLineWrapMode(QtWidgets.QTextEdit.LineWrapMode.NoWrap)
         self.xsdConfArrayLengthText.setHorizontalScrollBarPolicy(
             QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
@@ -320,8 +320,8 @@ class Ui_Form(object):
         # self.xsdConfStringLengthText = QtWidgets.QTextEdit(self.xsdParams)
         self.xsdConfStringLengthText = LimitedQTextEdit(self.xsdParams)
         self.xsdConfStringLengthText.setObjectName('xsdConfStringLengthText')
-        self.xsdConfStringLengthText.setPlaceholderText("4096")
-        self.xsdConfStringLengthText.setToolTip("Введите число меньше 4096")
+        self.xsdConfStringLengthText.setPlaceholderText(str(LimitedQTextEdit.MAX_LIMIT))
+        self.xsdConfStringLengthText.setToolTip(f"Введите число меньше {LimitedQTextEdit.MAX_LIMIT}")
         self.xsdConfStringLengthText.setLineWrapMode(QtWidgets.QTextEdit.LineWrapMode.NoWrap)
         self.xsdConfStringLengthText.setHorizontalScrollBarPolicy(
             QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOff)

@@ -1,3 +1,6 @@
+from xsdPart.xsdUtils import getStringWithoutNamespace
+
+
 class XsdPropertyObject(object):
     def __init__(self, xsdTag, parentPath, otherXsdObjects):
 
@@ -8,20 +11,26 @@ class XsdPropertyObject(object):
 
         for attribKey in xsdTag.attrib:
             if attribKey == 'type':
-                self.type = self.getStringWithoutNamespaceNamespace(xsdTag.attrib['type'])
+                self.type = getStringWithoutNamespace(
+                    xsdTag.attrib['type'])
             else:
-                self.__dict__[attribKey] = xsdTag.attrib[attribKey]
+                self.__dict__[attribKey] = getStringWithoutNamespace(
+                    xsdTag.attrib[attribKey])
 
         # if 'name' in xsdTag.attrib:
         #     self.name = xsdTag.attrib['name']
         # if 'type' in xsdTag.attrib:
-        #     self.type = self.getStringWithoutNamespaceNamespace(xsdTag.attrib['type'])
+        #     self.type = getStringWithoutNamespaceNamespace(xsdTag.attrib['type'])
 
         if not hasattr(self, 'type'):
-            self.type = ''
+            if hasattr(self, 'base'):
+                self.type = self.base
+            else:
+                self.type = ''
 
         if next((True for innerTagName in xsdTag.__dict__ if
-                 innerTagName in ['complexType', 'group', 'all', 'choice', 'sequence']),
+                 innerTagName in ['complexType', 'group', 'all', 'choice',
+                                  'sequence']),
                 False):
             self.type = 'object'
             # innerTagName in ['group', 'all', 'choice', 'sequence']),
@@ -37,10 +46,12 @@ class XsdPropertyObject(object):
             # else:
             #     print("nope")
 
-            if propKey not in ['complexType', 'group', 'all', 'choice', 'sequence']:
+            if propKey not in ['complexType', 'group', 'all', 'choice',
+                               'sequence']:
                 if propKey == 'annotation' and 'documentation' in \
                         propTag.__dict__.keys():
-                    self.__dict__[propKey] = propTag.__dict__['documentation'].text
+                    self.__dict__[propKey] = propTag.__dict__[
+                        'documentation'].text
                 elif propKey == 'simpleType':
                     if hasattr(propTag, 'restriction'):
                         self.parseRestrictions(propTag, 'restriction')
@@ -48,7 +59,8 @@ class XsdPropertyObject(object):
                     if hasattr(propTag, 'list') \
                             and hasattr(propTag.list, 'attrib') \
                             and 'itemType' in propTag.list.attrib:
-                        self.type = self.getStringWithoutNamespaceNamespace(propTag.list.attrib['itemType'])
+                        self.type = getStringWithoutNamespace(
+                            propTag.list.attrib['itemType'])
 
                 elif propKey == 'restriction' or propKey == 'extension':
                     self.parseRestrictions(xsdTag, propKey)
@@ -65,9 +77,9 @@ class XsdPropertyObject(object):
 
         if not hasattr(self, 'name'):
             if hasattr(self, 'ref'):
-                self.name = self.getStringWithoutNamespaceNamespace(self.ref)
+                self.name = getStringWithoutNamespace(self.ref)
             elif hasattr(self, 'base'):
-                self.name = self.getStringWithoutNamespaceNamespace(self.base)
+                self.name = getStringWithoutNamespace(self.base)
             else:
                 self.name = 'elem№' + str(otherXsdObjects.__len__() + 1)
 
@@ -81,26 +93,25 @@ class XsdPropertyObject(object):
     def getBaseType(self, parentTag):
         for childTag in parentTag.iterchildren():
             if hasattr(childTag, 'attrib') and 'base' in childTag.attrib:
-                return childTag.attrib['base']
+                return getStringWithoutNamespace(
+                    childTag.attrib['base'])
             else:
                 if baseType := self.getBaseType(childTag):
                     return baseType
 
         return
 
-    def getStringWithoutNamespaceNamespace(self, originalString) -> str:
-        namespaceSplit = originalString.split(':')
-        return namespaceSplit[len(namespaceSplit) - 1].strip()
-
     def parseRestrictions(self, xsdTag, propKey):
         restrictionsMainTag = xsdTag.__dict__[propKey]
         if 'base' in restrictionsMainTag.attrib:
-            self.type = self.getStringWithoutNamespaceNamespace(restrictionsMainTag.attrib['base'])
+            self.type = getStringWithoutNamespace(
+                restrictionsMainTag.attrib['base'])
 
         # if 'pattern' in xsdTag.__dict__[propKey].__dict__.keys():
         for restrictionName in restrictionsMainTag.__dict__.keys():
             restrictionTag = restrictionsMainTag.__dict__[restrictionName]
-            if hasattr(restrictionTag, 'tag') and not restrictionTag.tag.endswith('attribute'):
+            if hasattr(restrictionTag,
+                       'tag') and not restrictionTag.tag.endswith('attribute'):
                 for i in range(len(restrictionTag)):
                     if hasattr(restrictionTag[i], 'attrib'):
                         for attrib in restrictionTag[i].attrib:
@@ -108,7 +119,8 @@ class XsdPropertyObject(object):
                                 self.__dict__[
                                     restrictionName] += f', {restrictionTag[i].attrib[attrib]}'
                             else:
-                                self.__dict__[restrictionName] = restrictionTag[i].attrib[attrib]
+                                self.__dict__[restrictionName] = \
+                                    restrictionTag[i].attrib[attrib]
 
     def reset(self):
         self.tabsCount = 1
@@ -123,9 +135,11 @@ class XsdPropertyObject(object):
                 fieldValue = self.__dict__[fieldName]
                 if isinstance(fieldValue, XsdPropertyObject):
                     fieldValue.tabsCount = self.tabsCount + 1
-                    returnString += (PROPERTY_STRING % (fieldName, '\n' + str(fieldValue)))
+                    returnString += (PROPERTY_STRING % (
+                        fieldName, '\n' + str(fieldValue)))
                 else:
-                    returnString += (PROPERTY_STRING % (fieldName, str(fieldValue) + ''))
+                    returnString += (PROPERTY_STRING % (
+                        fieldName, str(fieldValue) + ''))
 
         returnString += '\n' + ('\t' * (self.tabsCount - 1)) + '}'
 
