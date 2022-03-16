@@ -129,6 +129,9 @@ class Ui_Form(object):
             self.jsonTab)
         self.pushButtonCopyFullResultJson = QtWidgets.QPushButton(self.jsonTab)
 
+        self.jsonProcessingButtons = [self.pushButtonLoadJson,
+                                      self.pushButtonRefreshJson,
+                                      self.pushButtonValidateJson]
         self.setupJsonConfElements()
 
     def setupXsdTab(self):
@@ -159,6 +162,10 @@ class Ui_Form(object):
         self.pushButtonCopySelectedResultXsd = QtWidgets.QPushButton(
             self.xsdTab)
         self.pushButtonCopyFullResultXsd = QtWidgets.QPushButton(self.xsdTab)
+
+        self.xsdProcessingButtons = [self.pushButtonLoadXsd,
+                                     self.pushButtonRefreshXsd,
+                                     self.pushButtonValidateXsd]
 
         self.setupXsdConfElements()
 
@@ -428,7 +435,8 @@ class Ui_Form(object):
         self.pushButtonRefreshJson.setGeometry(
             QtCore.QRect(self.pushButtonLoadJson.geometry().left(),
                          self.pushButtonLoadJson.geometry().bottom() + Ui_Form.STANDARD_MARGIN,
-                         Ui_Form.BUTTON_WIDTH, round(Ui_Form.BUTTON_HEIGHT/2)))
+                         Ui_Form.BUTTON_WIDTH,
+                         round(Ui_Form.BUTTON_HEIGHT / 2)))
 
         self.comboBoxChooseElementsJson.setGeometry(
             QtCore.QRect(self.pushButtonRefreshJson.geometry().left(),
@@ -483,7 +491,8 @@ class Ui_Form(object):
         self.pushButtonRefreshXsd.setGeometry(
             QtCore.QRect(self.pushButtonLoadXsd.geometry().left(),
                          self.pushButtonLoadXsd.geometry().bottom() + Ui_Form.STANDARD_MARGIN,
-                         Ui_Form.BUTTON_WIDTH, round(Ui_Form.BUTTON_HEIGHT/2)))
+                         Ui_Form.BUTTON_WIDTH,
+                         round(Ui_Form.BUTTON_HEIGHT / 2)))
 
         self.comboBoxChooseElementsXsd.setGeometry(
             QtCore.QRect(self.pushButtonRefreshXsd.geometry().left(),

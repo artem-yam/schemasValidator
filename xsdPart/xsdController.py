@@ -111,6 +111,9 @@ class XsdController:
         self.xsdObjects = None
         self.form.comboBoxChooseElementsXsd.clear()
 
+        for button in self.form.xsdProcessingButtons:
+            button.setEnabled(False)
+
         for string in constants.FILE_PROCESS_START_TEXT:
             self.printOutputMessage(string)
 
@@ -132,6 +135,9 @@ class XsdController:
                 and xsdObject.fullPath == '/' + xsdObject.name)
 
             self.form.comboBoxChooseElementsXsd.addItems(rootTagsNames)
+
+            for button in self.form.xsdProcessingButtons:
+                button.setEnabled(True)
 
             for string in constants.FILE_PROCESS_FINISH_TEXT:
                 self.printOutputMessage(string)

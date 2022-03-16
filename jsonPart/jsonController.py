@@ -114,6 +114,9 @@ class JsonController:
         self.jsonObjects = None
         self.form.comboBoxChooseElementsJson.clear()
 
+        for button in self.form.jsonProcessingButtons:
+            button.setEnabled(False)
+
         for string in constants.FILE_PROCESS_START_TEXT:
             self.printOutputMessage(string)
 
@@ -137,6 +140,9 @@ class JsonController:
                      ))
 
             self.form.comboBoxChooseElementsJson.addItems(rootTagsNames)
+
+            for button in self.form.jsonProcessingButtons:
+                button.setEnabled(True)
 
             for string in constants.FILE_PROCESS_FINISH_TEXT:
                 self.printOutputMessage(string)
