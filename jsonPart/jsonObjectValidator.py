@@ -12,8 +12,7 @@ class JsonObjectValidator(object):
     NO_ADDITIONAL_PROPERTIES_MESSAGE = 'Для элементов с типом "object" ' \
                                        'должно быть указано ' \
                                        '"additionalProperties":false'
-    NO_MAX_PROPERTIES_MESSAGE = 'При наличии "additionalProperties" ' \
-                                'или "patternProperties" также должно быть ' \
+    NO_MAX_PROPERTIES_MESSAGE = 'При наличии "patternProperties" должно быть ' \
                                 'указано "maxProperties"'
 
     STRING_NO_MAX_LENGTH_MESSAGE = 'Отсутствует ограничение по длине строки'
@@ -109,7 +108,8 @@ class JsonObjectValidator(object):
             validationResult.append(validatorMsg)
 
         if self.isComplexType(jsonObject):
-            if not hasattr(jsonObject, 'additionalProperties') or jsonObject.additionalProperties is True:
+            if not hasattr(jsonObject, 'additionalProperties') \
+                    or jsonObject.additionalProperties is True:
                 validatorMsg = OutputMessage(jsonObject, MessageType.ERROR_TYPE,
                                              JsonObjectValidator.NO_ADDITIONAL_PROPERTIES_MESSAGE)
                 validationResult.append(validatorMsg)
@@ -122,7 +122,7 @@ class JsonObjectValidator(object):
                     validationResult.append(validatorMsg)
 
             if hasattr(jsonObject, 'patternProperties'):
-                if not (hasattr(jsonObject,'maxProperties')
+                if not (hasattr(jsonObject, 'maxProperties')
                         and jsonObject.maxProperties):
                     validatorMsg = OutputMessage(jsonObject,
                                                  MessageType.ERROR_TYPE,
