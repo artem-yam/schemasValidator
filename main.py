@@ -3,9 +3,6 @@ import sys
 from PyQt6.QtWidgets import *
 
 import design
-import outputMessage
-from jsonPart.jsonObjectValidator import JsonObjectValidator
-from jsonPart.jsonParser import JsonParser
 import jsonPart.jsonController as jsonController
 import xsdPart.xsdController as xsdController
 

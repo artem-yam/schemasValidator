@@ -4,6 +4,7 @@ import traceback
 from copy import *
 
 from jsonPart.jsonPropertyObject import JsonPropertyObject
+import logging
 
 
 class JsonParser(object):
@@ -13,7 +14,7 @@ class JsonParser(object):
         self.form = form
 
     def parseFileToText(self, filePath) -> str:
-        print("Url = " + filePath)
+        logging.info("Url = " + filePath)
         jsonString = ''
         try:
             with open(filePath, encoding=sys.getfilesystemencoding()) as jsonFile:
@@ -21,11 +22,11 @@ class JsonParser(object):
                 jsonPrettyString = json.dumps(jsonString, indent=4, ensure_ascii=False)
                 jsonFile.close()
         except BaseException as err:
-            print('Ошибки открытия файла:\n', traceback.format_exc())
+            logging.warning('Ошибки открытия файла:\n', traceback.format_exc())
 
         if 'jsonPrettyString' in locals() and jsonPrettyString:
             jsonString = jsonPrettyString
-            # print(jsonPrettyString)
+            # logging.info(jsonPrettyString)
             # self.form.textEditTextJson.append(jsonPrettyString)
         else:
             jsonString = 'Ошибка загрузки файла'
@@ -40,7 +41,7 @@ class JsonParser(object):
             jsonString = schemaDraft
 
         except BaseException as err:
-            print('Ошибки получения версии драфта:\n', traceback.format_exc())
+            logging.warning('Ошибки получения версии драфта:\n', traceback.format_exc())
             jsonString = 'Ошибка получения версии драфта'
 
         return jsonString
@@ -52,23 +53,23 @@ class JsonParser(object):
 
             jsonObjects.update(self.parseProperties(jsonString))
 
-            print('---------------------------------------------------')
-            print('Мапа ДО объединения')
-            print('---------------------------------------------------')
-            print(';\n'.join(map(str, jsonObjects.values())))
+            logging.info('---------------------------------------------------')
+            logging.info('Мапа ДО объединения')
+            logging.info('---------------------------------------------------')
+            logging.info(';\n'.join(map(str, jsonObjects.values())))
 
             jsonObjects = self.combineTypesWithElement(jsonObjects)
 
-            print('---------------------------------------------------')
-            print('Мапа ПОСЛЕ объединения')
-            print('---------------------------------------------------')
-            print(';\n'.join(map(str, jsonObjects.values())))
+            logging.info('---------------------------------------------------')
+            logging.info('Мапа ПОСЛЕ объединения')
+            logging.info('---------------------------------------------------')
+            logging.info(';\n'.join(map(str, jsonObjects.values())))
 
             if not jsonObjects:
                 raise Exception("Объекты в json не обнаружены")
 
         except BaseException as err:
-            print('Ошибки получения объектов из json:\n', traceback.format_exc())
+            logging.warning('Ошибки получения объектов из json:\n', traceback.format_exc())
             jsonObjects = 'Ошибка преобразования json в объект, проверьте корректность загруженного текста'
 
         return jsonObjects
@@ -98,7 +99,7 @@ class JsonParser(object):
             else:
                 elemObject = modifiedJsonObjects[elemObjectKey]
 
-                print(f'По типу: {typeObject.fullPath} смотрим элемент: {elemObject.fullPath}')
+                logging.info(f'По типу: {typeObject.fullPath} смотрим элемент: {elemObject.fullPath}')
 
                 itemsToAdd = {}
 
@@ -130,7 +131,7 @@ class JsonParser(object):
                         itemsToAdd[
                             f'element {copiedInnerTypeObject.fullPath}'] = copiedInnerTypeObject
 
-                        print('Смотрим внутренний тип: ' + copiedInnerTypeObject.fullPath)
+                        logging.info('Смотрим внутренний тип: ' + copiedInnerTypeObject.fullPath)
 
                 modifiedJsonObjects.pop(elemObjectKey)
                 modifiedJsonObjects.update(itemsToAdd)
@@ -171,7 +172,7 @@ class JsonParser(object):
         jsonObjects = {}
 
         propString = json.dumps(jsonPropertiesMap[propName], ensure_ascii=False)
-        # print(propString)
+        # logging.info(propString)
         propObject = json.loads(propString,
                                 object_hook=JsonParser.jsonPropertyDecoder)
         propObject.name = propName

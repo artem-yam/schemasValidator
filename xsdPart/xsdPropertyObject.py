@@ -41,11 +41,6 @@ class XsdPropertyObject(object):
 
         for propKey, propTag in xsdTag.__dict__.items():
 
-            # if str(xsdTag.__dict__[propKey]):
-            #     print("yes")
-            # else:
-            #     print("nope")
-
             if propKey not in ['complexType', 'group', 'all', 'choice',
                                'sequence']:
                 if propKey == 'annotation' and 'documentation' in \

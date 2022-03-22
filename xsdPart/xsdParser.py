@@ -8,6 +8,7 @@ from lxml import objectify
 
 from xsdPart.xsdPropertyObject import XsdPropertyObject
 from xsdPart.xsdUtils import *
+import logging
 
 
 class XsdParser(object):
@@ -17,7 +18,7 @@ class XsdParser(object):
         self.form = form
 
     def parseFileToText(self, filePath) -> str:
-        print("Url = " + filePath)
+        logging.info("Url = " + filePath)
         xsdString = 'Ошибка загрузки файла'
         try:
             with open(filePath,
@@ -25,7 +26,7 @@ class XsdParser(object):
                 xml = xsdFile.read()
                 xsdFile.close()
         except BaseException as err:
-            print('Ошибки открытия файла:\n', traceback.format_exc())
+            logging.warning('Ошибки открытия файла:\n', traceback.format_exc())
 
         if 'xml' in locals():
             try:
@@ -38,7 +39,7 @@ class XsdParser(object):
                      parseString(xml).toprettyxml(indent=4 * ' ').split('\n') if
                      line.strip()])
             except BaseException as err:
-                print('Ошибки загрузки файла:\n', traceback.format_exc())
+                logging.warning('Ошибки загрузки файла:\n', traceback.format_exc())
 
         return xsdString
 
@@ -66,31 +67,31 @@ class XsdParser(object):
                             referedElement.__dict__[fieldName] = \
                                 xsdObject.__dict__[fieldName]
 
-            # print('---------------------------------------------------')
-            # print('Мапа ДО объединения')
-            # print('---------------------------------------------------')
-            # print(';\n'.join(map(str, xsdObjects.values())))
+            # logging.info('---------------------------------------------------')
+            # logging.info('Мапа ДО объединения')
+            # logging.info('---------------------------------------------------')
+            # logging.info(';\n'.join(map(str, xsdObjects.values())))
 
             xsdObjects = self.processSimpleTypesChain(xsdObjects)
             xsdObjects = self.processExtensionsAndRestrictions(xsdObjects)
 
-            print('---------------------------------------------------')
-            print('Мапа ДО объединения')
-            print('---------------------------------------------------')
-            print(';\n'.join(map(str, xsdObjects.values())))
+            logging.info('---------------------------------------------------')
+            logging.info('Мапа ДО объединения')
+            logging.info('---------------------------------------------------')
+            logging.info(';\n'.join(map(str, xsdObjects.values())))
 
             xsdObjects = self.combineTypesWithElement(xsdObjects)
 
-            print('---------------------------------------------------')
-            print('Мапа ПОСЛЕ объединения')
-            print('---------------------------------------------------')
-            print(';\n'.join(map(str, xsdObjects.values())))
+            logging.info('---------------------------------------------------')
+            logging.info('Мапа ПОСЛЕ объединения')
+            logging.info('---------------------------------------------------')
+            logging.info(';\n'.join(map(str, xsdObjects.values())))
 
             if not xsdObjects:
                 raise Exception("Объекты в xsd не обнаружены")
 
         except BaseException as err:
-            print('Ошибки получения объектов из xsd:\n', traceback.format_exc())
+            logging.warning('Ошибки получения объектов из xsd:\n', traceback.format_exc())
             xsdObjects = 'Ошибка преобразования xsd в объект,' \
                          + ' проверьте корректность загруженного текста'
 
@@ -177,7 +178,7 @@ class XsdParser(object):
                 modifiedXsdObjects.pop(typeObjectKey)
                 typeObjectKey = self.getNextCustomTypeRefKey(modifiedXsdObjects)
             else:
-                print(
+                logging.info(
                     f'По типу: {typeObject.fullPath} смотрим элемент: '
                     f'{modifiedXsdObjects[elemObjectKey].fullPath}')
 
@@ -215,7 +216,7 @@ class XsdParser(object):
                 #         itemsToAdd[
                 #             f'element {copiedInnerTypeObject.fullPath}'] = copiedInnerTypeObject
                 #
-                #         print(
+                #         logging.info(
                 #             'Смотрим внутренний тип: ' + copiedInnerTypeObject.fullPath)
                 #
                 # modifiedXsdObjects.pop(elemObjectKey)
@@ -253,18 +254,20 @@ class XsdParser(object):
 
         # TODO копирование внутренних типов
         for innerTypeObjectKey, innerTypeObject in xsdObjectsTempCopy.items():
-            if innerTypeObject.fullPath.startswith(destinationObjectPath + '/') and \
+            if innerTypeObject.fullPath.startswith(
+                    destinationObjectPath + '/') and \
                     innerTypeObject.fullPath != destinationObjectPath:
                 copiedInnerTypeObject = copy(innerTypeObject)
 
                 copiedInnerTypeObject.fullPath = copiedDestinationObject.fullPath + '/' + \
                                                  innerTypeObject.fullPath.split(
-                                                     destinationObjectPath + '/')[1]
+                                                     destinationObjectPath + '/')[
+                                                     1]
 
                 itemsToAdd[
                     f'element {copiedInnerTypeObject.fullPath}'] = copiedInnerTypeObject
 
-                print(
+                logging.info(
                     f'Обновили внутренний тип: из {innerTypeObject.fullPath}'
                     f' в {copiedInnerTypeObject.fullPath}')
 
@@ -469,7 +472,7 @@ class XsdParser(object):
         xsdObjects = {}
 
         # propString = xsd.dumps(xsdPropertiesMap[propName], ensure_ascii=False)
-        # print(propString)
+        # logging.info(propString)
         # propObject = xsd.loads(propString,object_hook=XsdParser.xsdPropertyDecoder)
 
         propObject = ''

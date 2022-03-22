@@ -76,7 +76,6 @@ class XsdController:
                                                    caption='Выберите схему',
                                                    filter=filters)
 
-        # print('directory = ' + directory)
         if directory:
             self.getXsdFromFile(directory)
 

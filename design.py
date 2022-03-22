@@ -285,10 +285,6 @@ class Ui_Form(object):
                          self.jsonConfStringLengthLabel.geometry().bottom() + 20,
                          500, 30))
 
-        # print("---------")
-        # children = self.confCheckTypeLabel.parent().children()
-        # print(';\n'.join(map(lambda x: x.objectName(), children)))
-
     def setupXsdConfElements(self):
         self.xsdParams = QtWidgets.QGroupBox(self.xsdTab)
         self.xsdParams.setStyleSheet(
@@ -400,10 +396,6 @@ class Ui_Form(object):
             QtCore.QRect(20,
                          self.xsdConfStringLengthLabel.geometry().bottom() + 20,
                          500, 30))
-
-        # print("---------")
-        # children = self.confCheckTypeLabel.parent().children()
-        # print(';\n'.join(map(lambda x: x.objectName(), children)))
 
     def resizeFormObjects(self, form):
         self.tabWidget.setGeometry(form.rect())

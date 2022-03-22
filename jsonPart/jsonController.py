@@ -78,7 +78,6 @@ class JsonController:
                                                    caption='Выберите схему',
                                                    filter=filters)
 
-        # print('directory = ' + directory)
         if directory:
             self.getJsonFromFile(directory)
 
