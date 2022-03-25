@@ -1,0 +1,114 @@
+<?xml version="1.0" standalone="yes"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" version="1.0" targetNamespace="http://www.sbrf.ru/ecm/v3" xmlns="http://www.sbrf.ru/ecm/v3" xmlns:tns="http://www.sbrf.ru/ecm/v3" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+    <xs:element name="attrs" type="attrs"/>
+
+    <xs:element name="ticket" type="ticket"/>
+
+    <xs:complexType name="attrs">
+        <xs:sequence>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element name="bool" type="attrBool"/>
+                <xs:element name="str" type="attrStr"/>
+                <xs:element name="strs" type="attrStrs"/>
+                <xs:element name="date" type="attrDate"/>
+                <xs:element name="dbl" type="attrDbl"/>
+                <xs:element name="int" type="attrInt"/>
+                <xs:element name="bin" type="attrBin"/>
+            </xs:choice>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="attrBool">
+        <xs:simpleContent>
+            <xs:extension base="xs:boolean">
+                <xs:attribute name="id" type="xs:string" use="required"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:complexType name="attrStr">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="id" type="xs:string" use="required"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:complexType name="attrStrs">
+        <xs:sequence>
+            <xs:element name="str" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:string" use="required"/>
+        <xs:attribute name="action" type="multifieldAction"/>
+    </xs:complexType>
+
+    <xs:complexType name="attrDate">
+        <xs:simpleContent>
+            <xs:extension base="xs:dateTime">
+                <xs:attribute name="id" type="xs:string" use="required"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:complexType name="attrDbl">
+        <xs:simpleContent>
+            <xs:extension base="xs:double">
+                <xs:attribute name="id" type="xs:string" use="required"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:complexType name="attrInt">
+        <xs:simpleContent>
+            <xs:extension base="xs:int">
+                <xs:attribute name="id" type="xs:string" use="required"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:complexType name="attrBin">
+        <xs:sequence>
+            <xs:element name="value" type="xs:base64Binary" minOccurs="0"/>
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="ticket">
+        <xs:sequence>
+            <xs:element name="permissions" type="permissions" minOccurs="0"/>
+            <xs:element name="templateAttrs" type="attrs" minOccurs="0"/>
+        </xs:sequence>
+        <xs:attribute name="template" type="xs:string"/>
+        <xs:attribute name="user" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:complexType name="permissions">
+        <xs:sequence>
+            <xs:element name="allow" type="permission" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="deny" type="permission" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="permission">
+        <xs:complexContent>
+            <xs:extension base="attrs">
+                <xs:sequence/>
+                <xs:attribute name="path" type="xs:string"/>
+                <xs:attribute name="actions">
+                    <xs:simpleType>
+                        <xs:list itemType="xs:string"/>
+                    </xs:simpleType>
+                </xs:attribute>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:simpleType name="multifieldAction">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="add"/>
+            <xs:enumeration value="remove"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+</xs:schema>

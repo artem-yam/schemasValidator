@@ -1,6 +1,6 @@
+import re
 import sys
 import traceback
-import re
 from copy import *
 from xml.dom.minidom import parseString
 
@@ -8,7 +8,6 @@ from lxml import objectify
 
 from xsdPart.xsdPropertyObject import XsdPropertyObject
 from xsdPart.xsdUtils import *
-import logging
 
 
 class XsdParser(object):
@@ -39,7 +38,8 @@ class XsdParser(object):
                      parseString(xml).toprettyxml(indent=4 * ' ').split('\n') if
                      line.strip()])
             except BaseException as err:
-                logging.warning('Ошибки загрузки файла:\n', traceback.format_exc())
+                logging.warning('Ошибки загрузки файла:\n',
+                                traceback.format_exc())
 
         return xsdString
 
@@ -73,14 +73,15 @@ class XsdParser(object):
             # logging.info(';\n'.join(map(str, xsdObjects.values())))
 
             xsdObjects = self.processSimpleTypesChain(xsdObjects)
-            xsdObjects = self.processExtensionsAndRestrictions(xsdObjects)
+            # xsdObjects = self.processExtensionsAndRestrictions(xsdObjects)
 
             logging.info('---------------------------------------------------')
             logging.info('Мапа ДО объединения')
             logging.info('---------------------------------------------------')
             logging.info(';\n'.join(map(str, xsdObjects.values())))
 
-            xsdObjects = self.combineTypesWithElement(xsdObjects)
+            xsdObjects = self.processExtensionsAndRestrictions(xsdObjects)
+            # xsdObjects = self.combineTypesWithElement(xsdObjects)
 
             logging.info('---------------------------------------------------')
             logging.info('Мапа ПОСЛЕ объединения')
@@ -91,7 +92,8 @@ class XsdParser(object):
                 raise Exception("Объекты в xsd не обнаружены")
 
         except BaseException as err:
-            logging.warning('Ошибки получения объектов из xsd:\n', traceback.format_exc())
+            logging.warning('Ошибки получения объектов из xsd:\n',
+                            traceback.format_exc())
             xsdObjects = 'Ошибка преобразования xsd в объект,' \
                          + ' проверьте корректность загруженного текста'
 
@@ -147,10 +149,31 @@ class XsdParser(object):
     def processExtensionsAndRestrictions(self, xsdObjects) -> dict:
         modifiedXsdObjects = copy(xsdObjects)
 
-        # for xsdObjectKey, xsdObject in modifiedXsdObjects.items():
-        #     if hasattr(xsdObject,'tag') and xsdObject.tag == 'extension':
+        # xsdObjectKey == 'extension /permission/attrs'
+        # xsdObject.name == 'attrs' and hasattr(xsdObject, 'tag') and xsdObject.tag == 'extension'
+        for xsdObjectKey, xsdObject in xsdObjects.items():
+            if hasattr(xsdObject, 'tag') and xsdObject.tag == 'extension' \
+                    and hasattr(xsdObject, 'base') \
+                    and (typeObjectKey := self.getTypeObjectKeyByName(
+                            xsdObjects, xsdObject.base)):
+                itemsToUpdate = self.proccessObjectRef(modifiedXsdObjects,
+                                                       xsdObjectKey,
+                                                       typeObjectKey)
 
-        return xsdObjects
+                modifiedXsdObjects.update(itemsToUpdate)
+                # xsdObjects.update(itemsToUpdate)
+                # modifiedXsdObjects.pop(xsdObjectKey)
+
+        return modifiedXsdObjects
+
+    def getTypeObjectKeyByName(self, xsdObjects, typeName):
+        return next(
+            (typeObjectKey for typeObjectKey, typeObject in
+             xsdObjects.items() if
+             typeObject.name.lower() == typeName.lower()
+             and (typeObjectKey.startswith('complexType')
+                  or typeObjectKey.startswith('simpleType'))),
+            None)
 
     # TODO фикс на случай циклических ссылок
     def combineTypesWithElement(self, xsdObjects) -> dict:
@@ -178,9 +201,9 @@ class XsdParser(object):
                 modifiedXsdObjects.pop(typeObjectKey)
                 typeObjectKey = self.getNextCustomTypeRefKey(modifiedXsdObjects)
             else:
-                logging.info(
-                    f'По типу: {typeObject.fullPath} смотрим элемент: '
-                    f'{modifiedXsdObjects[elemObjectKey].fullPath}')
+                # logging.info(
+                #     f'По типу: {typeObject.fullPath} смотрим элемент: '
+                #     f'{modifiedXsdObjects[elemObjectKey].fullPath}')
 
                 # elemObject = modifiedXsdObjects[elemObjectKey]
                 #
@@ -267,9 +290,9 @@ class XsdParser(object):
                 itemsToAdd[
                     f'element {copiedInnerTypeObject.fullPath}'] = copiedInnerTypeObject
 
-                logging.info(
-                    f'Обновили внутренний тип: из {innerTypeObject.fullPath}'
-                    f' в {copiedInnerTypeObject.fullPath}')
+                # logging.info(
+                #     f'Обновили внутренний тип: из {innerTypeObject.fullPath}'
+                #     f' в {copiedInnerTypeObject.fullPath}')
 
         return itemsToAdd
 

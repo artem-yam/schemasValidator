@@ -254,8 +254,6 @@
 
     <xs:complexType name="permissions">
         <xs:sequence>
-<!--            <xs:element name="allow" type="permissions" minOccurs="0" maxOccurs="unbounded"/>-->
-<!--            <xs:element name="deny" type="permissions" minOccurs="0" maxOccurs="unbounded"/>-->
             <xs:element name="allow" type="permission" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element name="deny" type="permission" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
