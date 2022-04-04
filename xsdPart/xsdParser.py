@@ -2,9 +2,9 @@ import re
 import sys
 import traceback
 from copy import *
-from xml.dom.minidom import parseString
 
 from lxml import objectify
+from xml.dom.minidom import parseString
 
 from xsdPart.xsdPropertyObject import XsdPropertyObject
 from xsdPart.xsdUtils import *
@@ -34,9 +34,10 @@ class XsdParser(object):
 
                 # from xml.dom.minidom import parseString
                 xsdString = '\n'.join(
-                    [line for line in
-                     parseString(xml).toprettyxml(indent=4 * ' ').split('\n') if
-                     line.strip()])
+                        [line for line in
+                         parseString(xml).toprettyxml(indent=4 * ' ').split(
+                                 '\n') if
+                         line.strip()])
             except BaseException as err:
                 logging.warning('Ошибки загрузки файла:\n',
                                 traceback.format_exc())
@@ -58,27 +59,32 @@ class XsdParser(object):
             for objectKey in xsdObjects:
                 xsdObject = xsdObjects[objectKey]
                 if hasattr(xsdObject, 'ref'):
-                    # referedElement = deepcopy(xsdObjects[f'element /{xsdObject.ref}'])
+                    # referedElement = deepcopy(xsdObjects[f'element /{
+                    # xsdObject.ref}'])
                     referedElement = copy(
-                        xsdObjects[f'element /{xsdObject.ref}'])
+                            xsdObjects[f'element /{xsdObject.ref}'])
                     xsdObjects[objectKey] = referedElement
                     for fieldName in xsdObject.__dict__:
                         if fieldName not in ['tag', 'type', 'ref']:
                             referedElement.__dict__[fieldName] = \
                                 xsdObject.__dict__[fieldName]
 
-            # logging.info('---------------------------------------------------')
+            # logging.info(
+            # '---------------------------------------------------')
             # logging.info('Мапа ДО объединения')
-            # logging.info('---------------------------------------------------')
+            # logging.info(
+            # '---------------------------------------------------')
             # logging.info(';\n'.join(map(str, xsdObjects.values())))
 
             xsdObjects = self.processSimpleTypesChain(xsdObjects)
             # xsdObjects = self.processExtensionsAndRestrictions(xsdObjects)
 
-            logging.info('---------------------------------------------------')
-            logging.info('Мапа ДО объединения')
-            logging.info('---------------------------------------------------')
-            logging.info(';\n'.join(map(str, xsdObjects.values())))
+            # logging.info(
+            # '---------------------------------------------------')
+            # logging.info('Мапа ДО объединения')
+            # logging.info(
+            # '---------------------------------------------------')
+            # logging.info(';\n'.join(map(str, xsdObjects.values())))
 
             xsdObjects = self.processExtensionsAndRestrictions(xsdObjects)
             # xsdObjects = self.combineTypesWithElement(xsdObjects)
@@ -106,14 +112,15 @@ class XsdParser(object):
         # for typeObjectKey, typeObject in modifiedXsdObjects.items():
         while True:
             typeObjectKey = next(
-                (typeObjectKey for typeObjectKey, typeObject in
-                 modifiedXsdObjects.items() if
-                 typeObject.tag == 'simpleType' and not next(
-                     (objectKey for objectKey, xsdObject in
-                      modifiedXsdObjects.items() if
-                      xsdObject.tag == 'simpleType' and typeObject.type == xsdObject.name),
-                     False)),
-                False)
+                    (typeObjectKey for typeObjectKey, typeObject in
+                     modifiedXsdObjects.items() if
+                     typeObject.tag == 'simpleType' and not next(
+                             (objectKey for objectKey, xsdObject in
+                              modifiedXsdObjects.items() if
+                              xsdObject.tag == 'simpleType' and
+                              typeObject.type == xsdObject.name),
+                             False)),
+                    False)
 
             if not typeObjectKey:
                 break
@@ -123,9 +130,9 @@ class XsdParser(object):
 
             while True:
                 elemObjectKey = next(
-                    (objectKey for objectKey, xsdObject in
-                     modifiedXsdObjects.items() if
-                     typeObject.name == xsdObject.type), False)
+                        (objectKey for objectKey, xsdObject in
+                         modifiedXsdObjects.items() if
+                         typeObject.name == xsdObject.type), False)
 
                 if not elemObjectKey:
                     break
@@ -150,30 +157,37 @@ class XsdParser(object):
         modifiedXsdObjects = copy(xsdObjects)
 
         # xsdObjectKey == 'extension /permission/attrs'
-        # xsdObject.name == 'attrs' and hasattr(xsdObject, 'tag') and xsdObject.tag == 'extension'
+        # xsdObject.name == 'attrs' and hasattr(xsdObject, 'tag') and
+        # xsdObject.tag == 'extension'
         for xsdObjectKey, xsdObject in xsdObjects.items():
-            if hasattr(xsdObject, 'tag') and xsdObject.tag == 'extension' \
-                    and hasattr(xsdObject, 'base') \
-                    and (typeObjectKey := self.getTypeObjectKeyByName(
-                            xsdObjects, xsdObject.base)):
-                itemsToUpdate = self.proccessObjectRef(modifiedXsdObjects,
-                                                       xsdObjectKey,
-                                                       typeObjectKey)
+            if hasattr(xsdObject, 'tag') and hasattr(xsdObject, 'base') \
+                    and xsdObject.tag in ['extension', 'restriction']:
+                baseTypeName = getStringWithoutNamespace(xsdObject.base)
+                isSimpleType = (baseTypeName.lower() in XSD_SIMPLE_TYPES)
 
-                modifiedXsdObjects.update(itemsToUpdate)
-                # xsdObjects.update(itemsToUpdate)
-                # modifiedXsdObjects.pop(xsdObjectKey)
+                if not isSimpleType \
+                        and (typeObjectKey := self.getTypeObjectKeyByName(
+                        xsdObjects, xsdObject.base)) \
+                        and (isExtension := xsdObject.tag == 'extension'):
+                    itemsToUpdate = self.proccessObjectRef(modifiedXsdObjects,
+                                                           xsdObjectKey,
+                                                           typeObjectKey,
+                                                           isExtension)
+
+                    modifiedXsdObjects.update(itemsToUpdate)
+                    # xsdObjects.update(itemsToUpdate)
+                    # modifiedXsdObjects.pop(xsdObjectKey)
 
         return modifiedXsdObjects
 
     def getTypeObjectKeyByName(self, xsdObjects, typeName):
         return next(
-            (typeObjectKey for typeObjectKey, typeObject in
-             xsdObjects.items() if
-             typeObject.name.lower() == typeName.lower()
-             and (typeObjectKey.startswith('complexType')
-                  or typeObjectKey.startswith('simpleType'))),
-            None)
+                (typeObjectKey for typeObjectKey, typeObject in
+                 xsdObjects.items() if
+                 typeObject.name.lower() == typeName.lower()
+                 and (typeObjectKey.startswith('complexType')
+                      or typeObjectKey.startswith('simpleType'))),
+                None)
 
     # TODO фикс на случай циклических ссылок
     def combineTypesWithElement(self, xsdObjects) -> dict:
@@ -191,11 +205,11 @@ class XsdParser(object):
             typeObject = modifiedXsdObjects[typeObjectKey]
 
             elemObjectKey = next(
-                (elemObjectKey for elemObjectKey, elemObject
-                 in modifiedXsdObjects.items() if
-                 # TODO хз, нужно ли убирать сравнение по тегу???
-                 elemObject.tag == 'element' and
-                 typeObject.name == elemObject.type), None)
+                    (elemObjectKey for elemObjectKey, elemObject
+                     in modifiedXsdObjects.items() if
+                     # TODO хз, нужно ли убирать сравнение по тегу???
+                     elemObject.tag == 'element' and
+                     typeObject.name == elemObject.type), None)
 
             if elemObjectKey is None:
                 modifiedXsdObjects.pop(typeObjectKey)
@@ -225,22 +239,29 @@ class XsdParser(object):
                 # modifiedXsdObjects[elemObjectKey] = copiedTypeObject
                 #
                 # # TODO копирование внутренних типов
-                # for innerTypeObjectKey, innerTypeObject in modifiedXsdObjects.items():
-                #     if innerTypeObject.fullPath.startswith(typePath + '/') and \
+                # for innerTypeObjectKey, innerTypeObject in
+                # modifiedXsdObjects.items():
+                #     if innerTypeObject.fullPath.startswith(typePath + '/')
+                #     and \
                 #             innerTypeObject.fullPath != typePath:
                 #         copiedInnerTypeObject = copy(innerTypeObject)
                 #
-                #         copiedInnerTypeObject.fullPath = copiedTypeObject.fullPath + '/' + \
+                #         copiedInnerTypeObject.fullPath =
+                #         copiedTypeObject.fullPath + '/' + \
                 #                                          innerTypeObject.fullPath.split(
-                #                                              typePath + '/')[1]
+                #                                              typePath +
+                #                                              '/')[1]
                 #
                 #         xsdObjects[
-                #             f'element {copiedInnerTypeObject.fullPath}'] = copiedInnerTypeObject
+                #             f'element {copiedInnerTypeObject.fullPath}'] =
+                #             copiedInnerTypeObject
                 #         itemsToAdd[
-                #             f'element {copiedInnerTypeObject.fullPath}'] = copiedInnerTypeObject
+                #             f'element {copiedInnerTypeObject.fullPath}'] =
+                #             copiedInnerTypeObject
                 #
                 #         logging.info(
-                #             'Смотрим внутренний тип: ' + copiedInnerTypeObject.fullPath)
+                #             'Смотрим внутренний тип: ' +
+                #             copiedInnerTypeObject.fullPath)
                 #
                 # modifiedXsdObjects.pop(elemObjectKey)
                 # modifiedXsdObjects.update(itemsToAdd)
@@ -255,8 +276,10 @@ class XsdParser(object):
 
         return xsdObjects
 
-    def proccessObjectRef(self, xsdObjects, originalObjectKey,
-                          destinationObjectKey) -> dict:
+    def proccessObjectRef(self, xsdObjects,
+                          originalObjectKey,
+                          destinationObjectKey,
+                          copyInnerDestinationObjects: bool = True) -> dict:
         itemsToAdd = {}
         xsdObjectsTempCopy = copy(xsdObjects)
         originalObject = xsdObjects[originalObjectKey]
@@ -276,23 +299,28 @@ class XsdParser(object):
         xsdObjectsTempCopy[originalObjectKey] = copiedDestinationObject
 
         # TODO копирование внутренних типов
-        for innerTypeObjectKey, innerTypeObject in xsdObjectsTempCopy.items():
-            if innerTypeObject.fullPath.startswith(
-                    destinationObjectPath + '/') and \
-                    innerTypeObject.fullPath != destinationObjectPath:
-                copiedInnerTypeObject = copy(innerTypeObject)
+        if copyInnerDestinationObjects:
+            for innerTypeObjectKey, innerTypeObject in \
+                    xsdObjectsTempCopy.items():
+                if innerTypeObject.fullPath.startswith(
+                        destinationObjectPath + '/') and \
+                        innerTypeObject.fullPath != destinationObjectPath:
+                    copiedInnerTypeObject = copy(innerTypeObject)
 
-                copiedInnerTypeObject.fullPath = copiedDestinationObject.fullPath + '/' + \
-                                                 innerTypeObject.fullPath.split(
-                                                     destinationObjectPath + '/')[
-                                                     1]
+                    copiedInnerTypeObject.fullPath = \
+                        copiedDestinationObject.fullPath + '/' + \
+                        innerTypeObject.fullPath.split(
+                                destinationObjectPath + '/')[
+                            1]
 
-                itemsToAdd[
-                    f'element {copiedInnerTypeObject.fullPath}'] = copiedInnerTypeObject
+                    itemsToAdd[
+                        f'element {copiedInnerTypeObject.fullPath}'] = \
+                        copiedInnerTypeObject
 
-                # logging.info(
-                #     f'Обновили внутренний тип: из {innerTypeObject.fullPath}'
-                #     f' в {copiedInnerTypeObject.fullPath}')
+                    # logging.info(
+                    #     f'Обновили внутренний тип: из {
+                    #     innerTypeObject.fullPath}'
+                    #     f' в {copiedInnerTypeObject.fullPath}')
 
         return itemsToAdd
 
@@ -300,14 +328,14 @@ class XsdParser(object):
         # TODO вроде корректная проверка ссылки на тип, но надо проверить!!!
         for xsdObject in xsdObjects.values():
             typeObjectKey = next(
-                (typeObjectKey for typeObjectKey, typeObject in
-                 xsdObjects.items() if
-                 typeObject.name == xsdObject.type
-                 and typeObject.type.lower() not in XSD_SIMPLE_TYPES
-                 # and typeObject.tag not in ['element', 'attribute']),
-                 and typeObject.tag not in ['element']),
-                # and typeObject.tag != 'element'),
-                False)
+                    (typeObjectKey for typeObjectKey, typeObject in
+                     xsdObjects.items() if
+                     typeObject.name == xsdObject.type
+                     and typeObject.type.lower() not in XSD_SIMPLE_TYPES
+                     # and typeObject.tag not in ['element', 'attribute']),
+                     and typeObject.tag not in ['element']),
+                    # and typeObject.tag != 'element'),
+                    False)
             if typeObjectKey:
                 return typeObjectKey
 
@@ -323,7 +351,8 @@ class XsdParser(object):
     #
     #         for elemObjectKey, elemObject in modifiedXsdObjects.items():
     #
-    #             typeObject = next((typeObject for typeObject in modifiedXsdObjects.values() if
+    #             typeObject = next((typeObject for typeObject in
+    #             modifiedXsdObjects.values() if
     #                                typeObject.name == elemObject.type), False)
     #             if typeObject:
     #                 copiedTypeObject = copy(typeObject)
@@ -332,23 +361,28 @@ class XsdParser(object):
     #
     #                 for fieldName in elemObject.__dict__:
     #                     if fieldName in ['name', 'fullPath', 'tag']:
-    #                         copiedTypeObject.__dict__[fieldName] = elemObject.__dict__[fieldName]
+    #                         copiedTypeObject.__dict__[fieldName] =
+    #                         elemObject.__dict__[fieldName]
     #
     #                 xsdObjects[elemObjectKey] = copiedTypeObject
     #
     #                 itemsToRemove.append(elemObjectKey)
     #
-    #                 for innerTypeObjectKey, innerTypeObject in modifiedXsdObjects.items():
+    #                 for innerTypeObjectKey, innerTypeObject in
+    #                 modifiedXsdObjects.items():
     #                     if innerTypeObject.fullPath.startswith(typePath) and \
     #                             innerTypeObject.fullPath != typePath:
     #                         copiedInnerTypeObject = copy(innerTypeObject)
     #
-    #                         copiedInnerTypeObject.fullPath = copiedTypeObject.fullPath + \
+    #                         copiedInnerTypeObject.fullPath =
+    #                         copiedTypeObject.fullPath + \
     #                                                          innerTypeObject.fullPath.split(
     #                                                              typePath)[1]
     #
     #                         xsdObjects[
-    #                             f'element {copiedInnerTypeObject.fullPath}'] = copiedInnerTypeObject
+    #                             f'element {
+    #                             copiedInnerTypeObject.fullPath}'] =
+    #                             copiedInnerTypeObject
     #
     #         modifiedXsdObjects = copy(xsdObjects)
     #         for itemToRemove in itemsToRemove:
@@ -393,48 +427,81 @@ class XsdParser(object):
                         tagPath = parentPath + '/' + tag.attrib['name']
                     elif hasattr(tag, 'attrib') and 'base' in tag.attrib:
                         tagPath = parentPath + '/' + getStringWithoutNamespace(
-                            tag.attrib['base'])
+                                tag.attrib['base'])
                     else:
                         # tagPath = parentPath + '/someTag'
                         tagPath = parentPath
 
                     # if hasattr(attribute, 'attrib') \
                     #         and 'name' in attribute.attrib:
-                    #     attributePath = tagPath + '/' + attribute.attrib['name']
+                    #     attributePath = tagPath + '/' + attribute.attrib[
+                    #     'name']
                     # else:
                     #     attributePath = tagPath + '/attribute№' + str(i + 1)
 
                     xsdObjects.update(
-                        self.parseAttributeAsElement(attribute, tagPath, i))
+                            self.parseAttributeAsElement(attribute, tagPath, i))
 
             if re.search('(group|all|choice|sequence)$', tag.tag,
                          re.IGNORECASE):
                 # for innerTag in schemaTag.iterchildren():
-                #     xsdObjects.update(self.parseElements(innerTag, parentPath))
+                #     xsdObjects.update(self.parseElements(innerTag,
+                #     parentPath))
                 xsdObjects.update(self.parseElements(tag, parentPath))
             elif hasattr(tag, 'element'):
                 xsdObjects.update(self.parseElements(tag.element, parentPath))
             else:
-                xsdObject = XsdPropertyObject(tag, parentPath, xsdObjects)
+                # elif tag.attrib:
+                xsdObject = None
+                if tag.attrib:
+                    xsdObject = XsdPropertyObject(tag, parentPath, xsdObjects)
+                    xsdObjects[
+                        f'{xsdObject.tag} {xsdObject.fullPath}'] = xsdObject
 
                 # if not hasattr(xsdObject, 'name'):
                 #     xsdObject.name = 'elem№' + str(xsdObjects.__len__() + 1)
                 #
                 # xsdObject.fullPath = parentPath + '/' + xsdObject.name
 
+                innerContent = None
+
                 if hasattr(tag, 'complexContent'):
-                    tag.complexContent.attrib['name'] = xsdObject.name
-                    xsdObjects.update(self.parseElements(tag.complexContent,
-                                                         parentPath + '/' + xsdObject.name))
+                    innerContent = tag.complexContent
                 elif hasattr(tag, 'simpleContent'):
-                    tag.simpleContent.attrib['name'] = xsdObject.name
-                    xsdObjects.update(self.parseElements(tag.simpleContent,
-                                                         parentPath + '/' + xsdObject.name))
+                    innerContent = tag.simpleContent
+                elif hasattr(tag, 'complexType'):
+                    innerContent = tag
+
+                if innerContent is not None:
+                    if hasattr(xsdObject, 'name'):
+                        innerContent.attrib['name'] = xsdObject.name
+                    xsdObjects.update(
+                            self.parseElements(
+                                    innerContent,
+                                    parentPath +
+                                    (('/' + xsdObject.name)
+                                    if hasattr(xsdObject, 'name')
+                                    else '')
+                            )
+                    )
+
+                # if hasattr(tag, 'complexContent'):
+                #     tag.complexContent.attrib['name'] = xsdObject.name
+                #     xsdObjects.update(self.parseElements(tag.complexContent,
+                #                                          parentPath + '/' +
+                #                                          xsdObject.name))
+                # elif hasattr(tag, 'simpleContent'):
+                #     tag.simpleContent.attrib['name'] = xsdObject.name
+                #     xsdObjects.update(self.parseElements(tag.simpleContent,
+                #                                          parentPath + '/' +
+                #                                          xsdObject.name))
 
                 # else:
 
                 # xsdObjects[xsdObject.fullPath] = xsdObject
-                xsdObjects[f'{xsdObject.tag} {xsdObject.fullPath}'] = xsdObject
+
+                # xsdObjects[f'{xsdObject.tag} {xsdObject.fullPath}'] =
+                # xsdObject
 
                 tempTag = tag
 
@@ -442,22 +509,26 @@ class XsdParser(object):
 
                 while tempTag is not None and \
                         (elementsGroup := next(
+                                (tempTag.__dict__[innerTagName] for innerTagName
+                                 in
+                                 tempTag.__dict__ if
+                                 innerTagName in ['group', 'all', 'choice',
+                                                  'sequence']),
+                                None)) is None:
+                    tempTag = next(
                             (tempTag.__dict__[innerTagName] for innerTagName in
                              tempTag.__dict__ if
-                             innerTagName in ['group', 'all', 'choice',
-                                              'sequence']),
-                            None)) is None:
-                    tempTag = next(
-                        (tempTag.__dict__[innerTagName] for innerTagName in
-                         tempTag.__dict__ if
-                         innerTagName in ['complexType', 'complexContent',
-                                          'restriction', 'extension']), None)
+                             innerTagName in [#'complexType', 'complexContent',
+                                              'restriction', 'extension']),
+                            None)
 
                 if elementsGroup is not None:
                     xsdObjects.update(self.parseElements(elementsGroup,
-                                                         xsdObject.fullPath if hasattr(
-                                                             xsdObject,
-                                                             'fullPath') else parentPath))
+                                                         xsdObject.fullPath
+                                                         if hasattr(
+                                                                 xsdObject,
+                                                                 'fullPath')
+                                                         else parentPath))
 
                 # TODO подумать над этим фрагментом (тест на типе permission)
 
@@ -466,16 +537,20 @@ class XsdParser(object):
                 #          tag.__dict__ if
                 #          innerTagName in ['complexType', 'complexContent',
                 #                           # 'restriction', 'extension',
-                #                           'group', 'all', 'choice', 'sequence']),
+                #                           'group', 'all', 'choice',
+                #                           'sequence']),
                 #         None)) is not None:
-                #     xsdObjects.update(self.parseElements(tag, xsdObject.fullPath))
+                #     xsdObjects.update(self.parseElements(tag,
+                #     xsdObject.fullPath))
 
                 # TODO конец фрагмента
 
                 # if hasattr(tag, 'complexType'):
-                #     xsdObjects.update(self.parseElements(tag.complexType, xsdObject.fullPath))
+                #     xsdObjects.update(self.parseElements(tag.complexType,
+                #     xsdObject.fullPath))
                 # elif hasattr(tag, 'sequence'):
-                #     xsdObjects.update(self.parseElements(tag.sequence, xsdObject.fullPath))
+                #     xsdObjects.update(self.parseElements(tag.sequence,
+                #     xsdObject.fullPath))
 
         # if 'properties' in xsdString:
         #     xsdProperties = xsdString['properties']
@@ -487,18 +562,22 @@ class XsdParser(object):
         #     xsdProperties = xsdString['definitions']
         #
         #     for prop in xsdProperties:
-        #         xsdObjects.update(self.parseProperty(prop, xsdProperties, '#/definitions'))
+        #         xsdObjects.update(self.parseProperty(prop, xsdProperties,
+        #         '#/definitions'))
 
         return xsdObjects
 
+    # TODO не используется?
     def parseProperty(self, propName, xsdPropertiesMap, pathPrefix) -> dict:
         xsdObjects = {}
 
         # propString = xsd.dumps(xsdPropertiesMap[propName], ensure_ascii=False)
         # logging.info(propString)
-        # propObject = xsd.loads(propString,object_hook=XsdParser.xsdPropertyDecoder)
+        # propObject = xsd.loads(propString,
+        # object_hook=XsdParser.xsdPropertyDecoder)
 
-        propObject = ''
+        propObject = XsdPropertyObject()
+        # propObject = ''
 
         propObject.name = propName
         propObject.fullPath = pathPrefix + '/' + propName
@@ -514,13 +593,13 @@ class XsdParser(object):
 
         if hasattr(propObject, 'oneOf') and propObject.oneOf:
             xsdObjects.update(
-                self.parseCombinationKeywords(propObject, 'oneOf'))
+                    self.parseCombinationKeywords(propObject, 'oneOf'))
         elif hasattr(propObject, 'anyOf') and propObject.anyOf:
             xsdObjects.update(
-                self.parseCombinationKeywords(propObject, 'anyOf'))
+                    self.parseCombinationKeywords(propObject, 'anyOf'))
         elif hasattr(propObject, 'allOf') and propObject.allOf:
             xsdObjects.update(
-                self.parseCombinationKeywords(propObject, 'allOf'))
+                    self.parseCombinationKeywords(propObject, 'allOf'))
         elif hasattr(propObject, 'not') and propObject.__dict__['not']:
             xsdObjects.update(self.parseCombinationKeywords(propObject, 'not'))
 
@@ -540,9 +619,9 @@ class XsdParser(object):
         if not hasattr(propObject, 'type'):
             propObject.type = keyword
 
-        oneOfList = propObject.__dict__[keyword]
-        for propIndex in range(len(oneOfList)):
-            innerObject = oneOfList[propIndex]
+        keywordInnerObjectsList = propObject.__dict__[keyword]
+        for propIndex in range(len(keywordInnerObjectsList)):
+            innerObject = keywordInnerObjectsList[propIndex]
             innerObject.fullPath = propObject.fullPath + '/' + \
                                    (innerObject.name if hasattr(innerObject,
                                                                 'name')
@@ -594,22 +673,25 @@ class XsdParser(object):
 
                         if isinstance(innerObject, XsdPropertyObject):
                             innerObject.name = prop
-                            innerObject.fullPath = propArrayObject.fullPath + '/' + prop
+                            innerObject.fullPath = propArrayObject.fullPath \
+                                                   + '/' + prop
                             # xsdObjects[innerObject.fullPath] = innerObject
                             xsdObjects[
-                                f'{innerObject.tag} {innerObject.fullPath}'] = innerObject
+                                f'{innerObject.tag} {innerObject.fullPath}'] \
+                                = innerObject
 
                             xsdObjects.update(
-                                self.checkInnerProperties(innerObject))
+                                    self.checkInnerProperties(innerObject))
 
                 else:
                     itemsObject.fullPath = propArrayObject.fullPath + '/' + \
                                            (itemsObject.name if hasattr(
-                                               itemsObject,
-                                               'name') else 'items')
+                                                   itemsObject,
+                                                   'name') else 'items')
                     # xsdObjects[itemsObject.fullPath] = itemsObject
                     xsdObjects[
-                        f'{itemsObject.tag} {itemsObject.fullPath}'] = itemsObject
+                        f'{itemsObject.tag} {itemsObject.fullPath}'] = \
+                        itemsObject
 
                     xsdObjects.update(self.checkInnerProperties(itemsObject))
 

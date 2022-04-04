@@ -39,7 +39,7 @@
         <xs:sequence>
             <xs:element name="str" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
-        <xs:attribute name="id" type="xs:string" use="required"/>
+        <xs:attribute name="failCode" type="failureCode" use="required"/>
         <xs:attribute name="action" type="multifieldAction"/>
     </xs:complexType>
 
@@ -110,5 +110,13 @@
             <xs:enumeration value="remove"/>
         </xs:restriction>
     </xs:simpleType>
+
+    <xs:complexType name="failureCode">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="id" type="xs:string"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
 
 </xs:schema>

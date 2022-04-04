@@ -1,12 +1,13 @@
 import os
 import threading
+
 import pyperclip
 from PyQt6.QtCore import *
 from PyQt6.QtGui import *
 from PyQt6.QtWidgets import *
 
-import outputMessage
 import constants
+import outputMessage
 from xsdPart.xsdObjectValidator import XsdObjectValidator
 from xsdPart.xsdParser import XsdParser
 
@@ -15,14 +16,15 @@ def setup(form):
     xsdController = XsdController(form)
 
     form.pushButtonLoadXsd.clicked.connect(xsdController.loadXsd)
-    form.pushButtonRefreshXsd.clicked.connect(xsdController.refreshObjectsFromText)
+    form.pushButtonRefreshXsd.clicked.connect(
+        xsdController.refreshObjectsFromText)
     form.pushButtonValidateXsd.clicked.connect(xsdController.validateXsd)
     form.textEditTextXsd.dropEvent = xsdController.xsdFileDropEvent
 
     form.pushButtonCopySelectedResultXsd.clicked.connect(
-        xsdController.copySelectedResult)
+            xsdController.copySelectedResult)
     form.pushButtonCopyFullResultXsd.clicked.connect(
-        xsdController.copyFullResult)
+            xsdController.copyFullResult)
 
     form.textEditResultXsd.keyPressEvent = xsdController.keyPressEvent
 
@@ -44,9 +46,11 @@ class XsdController:
             return QListWidget.keyPressEvent(self.form.textEditResultXsd, event)
 
     def copySelectedResult(self):
-        # itemsTextList = [str(self.form.textEditResultXsd.item(i).text()) for i in
+        # itemsTextList = [str(self.form.textEditResultXsd.item(i).text())
+        # for i in
         #                  range(self.form.textEditResultXsd.count())
-        # subprocess.run("pbcopy", universal_newlines=True, input=str(itemsTextList)) # clip
+        # subprocess.run("pbcopy", universal_newlines=True, input=str(
+        # itemsTextList)) # clip
         itemsTextString = ''
         for item in self.form.textEditResultXsd.selectedItems():
             itemsTextString += str(item.text() + '\n')
@@ -54,12 +58,15 @@ class XsdController:
         pyperclip.copy(itemsTextString)
 
     def copyFullResult(self):
-        # itemsTextList = [str(self.form.textEditResultXsd.item(i).text()) for i in
+        # itemsTextList = [str(self.form.textEditResultXsd.item(i).text())
+        # for i in
         #                  range(self.form.textEditResultXsd.count())
-        # subprocess.run("pbcopy", universal_newlines=True, input=str(itemsTextList)) # clip
+        # subprocess.run("pbcopy", universal_newlines=True, input=str(
+        # itemsTextList)) # clip
         itemsTextString = ''
         # for i in range(self.form.textEditResultXsd.count()):
-        #     itemsTextString += str(self.form.textEditResultXsd.item(i).text() + '\n')
+        #     itemsTextString += str(self.form.textEditResultXsd.item(
+        #     i).text() + '\n')
         self.form.textEditResultXsd.selectAll()
         for item in self.form.textEditResultXsd.selectedItems():
             itemsTextString += str(item.text() + '\n')
@@ -102,8 +109,8 @@ class XsdController:
                 self.refreshObjectsFromText()
             else:
                 self.form.textEditTextXsd.append(
-                    'Файл в формате ' + fileUrl[fileUrl.rindex(
-                        '.'):] + ' не может быть загружен')
+                        'Файл в формате ' + fileUrl[fileUrl.rindex(
+                                '.'):] + ' не может быть загружен')
 
     def refreshObjectsFromText(self):
         self.form.textEditResultXsd.clear()
@@ -128,10 +135,11 @@ class XsdController:
         self.form.textEditResultXsd.clear()
         if isinstance(self.xsdObjects, dict):
             rootTagsNames = list(
-                xsdObject.name for xsdObject in self.xsdObjects.values()
-                if hasattr(xsdObject, 'fullPath') and hasattr(xsdObject, 'name')
-                and hasattr(xsdObject, 'tag') and xsdObject.tag == 'element'
-                and xsdObject.fullPath == '/' + xsdObject.name)
+                    xsdObject.name for xsdObject in self.xsdObjects.values()
+                    if hasattr(xsdObject, 'fullPath') and hasattr(xsdObject,
+                                                                  'name')
+                    and hasattr(xsdObject, 'tag') and xsdObject.tag == 'element'
+                    and xsdObject.fullPath == '/' + xsdObject.name)
 
             self.form.comboBoxChooseElementsXsd.addItems(rootTagsNames)
 
@@ -142,21 +150,23 @@ class XsdController:
                 self.printOutputMessage(string)
             # self.printOutputMessage('Обработка файла закончена!')
             # self.printOutputMessage('Выберите элементы из выпадающего списка')
-            # self.printOutputMessage('Затем нажмите кнопку "Валидировать схему"')
+            # self.printOutputMessage('Затем нажмите кнопку "Валидировать
+            # схему"')
         else:
             self.form.textEditResultXsd.addItem(str(self.xsdObjects))
             self.form.textEditResultXsd.item(
-                self.form.textEditResultXsd.count() - 1).setForeground(
-                Qt.GlobalColor.red)
+                    self.form.textEditResultXsd.count() - 1).setForeground(
+                    Qt.GlobalColor.red)
 
     def validateXsd(self):
         self.form.textEditResultXsd.clear()
 
         chosenElements = list(
-            self.form.comboBoxChooseElementsXsd.model().item(i).text() for i in
-            range(self.form.comboBoxChooseElementsXsd.count())
-            if self.form.comboBoxChooseElementsXsd.model().item(
-                i).checkState() == Qt.CheckState.Checked)
+                self.form.comboBoxChooseElementsXsd.model().item(i).text() for i
+                in
+                range(self.form.comboBoxChooseElementsXsd.count())
+                if self.form.comboBoxChooseElementsXsd.model().item(
+                        i).checkState() == Qt.CheckState.Checked)
 
         objectsToValidate = {}
 
@@ -174,7 +184,8 @@ class XsdController:
             objectsToValidate = None
 
         # objectsToValidate.update(
-        #     self.form.comboBoxChooseElementsXsd.model().item(i).text() for i in self.xsdObjects
+        #     self.form.comboBoxChooseElementsXsd.model().item(i).text() for
+        #     i in self.xsdObjects
         #     if i in chosenElements)
         # self.xsdObjects
 
@@ -190,9 +201,11 @@ class XsdController:
 
                 for xsdObject in objectsToValidate.values():
                     fullValidationResult.extend(
-                        self.form.xsdValidator.validate(xsdObject))
+                            self.form.xsdValidator.validate(xsdObject,
+                                                            objectsToValidate))
                     stringPatternValidationResult.extend(
-                        self.form.xsdValidator.checkStringPattern(xsdObject))
+                            self.form.xsdValidator.checkStringPattern(
+                                xsdObject))
 
                 if fullValidationResult:
                     for msg in fullValidationResult:
@@ -201,16 +214,20 @@ class XsdController:
                 else:
                     self.form.textEditResultXsd.addItem('Схема валидна!')
                     self.form.textEditResultXsd.item(
-                        self.form.textEditResultXsd.count() - 1).setForeground(
-                        Qt.GlobalColor.green)
+                            self.form.textEditResultXsd.count() -
+                            1).setForeground(
+                            Qt.GlobalColor.green)
 
                 if stringPatternValidationResult:
                     self.form.textEditResultXsd.addItem(
-                        'Также отсутствуют паттерны в строковых тегах:')
+                            'Также отсутствуют паттерны в строковых тегах:')
                     self.form.textEditResultXsd.item(
-                        self.form.textEditResultXsd.count() - 1).setForeground(
-                        Qt.GlobalColor.white)
-                    # self.form.textEditResultXsd.item(self.form.textEditResultXsd.count() - 1).setBackground(Qt.GlobalColor.white)
+                            self.form.textEditResultXsd.count() -
+                            1).setForeground(
+                            Qt.GlobalColor.white)
+                    # self.form.textEditResultXsd.item(
+                    # self.form.textEditResultXsd.count() - 1).setBackground(
+                    # Qt.GlobalColor.white)
 
                     for msg in stringPatternValidationResult:
                         self.printOutputMessage(msg)
@@ -218,13 +235,13 @@ class XsdController:
             else:
                 self.form.textEditResultXsd.addItem(str(objectsToValidate))
                 self.form.textEditResultXsd.item(
-                    self.form.textEditResultXsd.count() - 1).setForeground(
-                    Qt.GlobalColor.red)
+                        self.form.textEditResultXsd.count() - 1).setForeground(
+                        Qt.GlobalColor.red)
         else:
             self.form.textEditResultXsd.addItem('Сначала загрузите схему!')
             self.form.textEditResultXsd.item(
-                self.form.textEditResultXsd.count() - 1).setForeground(
-                Qt.GlobalColor.red)
+                    self.form.textEditResultXsd.count() - 1).setForeground(
+                    Qt.GlobalColor.red)
 
     def printOutputMessage(self, message):
         self.form.textEditResultXsd.addItem(str(message))
@@ -237,5 +254,5 @@ class XsdController:
             itemColor = Qt.GlobalColor.red
 
         self.form.textEditResultXsd.item(
-            self.form.textEditResultXsd.count() - 1).setForeground(
-            itemColor)
+                self.form.textEditResultXsd.count() - 1).setForeground(
+                itemColor)

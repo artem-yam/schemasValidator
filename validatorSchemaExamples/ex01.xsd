@@ -4,7 +4,7 @@
     <element name="elemInnerComplexType">
         <complexType>
             <complexContent>
-                <restriction base="SomeComplexType">
+                <extension base="SomeComplexType">
                     <sequence>
                         <element name="SomeInteger" type="integer">
                             <annotation>
@@ -12,7 +12,7 @@
                             </annotation>
                         </element>
                     </sequence>
-                </restriction>
+                </extension>
             </complexContent>
         </complexType>
     </element>
