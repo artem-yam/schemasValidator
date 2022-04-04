@@ -2,7 +2,14 @@ from xsdPart.xsdUtils import getStringWithoutNamespace
 
 
 class XsdPropertyObject(object):
+
+    # def initFields(self):
+    #     self.fullPath = None
+    #     self.name = None
+    #     self.tag = None
+
     def __init__(self, xsdTag, parentPath, otherXsdObjects):
+        # self.initFields()
 
         if hasattr(xsdTag, 'prefix') and xsdTag.prefix:
             self.tag = xsdTag.tag.split('}')[1]
@@ -12,15 +19,16 @@ class XsdPropertyObject(object):
         for attribKey in xsdTag.attrib:
             if attribKey == 'type':
                 self.type = getStringWithoutNamespace(
-                    xsdTag.attrib['type'])
+                        xsdTag.attrib['type'])
             else:
                 self.__dict__[attribKey] = getStringWithoutNamespace(
-                    xsdTag.attrib[attribKey])
+                        xsdTag.attrib[attribKey])
 
         # if 'name' in xsdTag.attrib:
         #     self.name = xsdTag.attrib['name']
         # if 'type' in xsdTag.attrib:
-        #     self.type = getStringWithoutNamespaceNamespace(xsdTag.attrib['type'])
+        #     self.type = getStringWithoutNamespaceNamespace(xsdTag.attrib[
+        #     'type'])
 
         if not hasattr(self, 'type'):
             if hasattr(self, 'base'):
@@ -55,7 +63,7 @@ class XsdPropertyObject(object):
                             and hasattr(propTag.list, 'attrib') \
                             and 'itemType' in propTag.list.attrib:
                         self.type = getStringWithoutNamespace(
-                            propTag.list.attrib['itemType'])
+                                propTag.list.attrib['itemType'])
 
                 elif propKey == 'restriction' or propKey == 'extension':
                     self.parseRestrictions(xsdTag, propKey)
@@ -75,6 +83,8 @@ class XsdPropertyObject(object):
                 self.name = getStringWithoutNamespace(self.ref)
             elif hasattr(self, 'base'):
                 self.name = getStringWithoutNamespace(self.base)
+            elif hasattr(self, 'tag'):
+                self.name = getStringWithoutNamespace(self.tag)
             else:
                 self.name = 'elem№' + str(otherXsdObjects.__len__() + 1)
 
@@ -89,7 +99,7 @@ class XsdPropertyObject(object):
         for childTag in parentTag.iterchildren():
             if hasattr(childTag, 'attrib') and 'base' in childTag.attrib:
                 return getStringWithoutNamespace(
-                    childTag.attrib['base'])
+                        childTag.attrib['base'])
             else:
                 if baseType := self.getBaseType(childTag):
                     return baseType
@@ -100,7 +110,7 @@ class XsdPropertyObject(object):
         restrictionsMainTag = xsdTag.__dict__[propKey]
         if 'base' in restrictionsMainTag.attrib:
             self.type = getStringWithoutNamespace(
-                restrictionsMainTag.attrib['base'])
+                    restrictionsMainTag.attrib['base'])
 
         # if 'pattern' in xsdTag.__dict__[propKey].__dict__.keys():
         for restrictionName in restrictionsMainTag.__dict__.keys():

@@ -6,20 +6,42 @@ def getStringWithoutNamespace(originalString) -> str:
     return namespaceSplit[len(namespaceSplit) - 1].strip()
 
 
+def getElementSiblings(xsdElemObject, xsdObjectsDict) -> dict:
+    resultDict = {}
+
+    if hasattr(xsdElemObject, 'fullPath'):
+        parentPath = path if (
+                len(path := xsdElemObject.fullPath.rpartition('/')[
+                    0]) > 0) else None
+
+        if parentPath is not None:
+            for xsdObjectKey, xsdObject in xsdObjectsDict.items():
+                if hasattr(xsdElemObject,
+                           'fullPath') and \
+                        xsdElemObject.fullPath.rpartition('/')[0] == parentPath:
+                    resultDict[xsdObjectKey] = xsdObject
+
+    return resultDict
+
+
 XSD_SIMPLE_TYPES = ['string', 'boolean', 'decimal', 'float', 'double',
                     'dateTime', 'time', 'date', 'base64Binary',
                     'normalizedString', 'integer', 'nonPositiveInteger',
                     'negativeInteger', 'long', 'int', 'short', 'byte',
                     'nonNegativeInteger', 'positiveInteger']
 
-LOGGER_FORMAT = "%(asctime)s - [%(levelname)s] - (%(filename)s:%(funcName)s:%(lineno)d) - %(message)s"
+LOGGER_FORMAT = "%(asctime)s - [%(levelname)s] - (%(filename)s:%(" \
+                "funcName)s:%(lineno)d) - %(message)s"
 LOGGER_FILE_NAME = "validatorLog.log"
 
 
 class ColoredFormatter(logging.Formatter):
-    # FORMAT = "%(asctime)s - [%(levelname)s] - %(message)s (%(filename)s:%(funcName)s:%(lineno)d)"
-    # FORMAT = "%(asctime)s - %(name)s - %(levelname)s - %(message)s (%(filename)s:%(lineno)d)"
-    # FORMAT = "%(asctime)s - %(module)s - %(levelname)s - %(funcName)s: %(lineno)d - %(message)s"
+    # FORMAT = "%(asctime)s - [%(levelname)s] - %(message)s (%(filename)s:%(
+    # funcName)s:%(lineno)d)"
+    # FORMAT = "%(asctime)s - %(name)s - %(levelname)s - %(message)s (%(
+    # filename)s:%(lineno)d)"
+    # FORMAT = "%(asctime)s - %(module)s - %(levelname)s - %(funcName)s: %(
+    # lineno)d - %(message)s"
 
     RESET_SEQ = "\033[0m"
     COLOR_SEQ = "\033[20;%dm"
@@ -55,7 +77,7 @@ sh = logging.StreamHandler()
 sh.setFormatter(ColoredFormatter(LOGGER_FORMAT))
 
 logging.basicConfig(
-    level=logging.DEBUG,
-    handlers=(logging.FileHandler(LOGGER_FILE_NAME, 'w'), sh),
-    format=LOGGER_FORMAT
+        level=logging.DEBUG,
+        handlers=(logging.FileHandler(LOGGER_FILE_NAME, 'w'), sh),
+        format=LOGGER_FORMAT
 )

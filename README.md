@@ -22,30 +22,25 @@ TODO общее:
 
 TODO json:
 - в массивах не парсится блок items в отдельный элемент, только его внутренние проперти
+    из-за этого additionalProperties:true проходит валидацию
 - парсинг patternProperties ??? 
 - в patternProperties проверять ограничение имени свойства по длине
 - сделать ошибку при циклических ссылках
+- если additionalProperties схема(ссылка на какой-то элемент),
+ то внутренние типы этого элемента парсить внутрь add...Prop...
 - переделать поиск key-value pair
   (искать комбинацию key|param + value)
 
 
 TODO xsd:
-- переделать extension и restriction
-  (пример: /ticket/permissions/allow/attrs)
-  Extension сделал, но уточнить про пути!
-  Restriction сделать по аналогии !
-- понять, почему в путях остаются неймспейсы ++?
-- полное отсутствие типа у элемента +++
-  (пример: /GetStatementCVDataRqType/Any в тестовой схеме 3)
 - парсинг:
-    - ref +++
     - цикличные ссылки
       (пример:    1)  recreateObjects.folder... 2)  /ticket/permissions/allow... /ticket/permissions/deny... в
       ecm_mq_3.10.xsd)
     - complexContent внутри complexType работает некорректно                !!!
       (пример:   1)  permission... 2)  findData... в ecm_mq_3.10.xsd)
 - сделать ошибку при циклических ссылках
-- переделать поиск key-value pair ??? пока под вопросом
+- переделать поиск key-value pair ???
   (искать комбинацию key|param + value)
 
 
@@ -73,7 +68,11 @@ TODO xsd:
       - Если тип - simpleType, то в этом типе ищется по цепочке до простого типа
       - Если тип - complexType, то копируется объекты типа и всех подтипов 
       и на них переносится полный путь от элемента, 
-      на сам тип также переносятся доп. свойства элемента 
+      на сам тип также переносятся доп. свойства элемента
+    - поправил extension и restriction
+    - полное отсутствие типа у элемента
+      (пример: /GetStatementCVDataRqType/Any в тестовой схеме.xsd)
+    - ссылки через ref
 - проверки:
     - ограничение массива
     - элемент с номером карты   (инфо)
@@ -84,7 +83,8 @@ TODO xsd:
     - для строк проверка длины через паттерн
       (сделал только проверку отсутствия '+' и '*')    +++
     - проверять элементы без типа
-    - ограничение чисел (minExclusive, minInclusive, maxExclusive, maxInclusive, totalDigits) ???
+    - ограничение чисел 
+    (minExclusive, minInclusive, maxExclusive, maxInclusive, totalDigits)
 - конфигуратор:
     - ограничение массива
     - макс длина строки
