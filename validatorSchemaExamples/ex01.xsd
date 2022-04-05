@@ -6,7 +6,7 @@
             <complexContent>
                 <extension base="SomeComplexType">
                     <sequence>
-                        <element name="SomeInteger" type="integer">
+                        <element name="SomeAnotherInteger" type="integer">
                             <annotation>
                                 <documentation>Номер контракта карты</documentation>
                             </annotation>
