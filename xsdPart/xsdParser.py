@@ -2,9 +2,9 @@ import re
 import sys
 import traceback
 from copy import *
+from xml.dom.minidom import parseString
 
 from lxml import objectify
-from xml.dom.minidom import parseString
 
 from xsdPart.xsdPropertyObject import XsdPropertyObject
 from xsdPart.xsdUtils import *
@@ -77,17 +77,16 @@ class XsdParser(object):
             # logging.info(';\n'.join(map(str, xsdObjects.values())))
 
             xsdObjects = self.processSimpleTypesChain(xsdObjects)
-            # xsdObjects = self.processExtensionsAndRestrictions(xsdObjects)
-
-            # logging.info(
-            # '---------------------------------------------------')
-            # logging.info('Мапа ДО объединения')
-            # logging.info(
-            # '---------------------------------------------------')
-            # logging.info(';\n'.join(map(str, xsdObjects.values())))
-
             xsdObjects = self.processExtensionsAndRestrictions(xsdObjects)
-            # xsdObjects = self.combineTypesWithElement(xsdObjects)
+
+            logging.info('---------------------------------------------------')
+            logging.info('Мапа ДО объединения')
+            logging.info('---------------------------------------------------')
+            logging.info(';\n'.join(map(str, xsdObjects.values())))
+
+            # xsdObjects = self.processExtensionsAndRestrictions(xsdObjects)
+            xsdObjects = self.combineTypesWithElement(xsdObjects)
+            xsdObjects = self.sortDict(xsdObjects)
 
             logging.info('---------------------------------------------------')
             logging.info('Мапа ПОСЛЕ объединения')
@@ -104,6 +103,50 @@ class XsdParser(object):
                          + ' проверьте корректность загруженного текста'
 
         return xsdObjects
+
+    def sortDict(self, xsdObjects) -> dict:
+        modifiedXsdObjects = copy(xsdObjects)
+
+        alreadySortedObjects = []
+        # tempModifiedXsdObjects = copy(modifiedXsdObjects)
+        # parentObjectPath = None
+
+        # nextObjectPath = path if (hasattr(firstObject := modifiedXsdObjects[
+        #     next(iter(modifiedXsdObjects))], 'fullPath')
+        #                            and (path := firstObject.fullPath)) else
+        #                            None
+
+        while (
+                (tempModifiedXsdObjects := copy(modifiedXsdObjects)) and (
+                (nextParentObject := next(
+                        (nextObject for nextObjectKey, nextObject in
+                         modifiedXsdObjects.items() if
+                         nextObject not in alreadySortedObjects
+                         and hasattr(nextObject, 'fullPath')),
+                        None)) is not None)):
+            alreadySortedObjects.append(nextParentObject)
+
+            # parentObjectPath = nextParentObject.fullPath
+
+            # for xsdObjectKey, xsdObject in tempModifiedXsdObjects.items():
+            #     if xsdObject.fullPath.startswith(nextParentObject.fullPath):
+            #         alreadySortedObjects.append(xsdObject)
+            #     else:
+            #         modifiedXsdObjects.pop(xsdObjectKey)
+            #         modifiedXsdObjects[xsdObjectKey] = xsdObject
+
+            for xsdObjectKey, xsdObject in reversed(
+                    tempModifiedXsdObjects.items()):
+                if xsdObject.fullPath.startswith(nextParentObject.fullPath):
+                    alreadySortedObjects.append(xsdObject)
+                else:
+                    modifiedXsdObjects.pop(xsdObjectKey)
+                    modifiedXsdObjects = {xsdObjectKey: xsdObject,
+                                          **modifiedXsdObjects}
+
+        # tempModifiedXsdObjects = copy(modifiedXsdObjects)
+
+        return modifiedXsdObjects
 
     # TODO фикс на случай циклических ссылок
     def processSimpleTypesChain(self, xsdObjects) -> dict:
@@ -191,7 +234,6 @@ class XsdParser(object):
 
     # TODO фикс на случай циклических ссылок
     def combineTypesWithElement(self, xsdObjects) -> dict:
-
         # TODO
 
         # modifiedXsdObjects = deepcopy(xsdObjects)
@@ -480,10 +522,10 @@ class XsdParser(object):
                                     innerContent,
                                     parentPath +
                                     (('/' + xsdObject.name)
-                                    if hasattr(xsdObject, 'name')
-                                    else '')
+                                     if hasattr(xsdObject, 'name')
+                                     else '')
+                                    )
                             )
-                    )
 
                 # if hasattr(tag, 'complexContent'):
                 #     tag.complexContent.attrib['name'] = xsdObject.name
@@ -518,8 +560,9 @@ class XsdParser(object):
                     tempTag = next(
                             (tempTag.__dict__[innerTagName] for innerTagName in
                              tempTag.__dict__ if
-                             innerTagName in [#'complexType', 'complexContent',
-                                              'restriction', 'extension']),
+                             innerTagName in [
+                                 # 'complexType', 'complexContent',
+                                 'restriction', 'extension']),
                             None)
 
                 if elementsGroup is not None:
