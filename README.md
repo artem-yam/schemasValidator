@@ -28,8 +28,6 @@ TODO json:
 - сделать ошибку при циклических ссылках
 - если additionalProperties схема(ссылка на какой-то элемент),
  то внутренние типы этого элемента парсить внутрь add...Prop...
-- переделать поиск key-value pair
-  (искать комбинацию key|param + value)
 
 
 TODO xsd:
@@ -40,8 +38,6 @@ TODO xsd:
     - complexContent внутри complexType работает некорректно                !!!
       (пример:   1)  permission... 2)  findData... в ecm_mq_3.10.xsd)
 - сделать ошибку при циклических ссылках
-- переделать поиск key-value pair +++
-  (искать комбинацию key|param + value)
 
 
 Сделано общее:
@@ -86,6 +82,7 @@ TODO xsd:
     - проверять элементы без типа
     - ограничение чисел 
     (minExclusive, minInclusive, maxExclusive, maxInclusive, totalDigits)
+    - переделал поиск key-value pair (искать комбинацию key|param + value)
 - конфигуратор:
     - ограничение массива
     - макс длина строки
@@ -122,6 +119,7 @@ TODO xsd:
     - проверка наличия additionalProperties:false только для object
     - если есть additionalProperties и не равно false, то доп. проверка наличия maxProperties
     - убрать проверку наличия maxProperties при patternProperties=true
+    - переделал поиск key-value pair (искать комбинацию key|param + value)
 - конфигуратор:
     - макс длина строки
     - макс длина массива
