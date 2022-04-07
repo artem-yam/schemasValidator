@@ -7,7 +7,7 @@ from PyQt6.QtGui import *
 from PyQt6.QtWidgets import *
 
 import outputMessage
-import constants
+from baseUtils import *
 from jsonPart.jsonObjectValidator import JsonObjectValidator
 from jsonPart.jsonParser import JsonParser
 
@@ -116,7 +116,7 @@ class JsonController:
         for button in self.form.jsonProcessingButtons:
             button.setEnabled(False)
 
-        for string in constants.FILE_PROCESS_START_TEXT:
+        for string in FILE_PROCESS_START_TEXT:
             self.printOutputMessage(string)
 
         t1 = threading.Thread(target=self.parseTextToObjects,
@@ -143,7 +143,7 @@ class JsonController:
             for button in self.form.jsonProcessingButtons:
                 button.setEnabled(True)
 
-            for string in constants.FILE_PROCESS_FINISH_TEXT:
+            for string in FILE_PROCESS_FINISH_TEXT:
                 self.printOutputMessage(string)
             # self.printOutputMessage('Обработка файла закончена!')
             # self.printOutputMessage('Выберите элементы из выпадающего списка')

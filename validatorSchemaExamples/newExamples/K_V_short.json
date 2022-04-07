@@ -1,0 +1,34 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "SrvGetDebitCardStatementCAPRs",
+	"description": "Ответ на запрос выписки по счёту дебетовой карты",
+	"type": "object",
+	"properties": {
+		"Status": {
+			"description": "Статус выполнения операции",
+			"type": "object",
+			"properties": {
+				"key": {
+					"description": "Код статуса выполнения операции",
+					"type": "string",
+					"maxLength": 16
+				},
+				"Value": {
+					"description": "Описание ошибки",
+					"type": "string",
+					"maxLength": 6000
+				}
+			},
+			"required": [
+				"key"
+			],
+			"additionalProperties": false
+		}
+	},
+	"required": [
+		"Status"
+	],
+	"additionalProperties": false,
+	"definitions": {
+	}
+}

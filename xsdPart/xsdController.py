@@ -6,7 +6,7 @@ from PyQt6.QtCore import *
 from PyQt6.QtGui import *
 from PyQt6.QtWidgets import *
 
-import constants
+from baseUtils import *
 import outputMessage
 from xsdPart.xsdObjectValidator import XsdObjectValidator
 from xsdPart.xsdParser import XsdParser
@@ -120,7 +120,7 @@ class XsdController:
         for button in self.form.xsdProcessingButtons:
             button.setEnabled(False)
 
-        for string in constants.FILE_PROCESS_START_TEXT:
+        for string in FILE_PROCESS_START_TEXT:
             self.printOutputMessage(string)
 
         t1 = threading.Thread(target=self.parseTextToObjects,
@@ -146,7 +146,7 @@ class XsdController:
             for button in self.form.xsdProcessingButtons:
                 button.setEnabled(True)
 
-            for string in constants.FILE_PROCESS_FINISH_TEXT:
+            for string in FILE_PROCESS_FINISH_TEXT:
                 self.printOutputMessage(string)
             # self.printOutputMessage('Обработка файла закончена!')
             # self.printOutputMessage('Выберите элементы из выпадающего списка')

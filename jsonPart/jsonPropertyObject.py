@@ -19,9 +19,11 @@ class JsonPropertyObject(object):
                 fieldValue = self.__dict__[fieldName]
                 if isinstance(fieldValue, JsonPropertyObject):
                     fieldValue.tabsCount = self.tabsCount + 1
-                    returnString += (PROPERTY_STRING % (fieldName, '\n' + str(fieldValue)))
+                    returnString += (PROPERTY_STRING % (
+                        fieldName, '\n' + str(fieldValue)))
                 else:
-                    returnString += (PROPERTY_STRING % (fieldName, str(fieldValue) + ''))
+                    returnString += (PROPERTY_STRING % (
+                        fieldName, str(fieldValue) + ''))
 
         returnString += '\n' + ('\t' * (self.tabsCount - 1)) + '}'
 
