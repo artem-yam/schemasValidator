@@ -47,9 +47,11 @@ class JsonController:
                                              event)
 
     def copySelectedResult(self):
-        # itemsTextList = [str(self.form.textEditResultXsd.item(i).text()) for i in
+        # itemsTextList = [str(self.form.textEditResultXsd.item(i).text())
+        # for i in
         #                  range(self.form.textEditResultXsd.count())
-        # subprocess.run("pbcopy", universal_newlines=True, input=str(itemsTextList)) # clip
+        # subprocess.run("pbcopy", universal_newlines=True, input=str(
+        # itemsTextList)) # clip
         itemsTextString = ''
         for item in self.form.textEditResultJson.selectedItems():
             itemsTextString += str(item.text() + '\n')
@@ -58,12 +60,15 @@ class JsonController:
         self.form.comboBoxChooseElementsJson.setCurrentIndex(-1)
 
     def copyFullResult(self):
-        # itemsTextList = [str(self.form.textEditResultXsd.item(i).text()) for i in
+        # itemsTextList = [str(self.form.textEditResultXsd.item(i).text())
+        # for i in
         #                  range(self.form.textEditResultXsd.count())
-        # subprocess.run("pbcopy", universal_newlines=True, input=str(itemsTextList)) # clip
+        # subprocess.run("pbcopy", universal_newlines=True, input=str(
+        # itemsTextList)) # clip
         itemsTextString = ''
         # for i in range(self.form.textEditResultXsd.count()):
-        #     itemsTextString += str(self.form.textEditResultXsd.item(i).text() + '\n')
+        #     itemsTextString += str(self.form.textEditResultXsd.item(
+        #     i).text() + '\n')
         self.form.textEditResultJson.selectAll()
         for item in self.form.textEditResultJson.selectedItems():
             itemsTextString += str(item.text() + '\n')
@@ -135,7 +140,8 @@ class JsonController:
                 if hasattr(jsonObject, 'fullPath')
                 and hasattr(jsonObject, 'name')
                 and (jsonObject.fullPath == '/' + jsonObject.name
-                     # or jsonObject.fullPath == '#/definitions/' + jsonObject.name
+                     # or jsonObject.fullPath == '#/definitions/' +
+                     # jsonObject.name
                      ))
 
             self.form.comboBoxChooseElementsJson.addItems(rootTagsNames)
@@ -147,7 +153,8 @@ class JsonController:
                 self.printOutputMessage(string)
             # self.printOutputMessage('Обработка файла закончена!')
             # self.printOutputMessage('Выберите элементы из выпадающего списка')
-            # self.printOutputMessage('Затем нажмите кнопку "Валидировать схему"')
+            # self.printOutputMessage('Затем нажмите кнопку "Валидировать
+            # схему"')
         else:
             self.form.textEditResultJson.addItem(str(self.jsonObjects))
             self.form.textEditResultJson.item(
@@ -172,7 +179,8 @@ class JsonController:
                 # while isChosen == False:
                 for elem in chosenElements:
                     isChosen = jsonObject.fullPath.startswith(f'/{elem}') \
-                        # or jsonObject.fullPath.startswith(f'#/definitions/{elem}')
+                        # or jsonObject.fullPath.startswith(f'#/definitions/{
+                    # elem}')
                     if isChosen:
                         break
                 if isChosen:
@@ -198,7 +206,8 @@ class JsonController:
 
                 for jsonObject in objectsToValidate.values():
                     fullValidationResult.extend(
-                        # self.form.jsonValidator.validate(jsonObject, objectsToValidate))
+                        # self.form.jsonValidator.validate(jsonObject,
+                        # objectsToValidate))
                         self.form.jsonValidator.validate(jsonObject,
                                                          self.jsonObjects))
                     stringPatternValidationResult.extend(
@@ -220,7 +229,9 @@ class JsonController:
                     self.form.textEditResultJson.item(
                         self.form.textEditResultJson.count() - 1).setForeground(
                         Qt.GlobalColor.white)
-                    # self.form.textEditResultJson.item(self.form.textEditResultJson.count() - 1).setBackground(Qt.GlobalColor.white)
+                    # self.form.textEditResultJson.item(
+                    # self.form.textEditResultJson.count() -
+                    # 1).setBackground(Qt.GlobalColor.white)
 
                     for msg in stringPatternValidationResult:
                         self.printOutputMessage(msg)
@@ -251,7 +262,12 @@ class JsonController:
             itemColor)
 
     def printDraftVersion(self, jsonString):
-        draft = self.form.jsonParser.getJsonDraftVersion(jsonString)
+        if '/schema' in self.jsonObjects and hasattr(
+                schemaObject := self.jsonObjects['/schema'], '$schema'):
+            draft = schemaObject.__dict__['$schema']
+        else:
+            draft = self.form.jsonParser.getJsonDraftVersion(jsonString)
+
         validationResultMessage = self.form.jsonValidator.checkDraftVersion(
             draft)
         self.printOutputMessage(validationResultMessage)

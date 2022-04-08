@@ -1,5 +1,6 @@
 class JsonPropertyObject(object):
     def __init__(self, jsonMap):
+        self.tabsCount = None
         if isinstance(jsonMap, dict):
             self.__dict__.update(jsonMap)
 

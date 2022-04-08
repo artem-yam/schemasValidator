@@ -1,0 +1,60 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "description": "Схема сообщения об обновлении профиля клиента",
+    "type": "object",
+    "properties": {
+        "epkClientInfoRq": {
+            "$id": "#/properties/epkClientInfoRq",
+            "title": "Ответ на сообщение от ЕПК",
+            "description": "Ответ на сообщение от ЕПК",
+            "type": "object",
+            "properties": {
+                "epkClientInfo": {
+                    "$id": "#/properties/epkClientInfoRq/properties/epkClientInfo",
+                    "title": "Информация по клиентам",
+                    "description": "Информация по клиентам",
+                    "type": "array",
+                    "minItems": 1,
+                    "maxItems": 3,
+                    "uniqueItems": true,
+                    "items": {
+                        "$id": "#/properties/epkClientInfoRq/properties/epkClientInfo/items/properties//items/properties/contactGroup/items",
+                        "title": "Принадлежность контакта группе контактов",
+                        "description": "Принадлежность контакта группе контактов",
+                        "type": "object",
+                        "properties": {
+                            "key": {
+                                "$id": "#/properties/epkClientInfoRq/properties/epkClientInfo/items/properties//items/properties/contactGroup/items/properties/name",
+                                "title": "Ключ",
+                                "description": "Имя ключа (параметра)",
+                                "type": "string",
+                                "minLength": 1,
+                                "maxLength": 64
+                            },
+                            "value": {
+                                "$id": "#/properties/epkClientInfoRq/properties/epkClientInfo/items/properties//items/properties/contactGroup/items/properties/code",
+                                "title": "Значение",
+                                "description": "Строкове значение ключа (параметра)",
+                                "type": "string",
+                                "maxLength": 50
+                            }
+                        },
+                        "required": [
+                            "key"
+                        ],
+                        "additionalProperties": true
+                    },
+                    "additionalProperties": true
+                }
+            },
+            "required": [
+                "epkClientInfo"
+            ],
+            "additionalProperties": true
+        }
+    },
+    "required": [
+        "epkClientInfoRq"
+    ],
+    "additionalProperties": true
+}

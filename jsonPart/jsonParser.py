@@ -1,10 +1,10 @@
 import json
+import logging
 import sys
 import traceback
 from copy import *
 
 from jsonPart.jsonPropertyObject import JsonPropertyObject
-import logging
 
 
 class JsonParser(object):
@@ -17,9 +17,11 @@ class JsonParser(object):
         logging.info("Url = " + filePath)
         jsonString = ''
         try:
-            with open(filePath, encoding=sys.getfilesystemencoding()) as jsonFile:
+            with open(filePath,
+                      encoding=sys.getfilesystemencoding()) as jsonFile:
                 jsonString = json.load(jsonFile)
-                jsonPrettyString = json.dumps(jsonString, indent=4, ensure_ascii=False)
+                jsonPrettyString = json.dumps(jsonString, indent=4,
+                                              ensure_ascii=False)
                 jsonFile.close()
         except BaseException as err:
             logging.warning('Ошибки открытия файла:\n', traceback.format_exc())
@@ -41,7 +43,8 @@ class JsonParser(object):
             jsonString = schemaDraft
 
         except BaseException as err:
-            logging.warning('Ошибки получения версии драфта:\n', traceback.format_exc())
+            logging.warning('Ошибки получения версии драфта:\n',
+                            traceback.format_exc())
             jsonString = 'Ошибка получения версии драфта'
 
         return jsonString
@@ -63,14 +66,16 @@ class JsonParser(object):
             logging.info('---------------------------------------------------')
             logging.info('Мапа ПОСЛЕ объединения')
             logging.info('---------------------------------------------------')
-            logging.info(';\n'.join(map(str, jsonObjects.values())))
+            # logging.info(';\n'.join(map(str, jsonObjects.values())))
 
             if not jsonObjects:
                 raise Exception("Объекты в json не обнаружены")
 
         except BaseException as err:
-            logging.warning('Ошибки получения объектов из json:\n', traceback.format_exc())
-            jsonObjects = 'Ошибка преобразования json в объект, проверьте корректность загруженного текста'
+            logging.warning('Ошибки получения объектов из json:\n',
+                            traceback.format_exc())
+            jsonObjects = 'Ошибка преобразования json в объект, проверьте ' \
+                          'корректность загруженного текста'
 
         return jsonObjects
 
@@ -95,11 +100,14 @@ class JsonParser(object):
 
             if elemObjectKey is None:
                 modifiedJsonObjects.pop(typeObjectKey)
-                typeObjectKey = self.getNextCustomTypeRefKey(modifiedJsonObjects)
+                typeObjectKey = self.getNextCustomTypeRefKey(
+                    modifiedJsonObjects)
             else:
                 elemObject = modifiedJsonObjects[elemObjectKey]
 
-                logging.info(f'По типу: {typeObject.fullPath} смотрим элемент: {elemObject.fullPath}')
+                logging.info(
+                    f'По типу: {typeObject.fullPath} смо'
+                    f'трим элемент: {elemObject.fullPath}')
 
                 itemsToAdd = {}
 
@@ -111,27 +119,34 @@ class JsonParser(object):
 
                 for fieldName in elemObject.__dict__:
                     if fieldName in ['name', 'fullPath']:
-                        copiedTypeObject.__dict__[fieldName] = elemObject.__dict__[fieldName]
+                        copiedTypeObject.__dict__[fieldName] = \
+                            elemObject.__dict__[fieldName]
 
                 jsonObjects[elemObjectKey] = copiedTypeObject
                 modifiedJsonObjects[elemObjectKey] = copiedTypeObject
 
                 # TODO копирование внутренних типов
-                for innerTypeObjectKey, innerTypeObject in modifiedJsonObjects.items():
+                for innerTypeObjectKey, innerTypeObject in \
+                        modifiedJsonObjects.items():
                     if innerTypeObject.fullPath.startswith(typePath + '/') and \
                             innerTypeObject.fullPath != typePath:
                         copiedInnerTypeObject = copy(innerTypeObject)
 
-                        copiedInnerTypeObject.fullPath = copiedTypeObject.fullPath + '/' + \
-                                                         innerTypeObject.fullPath.split(
-                                                             typePath + '/')[1]
+                        copiedInnerTypeObject.fullPath = \
+                            copiedTypeObject.fullPath + '/' + \
+                            innerTypeObject.fullPath.split(
+                                typePath + '/')[1]
 
                         jsonObjects[
-                            f'element {copiedInnerTypeObject.fullPath}'] = copiedInnerTypeObject
+                            f'element {copiedInnerTypeObject.fullPath}'] = \
+                            copiedInnerTypeObject
                         itemsToAdd[
-                            f'element {copiedInnerTypeObject.fullPath}'] = copiedInnerTypeObject
+                            f'element {copiedInnerTypeObject.fullPath}'] = \
+                            copiedInnerTypeObject
 
-                        logging.info('Смотрим внутренний тип: ' + copiedInnerTypeObject.fullPath)
+                        logging.info(
+                            'Смотрим внутренний тип: ' +
+                            copiedInnerTypeObject.fullPath)
 
                 modifiedJsonObjects.pop(elemObjectKey)
                 modifiedJsonObjects.update(itemsToAdd)
@@ -143,7 +158,8 @@ class JsonParser(object):
         for jsonObject in jsonObjects.values():
             if hasattr(jsonObject, '$ref'):
                 typeObjectKey = next(
-                    (typeObjectKey for typeObjectKey, typeObject in jsonObjects.items() if
+                    (typeObjectKey for typeObjectKey, typeObject in
+                     jsonObjects.items() if
                      typeObject.fullPath == jsonObject.__dict__['$ref']),
                     False)
                 if typeObjectKey:
@@ -154,17 +170,35 @@ class JsonParser(object):
     def parseProperties(self, jsonString) -> dict:
         jsonObjects = {}
 
+        schemaString = json.dumps(jsonString, ensure_ascii=False)
+        schemaObject = json.loads(schemaString,
+                                  object_hook=JsonParser.jsonPropertyDecoder)
+        schemaObject.name = 'schema'
+        schemaObject.fullPath = f'/{schemaObject.name}'
+        jsonObjects[schemaObject.fullPath] = schemaObject
+
+        # if isSchemaObject := isinstance(jsonString, JsonPropertyObject):
+        #     jsonString.name = 'schema'
+        #     jsonString.fullPath = f'/{jsonString.name}'
+        #
+        #     jsonObjects[jsonString.fullPath] = jsonString
+
         if 'properties' in jsonString:
             jsonProperties = jsonString['properties']
 
             for prop in jsonProperties:
                 jsonObjects.update(self.parseProperty(prop, jsonProperties, ''))
 
+            schemaObject.properties = 'Все проперти запаршены'
+
         if 'definitions' in jsonString:
             jsonProperties = jsonString['definitions']
 
             for prop in jsonProperties:
-                jsonObjects.update(self.parseProperty(prop, jsonProperties, '#/definitions'))
+                jsonObjects.update(
+                    self.parseProperty(prop, jsonProperties, '#/definitions'))
+
+            schemaObject.definitions = 'Все определения типов запаршены'
 
         return jsonObjects
 
@@ -186,14 +220,27 @@ class JsonParser(object):
     def checkInnerProperties(self, propObject) -> dict:
         jsonObjects = {}
 
-        if hasattr(propObject, 'oneOf') and propObject.oneOf:
-            jsonObjects.update(self.parseCombinationKeywords(propObject, 'oneOf'))
-        elif hasattr(propObject, 'anyOf') and propObject.anyOf:
-            jsonObjects.update(self.parseCombinationKeywords(propObject, 'anyOf'))
-        elif hasattr(propObject, 'allOf') and propObject.allOf:
-            jsonObjects.update(self.parseCombinationKeywords(propObject, 'allOf'))
-        elif hasattr(propObject, 'not') and propObject.__dict__['not']:
-            jsonObjects.update(self.parseCombinationKeywords(propObject, 'not'))
+        # 'items'
+        someListTag = next(
+            (tag for tag in ['oneOf', 'anyOf', 'allOf', 'not'] if
+             hasattr(propObject, tag) and propObject.__dict__[tag]), None)
+
+        if someListTag is not None:
+            jsonObjects.update(
+                self.parseCombinationKeywords(propObject, someListTag))
+
+        # if hasattr(propObject, 'oneOf') and propObject.oneOf:
+        #     jsonObjects.update(
+        #         self.parseCombinationKeywords(propObject, 'oneOf'))
+        # elif hasattr(propObject, 'anyOf') and propObject.anyOf:
+        #     jsonObjects.update(
+        #         self.parseCombinationKeywords(propObject, 'anyOf'))
+        # elif hasattr(propObject, 'allOf') and propObject.allOf:
+        #     jsonObjects.update(
+        #         self.parseCombinationKeywords(propObject, 'allOf'))
+        # elif hasattr(propObject, 'not') and propObject.__dict__['not']:
+        #     jsonObjects.update(self.parseCombinationKeywords(propObject,
+        #     'not'))
 
         if hasattr(propObject, 'type'):
             if propObject.type == 'object' \
@@ -211,11 +258,12 @@ class JsonParser(object):
         if not hasattr(propObject, 'type'):
             propObject.type = keyword
 
-        oneOfList = propObject.__dict__[keyword]
-        for propIndex in range(len(oneOfList)):
-            innerObject = oneOfList[propIndex]
+        keywordInnerObjectsList = propObject.__dict__[keyword]
+        for propIndex in range(len(keywordInnerObjectsList)):
+            innerObject = keywordInnerObjectsList[propIndex]
             innerObject.fullPath = propObject.fullPath + '/' + \
-                                   (innerObject.name if hasattr(innerObject, 'name')
+                                   (innerObject.name if hasattr(innerObject,
+                                                                'name')
                                     else keyword + '#' + str(propIndex + 1))
             jsonObjects[innerObject.fullPath] = innerObject
 
@@ -256,10 +304,19 @@ class JsonParser(object):
             itemsParsed = False
 
             for itemsObject in itemsList:
+                itemsIndex = str(itemsList.index(itemsObject) + 1) if (
+                        len(itemsList) > 1) else ''
 
                 if itemsObject \
                         and isinstance(itemsObject, JsonPropertyObject) \
                         and not itemsObject.isEmpty():
+
+                    if not (hasattr(itemsObject, 'name') and itemsObject.name):
+                        itemsObject.name = 'items' + itemsIndex
+                    itemsObject.fullPath = \
+                        propArrayObject.fullPath + '/' + itemsObject.name
+                    jsonObjects[itemsObject.fullPath] = itemsObject
+
                     if not itemsParsed:
                         itemsParsed = True
 
@@ -271,17 +328,26 @@ class JsonParser(object):
 
                             if isinstance(innerObject, JsonPropertyObject):
                                 innerObject.name = prop
-                                innerObject.fullPath = propArrayObject.fullPath + '/' + prop
+                                innerObject.fullPath = \
+                                    itemsObject.fullPath + '/' + prop
                                 jsonObjects[innerObject.fullPath] = innerObject
 
-                                jsonObjects.update(self.checkInnerProperties(innerObject))
+                                jsonObjects.update(
+                                    self.checkInnerProperties(innerObject))
+
+                        itemsObject.properties \
+                            = 'Все проперти внутри блока items запаршены'
 
                     else:
-                        itemsObject.fullPath = propArrayObject.fullPath + '/' + \
-                                               (itemsObject.name if hasattr(itemsObject, 'name') else 'items')
+                        itemsObject.fullPath = itemsObject.fullPath + '/' \
+                                               + \
+                                               (itemsObject.name if hasattr(
+                                                   itemsObject,
+                                                   'name') else 'items')
                         jsonObjects[itemsObject.fullPath] = itemsObject
 
-                        jsonObjects.update(self.checkInnerProperties(itemsObject))
+                        jsonObjects.update(
+                            self.checkInnerProperties(itemsObject))
 
             if itemsParsed:
                 propArrayObject.items = 'Все элементы массива запаршены'

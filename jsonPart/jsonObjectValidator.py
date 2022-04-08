@@ -1,6 +1,7 @@
 import re
 
 import baseUtils
+import jsonPart.jsonUtils as jsonUtils
 from outputMessage import MessageType
 from outputMessage import OutputMessage
 
@@ -91,7 +92,7 @@ class JsonObjectValidator(object):
                                          JsonObjectValidator.NO_TYPE_MESSAGE)
             validationResult.append(validatorMsg)
 
-        if self.isComplexType(jsonObject):
+        if jsonUtils.isComplexType(jsonObject):
             if not hasattr(jsonObject, 'additionalProperties') \
                     or jsonObject.additionalProperties is True:
                 validatorMsg = OutputMessage(
@@ -298,15 +299,3 @@ class JsonObjectValidator(object):
 
         return validatorMsg
 
-    def isComplexType(self, jsonObject) -> bool:
-        result = False
-
-        if hasattr(jsonObject, 'type'):
-            objectType = jsonObject.type
-
-            # if not (objectType == 'string' or objectType == 'number' or objectType == 'integer'
-            #         or objectType == 'boolean' or objectType == 'null'):
-            if objectType == 'object':
-                result = True
-
-        return result

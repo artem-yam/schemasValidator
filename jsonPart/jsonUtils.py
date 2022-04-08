@@ -1,12 +1,12 @@
-def getElementSiblings(xsdElemObject, xsdObjectsDict) -> dict:
-    resultDict = {}
+def isComplexType(jsonObject) -> bool:
+    result = False
 
-    if hasattr(xsdElemObject, 'fullPath'):
-        if (len(parentPath := xsdElemObject.fullPath.rpartition('/')[0]) > 0):
-            for xsdObjectKey, xsdObject in xsdObjectsDict.items():
-                if xsdObject != xsdElemObject \
-                        and hasattr(xsdObject, 'fullPath') \
-                        and xsdObject.fullPath.rpartition('/')[0] == parentPath:
-                    resultDict[xsdObjectKey] = xsdObject
+    if hasattr(jsonObject, 'type'):
+        objectType = jsonObject.type
 
-    return resultDict
+        # if not (objectType == 'string' or objectType == 'number' or objectType == 'integer'
+        #         or objectType == 'boolean' or objectType == 'null'):
+        if objectType == 'object':
+            result = True
+
+    return result
